@@ -34,10 +34,6 @@ namespace itk
  *
  * This class provides an adaptor gate to use all the file formats supported by
  * the SCIFIO Java library.
- *
- * \warning Note that the Bio-Format Java library is distributed under a GPLv2
- * license. For details, see   
- * http://www.openmicroscopy.org/site/products/bio-formats
  */
 class ITK_EXPORT SCIFIOImageIO : public StreamingImageIOBase
 {
