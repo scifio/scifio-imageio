@@ -166,6 +166,9 @@ SCIFIOImageIO::SCIFIOImageIO()
   m_Args.push_back( "-Djava.awt.headless=true" );
   m_Args.push_back( "-cp" );
   m_Args.push_back( classpath );
+  // NB: The package "loci.formats" will change to "ome.scifio" in a future
+  // release. When SCIFIO is updated to a 4.5.x version, this string will
+  // likely need to change to something like "ome.scifio.itk.SCIFIOImageIO".
   m_Args.push_back( "loci.formats.itk.ITKBridgePipes" );
   m_Args.push_back( "waitForInput" );
   // convert to something usable by itksys
