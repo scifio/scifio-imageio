@@ -1,6 +1,6 @@
 /*
  * #%L
- * Bio-Formats plugin for the Insight Toolkit.
+ * SCIFIO ImageIO plugin for the Insight Toolkit.
  * %%
  * Copyright (C) 2010 - 2012 Insight Software Consortium, and Open Microscopy
  * Environment:
@@ -49,10 +49,10 @@
 #endif
 
 #include <iostream>
-#include "itkBioFormatsImageIO.h"
+#include "itkSCIFIOImageIO.h"
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
-#include "itkVectorImage.h"
+#include "itkImage.h"
 #include "itkMetaDataObject.h"
 #include "itkStreamingImageFilter.h"
 
@@ -71,23 +71,46 @@ int main( int argc, char * argv [] )
   typedef unsigned char       PixelType;
   const unsigned int          Dimension = 3;
 
-  typedef itk::VectorImage< PixelType, Dimension >   ImageType;
+  typedef itk::Image< PixelType, Dimension >   ImageType;
 
   typedef itk::ImageFileReader<ImageType> ReaderType;
 
-  itk::BioFormatsImageIO::Pointer io = itk::BioFormatsImageIO::New();
+  itk::SCIFIOImageIO::Pointer io = itk::SCIFIOImageIO::New();
 
   io->DebugOn();
 
   ReaderType::Pointer reader = ReaderType::New();
   std::cout << "reader->GetUseStreaming(): " << reader->GetUseStreaming() << std::endl;
 
-  reader->SetFileName(argv[1]);
+  std::cout << "done checking streaming usage";
+
+  reader->SetFileName("fileNotFound");
   reader->SetImageIO(io);
+
+  // should get an exception
+  // TODO: Exception is thrown in Java not c++ .. is not caught and dies
+  bool catched = false;
+  try
+    {
+    reader->Update();
+    }
+  catch (itk::ExceptionObject &e)
+    {
+    std::cerr << e << std::endl;
+    catched = true;
+    }
+  if( !catched )
+    {
+    std::cerr << "exception not catched for wrong path" << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  reader->SetFileName(argv[1]);
 
   typedef itk::StreamingImageFilter<ImageType, ImageType> StreamingFilter;
   StreamingFilter::Pointer streamer = StreamingFilter::New();
   streamer->SetInput( reader->GetOutput() );
+  // should this be argv[2]? Anticipating seg fault as in RGB test
   streamer->SetNumberOfStreamDivisions( atoi(argv[3]) );
 
   itk::ImageFileWriter<ImageType>::Pointer writer;

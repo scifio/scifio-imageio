@@ -1,7 +1,7 @@
-Bio-Formats ITK plugin
-----------------------
+SCIFIO ImageIO plugin
+---------------------
 
-This package provides an ImageIO plugin for ITK that uses Bio-Formats
+This package provides an ImageIO plugin for ITK that uses SCIFIO
 to read and write supported life sciences file formats.
 
 For details, including compilation and usage instructions, see:

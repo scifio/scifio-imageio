@@ -1,6 +1,6 @@
 /*
  * #%L
- * Bio-Formats plugin for the Insight Toolkit.
+ * SCIFIO ImageIO plugin for the Insight Toolkit.
  * %%
  * Copyright (C) 2010 - 2012 Insight Software Consortium, and Open Microscopy
  * Environment:
@@ -44,12 +44,8 @@
  * #L%
  */
 
-#ifndef __itkBioFormatsIOPlugin_h
-#define __itkBioFormatsIOPlugin_h
-
-#include "itkObjectFactoryBase.h"
-#include "itkBioFormatsIOWin32Header.h"
-
+#include "itkSCIFIOIOPlugin.h"
+#include "itkSCIFIOImageIOFactory.h"
 
 /**
  * Routine that is called when the shared library is loaded by
@@ -57,7 +53,9 @@
  *
  * itkLoad() is C (not C++) function.
  */
-extern "C" {
-  BioFormatsImageIO_EXPORT itk::ObjectFactoryBase* itkLoad();
+itk::ObjectFactoryBase* itkLoad()
+{
+  static itk::SCIFIOImageIOFactory::Pointer f =
+    itk::SCIFIOImageIOFactory::New();
+  return f;
 }
-#endif

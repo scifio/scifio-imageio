@@ -1,6 +1,6 @@
 /*
  * #%L
- * Bio-Formats plugin for the Insight Toolkit.
+ * SCIFIO ImageIO plugin for the Insight Toolkit.
  * %%
  * Copyright (C) 2010 - 2012 Insight Software Consortium, and Open Microscopy
  * Environment:
@@ -44,37 +44,22 @@
  * #L%
  */
 
-#include "itkBioFormatsImageIOFactory.h"
-#include "itkCreateObjectFunction.h"
-#include "itkBioFormatsImageIO.h"
-#include "itkVersion.h"
+// .NAME itkSCIFIOImageIOWin32Header - manage Windows system differences
+// .SECTION Description
+// The itkSCIFIOImageIOWin32Header captures some system differences
+// between Unix and Windows operating systems.
 
-namespace itk
-{
+#ifndef __itkSCIFIOImageIOWin32Header_h
+#define __itkSCIFIOImageIOWin32Header_h
 
-BioFormatsImageIOFactory::BioFormatsImageIOFactory()
-{
-  this->RegisterOverride("itkImageIOBase",
-    "itkBioFormatsImageIO",
-    "BioFormats Image IO",
-    1,
-    CreateObjectFunction<BioFormatsImageIO>::New());
-}
+#include <itkSCIFIOImageIOConfigure.h>
 
-BioFormatsImageIOFactory::~BioFormatsImageIOFactory()
-{
-}
+#if defined(WIN32) && !defined(BIO_FORMATS_IO_STATIC)
+#ifndef SCIFIOImageIO_EXPORT
+#define SCIFIOImageIO_EXPORT __declspec( dllexport )
+#endif
+#else
+#define SCIFIOImageIO_EXPORT
+#endif
 
-const char*
-BioFormatsImageIOFactory::GetITKSourceVersion(void) const
-{
-  return ITK_SOURCE_VERSION;
-}
-
-const char*
-BioFormatsImageIOFactory::GetDescription() const
-{
-  return "Bio-Formats ImageIO Factory, allows the loading of Bio-Formats-compatible images into Insight; see http://www.openmicroscopy.org/site/support/bio-formats/users/itk/index.html";
-}
-
-} // end namespace itk
+#endif

@@ -1,6 +1,6 @@
 /*
  * #%L
- * Bio-Formats plugin for the Insight Toolkit.
+ * SCIFIO ImageIO plugin for the Insight Toolkit.
  * %%
  * Copyright (C) 2010 - 2012 Insight Software Consortium, and Open Microscopy
  * Environment:
@@ -44,13 +44,13 @@
  * #L%
  */
 
-#ifndef __itkBioFormatsImageIO_h
-#define __itkBioFormatsImageIO_h
+#ifndef __itkSCIFIOImageIO_h
+#define __itkSCIFIOImageIO_h
 
 // ITK includes
 #include "itkImageIOBase.h"
 #include "itkStreamingImageIOBase.h"
-#include "itkBioFormatsIOWin32Header.h"
+#include "itkSCIFIOIOWin32Header.h"
 #include <sstream>
 #include <iostream>
 #include "itksys/Process.h"
@@ -58,28 +58,28 @@
 namespace itk
 {
 
-/** \class BioFormatsImageIO
+/** \class SCIFIOImageIO
  *
- * \brief Interface to the Bio-Formats Java Library.
+ * \brief Interface to the SCIFIO Java Library.
  *
  * This class provides an adaptor gate to use all the file formats supported by
- * the Bio-Formats Java library.
+ * the SCIFIO Java library.
  *
  * \warning Note that the Bio-Format Java library is distributed under a GPLv2
  * license. For details, see   
  * http://www.openmicroscopy.org/site/products/bio-formats
  */
-class BioFormatsImageIO_EXPORT BioFormatsImageIO : public StreamingImageIOBase
+class SCIFIOImageIO_EXPORT SCIFIOImageIO : public StreamingImageIOBase
 {
 public:
-  typedef BioFormatsImageIO           Self;
+  typedef SCIFIOImageIO           Self;
   typedef ImageIOBase                 Superclass;
   typedef SmartPointer<Self>          Pointer;
   typedef SmartPointer<const Self>    ConstPointer;
   /** Method for creation through the object factory **/
   itkNewMacro(Self);
   /** RTTI (and related methods) **/
-  itkTypeMacro(BioFormatsImageIO, Superclass);
+  itkTypeMacro(SCIFIOImageIO, Superclass);
 
   /**--------------- Read the data----------------- **/
   virtual bool CanReadFile(const char* FileNameToRead);
@@ -99,8 +99,8 @@ public:
   void DestroyJavaProcess();
 
 protected:
-  BioFormatsImageIO();
-  ~BioFormatsImageIO();
+  SCIFIOImageIO();
+  ~SCIFIOImageIO();
 
   virtual SizeType GetHeaderSize() const { return 0; }
 
@@ -115,14 +115,14 @@ private:
     char **argv = new char *[args.size() + 1];
     for( int i = 0; i < static_cast< int >( args.size() ); i++ )
       {
-      itkDebugMacro( "BioFormatsImageIO::toCArray::args["<<i<<"] = " << args[i]);
+      itkDebugMacro( "SCIFIOImageIO::toCArray::args["<<i<<"] = " << args[i]);
       argv[i] = (char*)args[i].c_str();
       }
     argv[args.size()] = NULL;
     return argv;
   }
 
-  ITKComponent bfToTIKComponentType( int pixelType ) {
+  ITKComponent scifioToTIKComponentType( int pixelType ) {
     switch ( pixelType ) {
       case 0:
         return CHAR;
@@ -143,7 +143,7 @@ private:
     }
   }
 
-  int itkToBFPixelType( ITKComponent cmp )
+  int itkToSCIFIOPixelType( ITKComponent cmp )
   {
     switch ( cmp )
     {

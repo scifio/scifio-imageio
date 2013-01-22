@@ -1,6 +1,6 @@
 /*
  * #%L
- * Bio-Formats plugin for the Insight Toolkit.
+ * SCIFIO ImageIO plugin for the Insight Toolkit.
  * %%
  * Copyright (C) 2010 - 2012 Insight Software Consortium, and Open Microscopy
  * Environment:
@@ -44,18 +44,52 @@
  * #L%
  */
 
-#include "itkBioFormatsIOPlugin.h"
-#include "itkBioFormatsImageIOFactory.h"
+#ifndef __itkSCIFIOImageIOFactory_h
+#define __itkSCIFIOImageIOFactory_h
 
-/**
- * Routine that is called when the shared library is loaded by
- * itk::ObjectFactoryBase::LoadDynamicFactories().
- *
- * itkLoad() is C (not C++) function.
- */
-itk::ObjectFactoryBase* itkLoad()
+#include "itkObjectFactoryBase.h"
+#include "itkSCIFIOIOWin32Header.h"
+#include "itkImageIOBase.h"
+
+namespace itk
 {
-  static itk::BioFormatsImageIOFactory::Pointer f =
-    itk::BioFormatsImageIOFactory::New();
-  return f;
-}
+
+class SCIFIOImageIO_EXPORT SCIFIOImageIOFactory : public ObjectFactoryBase
+{
+public:
+  /** Standard class typedefs **/
+  typedef SCIFIOImageIOFactory  Self;
+  typedef ObjectFactoryBase         Superclass;
+  typedef SmartPointer<Self>        Pointer;
+  typedef SmartPointer<const Self>  ConstPointer;
+
+  /** Class methods used to interface with the registered factories **/
+  virtual const char* GetITKSourceVersion(void) const;
+  virtual const char* GetDescription(void) const;
+
+  /** Method for class instantiation **/
+  itkFactorylessNewMacro(Self);
+
+  /** RTTI (and related methods) **/
+  itkTypeMacro(SCIFIOImageIOFactory, ObjectFactoryBase);
+
+  /** Register one factory of this type **/
+  static void RegisterOneFactory(void)
+    {
+    SCIFIOImageIOFactory::Pointer SCIFIOFactory = SCIFIOImageIOFactory::New();
+    ObjectFactoryBase::RegisterFactory(SCIFIOFactory);
+    }
+
+protected:
+  SCIFIOImageIOFactory();
+  ~SCIFIOImageIOFactory();
+
+private:
+  SCIFIOImageIOFactory(const Self&); // purposely not implemented
+  void operator=(const Self&); // purposely not implemented
+
+};
+
+} // end namespace itk
+
+#endif

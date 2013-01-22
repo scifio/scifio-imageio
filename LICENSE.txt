@@ -1,4 +1,4 @@
-Bio-Formats plugin for the Insight Toolkit.
+SCIFIO ImageIO plugin for the Insight Toolkit.
 
 Copyright (C) 2010 - 2012 Insight Software Consortium, and Open Microscopy
 Environment:

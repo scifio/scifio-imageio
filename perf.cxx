@@ -1,6 +1,6 @@
 /*
  * #%L
- * Bio-Formats plugin for the Insight Toolkit.
+ * SCIFIO ImageIO plugin for the Insight Toolkit.
  * %%
  * Copyright (C) 2010 - 2012 Insight Software Consortium, and Open Microscopy
  * Environment:
@@ -46,7 +46,7 @@
 
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
-#include "itkBioFormatsImageIO.h"
+#include "itkSCIFIOImageIO.h"
 #include "itkNrrdImageIO.h"
 #include "itkLSMImageIO.h"
 #include "itkTimeProbe.h"
@@ -65,7 +65,7 @@ int main(int, char * argv[])
   typedef itk::ImageFileReader< IType > ReaderType;
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName( argv[1] );
-  itk::BioFormatsImageIO::Pointer io = itk::BioFormatsImageIO::New();
+  itk::SCIFIOImageIO::Pointer io = itk::SCIFIOImageIO::New();
   reader->SetImageIO( io );
   // update a first time to avoid the effect of the system cache
   reader->Update();
@@ -81,7 +81,7 @@ int main(int, char * argv[])
 
   ReaderType::Pointer reader2 = ReaderType::New();
   reader2->SetFileName( argv[1] );
-  itk::BioFormatsImageIO::Pointer io2 = itk::BioFormatsImageIO::New();
+  itk::SCIFIOImageIO::Pointer io2 = itk::SCIFIOImageIO::New();
   reader2->SetImageIO( io2 );
   // update a first time to avoid the effect of the system cache
   reader2->Update();
@@ -113,7 +113,7 @@ int main(int, char * argv[])
     reader->Update();
     time.Stop();
     
-    io2 = itk::BioFormatsImageIO::New();
+    io2 = itk::SCIFIOImageIO::New();
     reader2->SetImageIO( io2 );
     time2.Start();
     reader2->Update();

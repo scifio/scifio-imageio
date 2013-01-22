@@ -1,6 +1,6 @@
 ###
 # #%L
-# Bio-Formats plugin for the Insight Toolkit.
+# SCIFIO ImageIO plugin for the Insight Toolkit.
 # %%
 # Copyright (C) 2010 - 2012 Insight Software Consortium, and Open Microscopy
 # Environment:
@@ -44,7 +44,7 @@
 # #L%
 ###
 
-project(BioFormatsImageIO)
+project(SCIFIOImageIO)
 
 cmake_minimum_required(VERSION 2.8)
 
@@ -58,8 +58,8 @@ set(include_dirs
 include_directories(${include_dirs})
 
 configure_file(
-  ${CMAKE_CURRENT_SOURCE_DIR}/itkBioFormatsImageIOConfigure.h.in
-  ${CMAKE_CURRENT_BINARY_DIR}/itkBioFormatsImageIOConfigure.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/itkSCIFIOImageIOConfigure.h.in
+  ${CMAKE_CURRENT_BINARY_DIR}/itkSCIFIOImageIOConfigure.h
 )
 
 file(GLOB headers "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
@@ -68,16 +68,16 @@ if(NOT DEFINED BUILD_SHARED_LIBS)
   option(BUILD_SHARED_LIBS "Build with shared libraries." ON)
 endif(NOT DEFINED BUILD_SHARED_LIBS)
 
-option(BFITK_WIN_BUILD_DEBUG "Build Debug version? If false, builds Release. Windows only." ON)
-if(${BFITK_WIN_BUILD_DEBUG} STREQUAL "ON")
-  if(NOT DEFINED BFITK_WIN_BUILD_VALUE)
-    set(BFITK_WIN_BUILD_VALUE \\Debug)
-  endif(NOT DEFINED BFITK_WIN_BUILD_VALUE)
-elseif(${BFITK_WIN_BUILD_DEBUG} STREQUAL "OFF")
-  if(NOT DEFINED BFITK_WIN_BUILD_VALUE)
-    set(BFITK_WIN_BUILD_VALUE \\Release)
-  endif(NOT DEFINED BFITK_WIN_BUILD_VALUE)
-endif(${BFITK_WIN_BUILD_DEBUG} STREQUAL "ON")
+option(SCIFIO_WIN_BUILD_DEBUG "Build Debug version? If false, builds Release. Windows only." ON)
+if(${SCIFIO_WIN_BUILD_DEBUG} STREQUAL "ON")
+  if(NOT DEFINED SCIFIO_WIN_BUILD_VALUE)
+    set(SCIFIO_WIN_BUILD_VALUE \\Debug)
+  endif(NOT DEFINED SCIFIO_WIN_BUILD_VALUE)
+elseif(${SCIFIO_WIN_BUILD_DEBUG} STREQUAL "OFF")
+  if(NOT DEFINED SCIFIO_WIN_BUILD_VALUE)
+    set(SCIFIO_WIN_BUILD_VALUE \\Release)
+  endif(NOT DEFINED SCIFIO_WIN_BUILD_VALUE)
+endif(${SCIFIO_WIN_BUILD_DEBUG} STREQUAL "ON")
 
 # --------------------------------------------------------------------------
 # Find ITK
@@ -92,21 +92,21 @@ include("${ITK_USE_FILE}")
 # For ITK 3.x, ITK_USE_REVIEW must be turned ON.
 
 if(ITK_VERSION_MAJOR LESS "3")
-  message(FATAL_ERROR "The BF-ITK plugin requires ITK 3.20.0 or newer. You are using ${ITK_VERSION_MAJOR}.${ITK_VERSION_MINOR}.${ITK_VERSION_PATCH}.")
+  message(FATAL_ERROR "The SCIFIO ImageIO plugin requires ITK 3.20.0 or newer. You are using ${ITK_VERSION_MAJOR}.${ITK_VERSION_MINOR}.${ITK_VERSION_PATCH}.")
 endif(ITK_VERSION_MAJOR LESS "3")
 
 if(ITK_VERSION_MAJOR EQUAL "3")
   if(ITK_VERSION_MINOR LESS "20")
-    message(FATAL_ERROR "The BF-ITK plugin requires ITK 3.20.0 or newer. You are using ${ITK_VERSION_MAJOR}.${ITK_VERSION_MINOR}.${ITK_VERSION_PATCH}.")
+    message(FATAL_ERROR "The SCIFIO ImageIO plugin requires ITK 3.20.0 or newer. You are using ${ITK_VERSION_MAJOR}.${ITK_VERSION_MINOR}.${ITK_VERSION_PATCH}.")
   endif(ITK_VERSION_MINOR LESS "20")
   if(NOT ITK_USE_REVIEW)
     message(FATAL_ERROR "For ITK 3.x, ITK_USE_REVIEW must be turned ON.")
   endif(NOT ITK_USE_REVIEW)
-  set(BF_LINK_REVIEW ON)
+  set(SCIFIO_LINK_REVIEW ON)
 endif(ITK_VERSION_MAJOR EQUAL "3")
 
 if(ITK_VERSION_MAJOR GREATER "3")
-  set(BF_LINK_REVIEW OFF)
+  set(SCIFIO_LINK_REVIEW OFF)
 endif(ITK_VERSION_MAJOR GREATER "3")
 
 # --------------------------------------------------------------------------
@@ -117,204 +117,205 @@ find_package(Java REQUIRED)
 # --------------------------------------------------------------------------
 # Sources
 
-set(BF_SRCS
-  itkBioFormatsImageIO.cxx
-  itkBioFormatsImageIOFactory.cxx
+set(SCIFIO_SRCS
+  itkSCIFIOImageIO.cxx
+  itkSCIFIOImageIOFactory.cxx
 )
 
 # --------------------------------------------------------------------------
 # Build and install the library
 
-set(lib_name BioFormatsIO)
+set(lib_name SCIFIOIO)
 add_library(${lib_name}
-  ${BF_SRCS}
+  ${SCIFIO_SRCS}
 )
 
-if(BF_LINK_REVIEW)
+if(SCIFIO_LINK_REVIEW)
   # Review libraries required
   target_link_libraries(${lib_name}
     ${ITK_LIBRARIES}
     ITKIOReview
   )
-else(BF_LINK_REVIEW)
+else(SCIFIO_LINK_REVIEW)
   target_link_libraries(${lib_name}
     ${ITK_LIBRARIES}
   )
-endif(BF_LINK_REVIEW)
+endif(SCIFIO_LINK_REVIEW)
 
 # --------------------------------------------------------------------------
 # Shared library that when placed in ITK_AUTOLOAD_PATH, will add
-# BioFormatsImageIO as an ImageIOFactory.  Need to have separate shared
+# SCIFIOImageIO as an ImageIOFactory.  Need to have separate shared
 # library for each new format. Note that the plugin library is placed
 # in a special directory to speed up the searching for ImageIO
 # factories (which improves the speed at which plugins run).
 
-set(BF_LIB_DIR "${CMAKE_BINARY_DIR}/lib")
+set(SCIFIO_LIB_DIR "${CMAKE_BINARY_DIR}/lib")
 
-add_library(BioFormatsIOPlugin MODULE
-  itkBioFormatsIOPlugin.cxx
+add_library(SCIFIOIOPlugin MODULE
+  itkSCIFIOIOPlugin.cxx
 )
-set_target_properties(BioFormatsIOPlugin
+set_target_properties(SCIFIOIOPlugin
   PROPERTIES
   RUNTIME_OUTPUT_DIRECTORY
-  "${BF_LIB_DIR}"
+  "${SCIFIO_LIB_DIR}"
   LIBRARY_OUTPUT_DIRECTORY
-  "${BF_LIB_DIR}"
+  "${SCIFIO_LIB_DIR}"
   ARCHIVE_OUTPUT_DIRECTORY
-  "${BF_LIB_DIR}"
+  "${SCIFIO_LIB_DIR}"
 )
-target_link_libraries(BioFormatsIOPlugin
+target_link_libraries(SCIFIOIOPlugin
   ${lib_name}
 )
 
 # --------------------------------------------------------------------------
 # Add some tests
 
-add_executable(itkBioFormatsImageIOTest itkBioFormatsImageIOTest.cxx)
-target_link_libraries(itkBioFormatsImageIOTest BioFormatsIO)
+add_executable(itkSCIFIOImageIOTest itkSCIFIOImageIOTest.cxx)
+target_link_libraries(itkSCIFIOImageIOTest SCIFIOIO)
 
-add_executable(itkRGBBioFormatsImageIOTest itkRGBBioFormatsImageIOTest.cxx)
-target_link_libraries(itkRGBBioFormatsImageIOTest BioFormatsIO)
+add_executable(itkRGBSCIFIOImageIOTest itkRGBSCIFIOImageIOTest.cxx)
+target_link_libraries(itkRGBSCIFIOImageIOTest SCIFIOIO)
 
-add_executable(itkBFImageInfo itkBioFormatsImageInfo.cxx)
-target_link_libraries(itkBFImageInfo BioFormatsIO)
+add_executable(itkSCIFIOImageInfo itkSCIFIOImageInfo.cxx)
+target_link_libraries(itkSCIFIOImageInfo SCIFIOIO)
 
-add_executable(itkVectorImageBioFormatsImageIOTest
-  itkVectorImageBioFormatsImageIOTest.cxx
+add_executable(itkVectorImageSCIFIOImageIOTest
+  itkVectorImageSCIFIOImageIOTest.cxx
 )
-target_link_libraries(itkVectorImageBioFormatsImageIOTest BioFormatsIO)
+target_link_libraries(itkVectorImageSCIFIOImageIOTest SCIFIOIO)
 
 add_executable(perf perf.cxx)
-target_link_libraries(perf BioFormatsIO)
+target_link_libraries(perf SCIFIOIO)
 
 # --------------------------------------------------------------------------
-# Copy targets into distribution folder (dist/bf-itk)
+# Copy targets into distribution folder (dist/scifio-imageio)
 
-set(BF_DIST_DIR "dist/bf-itk")
+set(SCIFIO_DIST_DIR "dist/scifio-imageio")
 
 if(APPLE)
-  set(BF_LIB_PREFIX "lib")
-  set(BF_SUFFIX ".dylib")
-  set(BF_BUILD_TYPE "")
+  set(SCIFIO_LIB_PREFIX "lib")
+  set(SCIFIO_SUFFIX ".dylib")
+  set(SCIFIO_BUILD_TYPE "")
 elseif(WIN32 OR WIN64)
-  set(BF_LIB_PREFIX "")
-  set(BF_BUILD_TYPE ${BFITK_WIN_BUILD_VALUE})
-  set(BF_SUFFIX ".dll")
+  set(SCIFIO_LIB_PREFIX "")
+  set(SCIFIO_BUILD_TYPE ${SCIFIO_WIN_BUILD_VALUE})
+  set(SCIFIO_SUFFIX ".dll")
 else(APPLE) # assume UNIX
-  set(BF_LIB_PREFIX "lib")
-  set(BF_SUFFIX ".so")
-  set(BF_BUILD_TYPE "")
+  set(SCIFIO_LIB_PREFIX "lib")
+  set(SCIFIO_SUFFIX ".so")
+  set(SCIFIO_BUILD_TYPE "")
 endif(APPLE)
 
 if(APPLE)
   add_custom_command(
-    TARGET BioFormatsIOPlugin
-    DEPENDS "${BF_LIB_DIR}/${BF_LIB_PREFIX}BioFormatsIOPlugin.so"
+    TARGET SCIFIOIOPlugin
+    DEPENDS "${SCIFIO_LIB_DIR}/${SCIFIO_LIB_PREFIX}SCIFIOIOPlugin.so"
     POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy
-      "${BF_LIB_DIR}/${BF_BUILD_TYPE}/${BF_LIB_PREFIX}BioFormatsIOPlugin.so"
-      "${BF_LIB_DIR}/${BF_BUILD_TYPE}/${BF_LIB_PREFIX}BioFormatsIOPlugin${BF_SUFFIX}"
+      "${SCIFIO_LIB_DIR}/${SCIFIO_BUILD_TYPE}/${SCIFIO_LIB_PREFIX}SCIFIOIOPlugin.so"
+      "${SCIFIO_LIB_DIR}/${SCIFIO_BUILD_TYPE}/${SCIFIO_LIB_PREFIX}SCIFIOIOPlugin${SCIFIO_SUFFIX}"
     VERBATIM
   )
 
   add_custom_command(
-    TARGET BioFormatsIOPlugin
-    DEPENDS "${BF_LIB_DIR}/${BF_BUILD_TYPE}/${BF_LIB_PREFIX}BioFormatsIOPlugin.so"
+    TARGET SCIFIOIOPlugin
+    DEPENDS "${SCIFIO_LIB_DIR}/${SCIFIO_BUILD_TYPE}/${SCIFIO_LIB_PREFIX}SCIFIOIOPlugin.so"
     POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy
-      "${BF_LIB_DIR}/${BF_BUILD_TYPE}/${BF_LIB_PREFIX}BioFormatsIOPlugin.so"
-      "${CMAKE_BINARY_DIR}/${BF_DIST_DIR}/${BF_LIB_PREFIX}BioFormatsIOPlugin.so"
+      "${SCIFIO_LIB_DIR}/${SCIFIO_BUILD_TYPE}/${SCIFIO_LIB_PREFIX}SCIFIOIOPlugin.so"
+      "${CMAKE_BINARY_DIR}/${SCIFIO_DIST_DIR}/${SCIFIO_LIB_PREFIX}SCIFIOIOPlugin.so"
     VERBATIM
   )
   install(FILES
-    "${CMAKE_BINARY_DIR}/${BF_DIST_DIR}/${BF_LIB_PREFIX}BioFormatsIOPlugin.so"
+    "${CMAKE_BINARY_DIR}/${SCIFIO_DIST_DIR}/${SCIFIO_LIB_PREFIX}SCIFIOIOPlugin.so"
     DESTINATION "."
   )
 endif(APPLE)
 
 add_custom_command(
-  TARGET BioFormatsIOPlugin
-  DEPENDS "${BF_LIB_DIR}/${BF_BUILD_TYPE}/${BF_LIB_PREFIX}BioFormatsIOPlugin${BF_SUFFIX}"
+  TARGET SCIFIOIOPlugin
+  DEPENDS "${SCIFIO_LIB_DIR}/${SCIFIO_BUILD_TYPE}/${SCIFIO_LIB_PREFIX}SCIFIOIOPlugin${SCIFIO_SUFFIX}"
   POST_BUILD
   COMMAND ${CMAKE_COMMAND} -E copy
-    "${BF_LIB_DIR}/${BF_BUILD_TYPE}/${BF_LIB_PREFIX}BioFormatsIOPlugin${BF_SUFFIX}"
-    "${CMAKE_BINARY_DIR}/${BF_DIST_DIR}/${BF_LIB_PREFIX}BioFormatsIOPlugin${BF_SUFFIX}"
+    "${SCIFIO_LIB_DIR}/${SCIFIO_BUILD_TYPE}/${SCIFIO_LIB_PREFIX}SCIFIOIOPlugin${SCIFIO_SUFFIX}"
+    "${CMAKE_BINARY_DIR}/${SCIFIO_DIST_DIR}/${SCIFIO_LIB_PREFIX}SCIFIOIOPlugin${SCIFIO_SUFFIX}"
   VERBATIM
 )
 install(FILES
-  "${CMAKE_BINARY_DIR}/${BF_DIST_DIR}/${BF_LIB_PREFIX}BioFormatsIOPlugin${BF_SUFFIX}"
+  "${CMAKE_BINARY_DIR}/${SCIFIO_DIST_DIR}/${SCIFIO_LIB_PREFIX}SCIFIOIOPlugin${SCIFIO_SUFFIX}"
   DESTINATION "."
 )
 
 add_custom_command(
-  TARGET BioFormatsIOPlugin
-  DEPENDS "${CMAKE_BINARY_DIR}${BF_BUILD_TYPE}/${BF_LIB_PREFIX}BioFormatsIO${BF_SUFFIX}"
+  TARGET SCIFIOIOPlugin
+  DEPENDS "${CMAKE_BINARY_DIR}${SCIFIO_BUILD_TYPE}/${SCIFIO_LIB_PREFIX}SCIFIOIO${SCIFIO_SUFFIX}"
   POST_BUILD
   COMMAND ${CMAKE_COMMAND} -E copy
-  "${CMAKE_BINARY_DIR}${BF_BUILD_TYPE}/${BF_LIB_PREFIX}BioFormatsIO${BF_SUFFIX}"
-  "${CMAKE_BINARY_DIR}/${BF_DIST_DIR}/${BF_LIB_PREFIX}BioFormatsIO${BF_SUFFIX}"
+  "${CMAKE_BINARY_DIR}${SCIFIO_BUILD_TYPE}/${SCIFIO_LIB_PREFIX}SCIFIOIO${SCIFIO_SUFFIX}"
+  "${CMAKE_BINARY_DIR}/${SCIFIO_DIST_DIR}/${SCIFIO_LIB_PREFIX}SCIFIOIO${SCIFIO_SUFFIX}"
   VERBATIM
 )
 install(FILES
-  "${CMAKE_BINARY_DIR}/${BF_DIST_DIR}/${BF_LIB_PREFIX}BioFormatsIO${BF_SUFFIX}"
+  "${CMAKE_BINARY_DIR}/${SCIFIO_DIST_DIR}/${SCIFIO_LIB_PREFIX}SCIFIOIO${SCIFIO_SUFFIX}"
   DESTINATION "."
 )
 
 # --------------------------------------------------------------------------
 # Define location of loci_tools.jar file. It is assumed that loci_tools.jar
-# has been generated using "ant tools" from the Bio-Formats base folder.
+# has been generated using "ant tools" from the SCIFIO base folder.
 
-set(BF_ARTIFACT_DIR "${PROJECT_SOURCE_DIR}/../../../artifacts")
-set(BF_LOCI_TOOLS_JAR "${BF_ARTIFACT_DIR}/loci_tools.jar")
+set(SCIFIO_ARTIFACT_DIR "${PROJECT_SOURCE_DIR}/../../../artifacts")
+set(SCIFIO_LOCI_TOOLS_JAR "${SCIFIO_ARTIFACT_DIR}/loci_tools.jar")
 
 # --------------------------------------------------------------------------
-# Copy loci_tools.jar to the distribution folder (dist/bf-itk).
+# Copy loci_tools.jar to the distribution folder (dist/scifio-imageio).
 
 add_custom_command(
-  TARGET BioFormatsIOPlugin
-  DEPENDS "${BF_LOCI_TOOLS_JAR}"
+  TARGET SCIFIOIOPlugin
+  DEPENDS "${SCIFIO_LOCI_TOOLS_JAR}"
   POST_BUILD
   COMMAND ${CMAKE_COMMAND} -E copy
-  "${BF_LOCI_TOOLS_JAR}"
-  "${CMAKE_BINARY_DIR}/${BF_DIST_DIR}/loci_tools.jar"
+  "${SCIFIO_LOCI_TOOLS_JAR}"
+  "${CMAKE_BINARY_DIR}/${SCIFIO_DIST_DIR}/loci_tools.jar"
   VERBATIM
 )
 install(FILES
-  "${CMAKE_BINARY_DIR}/${BF_DIST_DIR}/loci_tools.jar"
+  "${CMAKE_BINARY_DIR}/${SCIFIO_DIST_DIR}/loci_tools.jar"
   DESTINATION "."
 )
 
 # --------------------------------------------------------------------------
-# Generate a list of extensions supported by Bio-Formats, and copy the
-# resultant BioFormatsSuffixes.txt to the distribution folder (dist/bf-itk).
+# Generate a list of extensions supported by SCIFIO, and copy the
+# resultant SCIFIOSuffixes.txt to the distribution folder
+# (dist/scifio-imageio).
 
 add_custom_command(
-  TARGET BioFormatsIOPlugin
-  DEPENDS "${BF_LOCI_TOOLS_JAR}"
+  TARGET SCIFIOIOPlugin
+  DEPENDS "${SCIFIO_LOCI_TOOLS_JAR}"
   POST_BUILD
-  COMMAND "${JAVA_RUNTIME}" -cp "${BF_LOCI_TOOLS_JAR}"
-  "loci.formats.tools.BioFormatsExtensionPrinter"
+  COMMAND "${JAVA_RUNTIME}" -cp "${SCIFIO_LOCI_TOOLS_JAR}"
+  "loci.formats.tools.SCIFIOExtensionPrinter"
   VERBATIM
 )
 
 add_custom_command(
-  TARGET BioFormatsIOPlugin
-  DEPENDS "${CMAKE_BINARY_DIR}/BioFormatsSuffixes.txt"
+  TARGET SCIFIOIOPlugin
+  DEPENDS "${CMAKE_BINARY_DIR}/SCIFIOSuffixes.txt"
   POST_BUILD
   COMMAND ${CMAKE_COMMAND} -E copy
-  "${CMAKE_BINARY_DIR}/BioFormatsSuffixes.txt"
-  "${CMAKE_BINARY_DIR}/${BF_DIST_DIR}/BioFormatsSuffixes.txt"
+  "${CMAKE_BINARY_DIR}/SCIFIOSuffixes.txt"
+  "${CMAKE_BINARY_DIR}/${SCIFIO_DIST_DIR}/SCIFIOSuffixes.txt"
   VERBATIM
 )
 install(FILES
-  "${CMAKE_BINARY_DIR}/${BF_DIST_DIR}/BioFormatsSuffixes.txt"
+  "${CMAKE_BINARY_DIR}/${SCIFIO_DIST_DIR}/SCIFIOSuffixes.txt"
   DESTINATION "."
 )
 
 # --------------------------------------------------------------------------
-# Package distribution folder (dist/bf-itk) into .zip and .tar.gz archives,
-# which can be generated using the "make package" command.
+# Package distribution folder (dist/scifio-imageio) into .zip and .tar.gz
+# archives, which can be generated using the "make package" command.
 
-set(CPACK_PACKAGE_FILE_NAME "bf-itk")
+set(CPACK_PACKAGE_FILE_NAME "scifio-imageio")
 set(CPACK_GENERATOR "TGZ;ZIP")
 include(CPack)

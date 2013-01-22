@@ -1,6 +1,6 @@
 /*
  * #%L
- * Bio-Formats plugin for the Insight Toolkit.
+ * SCIFIO ImageIO plugin for the Insight Toolkit.
  * %%
  * Copyright (C) 2010 - 2012 Insight Software Consortium, and Open Microscopy
  * Environment:
@@ -53,7 +53,7 @@
 #include "itkMetaDataObject.h"
 #include "itkMetaDataDictionary.h"
 #include "itkImageIOBase.h"
-//#include "itkBioFormatsImageIO.h"
+//#include "itkSCIFIOImageIO.h"
 
 #define METADATA_NOT_FOUND "No value for this key."
 

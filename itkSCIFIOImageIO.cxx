@@ -1,6 +1,6 @@
 /*
  * #%L
- * Bio-Formats plugin for the Insight Toolkit.
+ * SCIFIO ImageIO plugin for the Insight Toolkit.
  * %%
  * Copyright (C) 2010 - 2012 Insight Software Consortium, and Open Microscopy
  * Environment:
@@ -49,7 +49,7 @@
 
 #include <fstream>
 
-#include "itkBioFormatsImageIO.h"
+#include "itkSCIFIOImageIO.h"
 #include "itkIOCommon.h"
 #include "itkExceptionObject.h"
 #include "itkMetaDataObject.h"
@@ -77,7 +77,7 @@
 
 //--------------------------------------
 //
-// BioFormatsImageIO
+// SCIFIOImageIO
 //
 
 namespace itk {
@@ -88,7 +88,7 @@ namespace itk {
     ReturnType res;
     if( !(std::istringstream(s) >> res) )
       {
-      itkGenericExceptionMacro(<<"BioFormatsImageIO: error while converting: " << s );
+      itkGenericExceptionMacro(<<"SCIFIOImageIO: error while converting: " << s );
       }
     return res;
   }
@@ -124,10 +124,10 @@ namespace itk {
     return oss.str();
   }
 
-BioFormatsImageIO::BioFormatsImageIO()
+SCIFIOImageIO::SCIFIOImageIO()
 {
   DebugOn(); // NB: For debugging.
-  itkDebugMacro("BioFormatsImageIO constructor");
+  itkDebugMacro("SCIFIOImageIO constructor");
 
   this->m_FileType = Binary;
 
@@ -140,7 +140,7 @@ BioFormatsImageIO::BioFormatsImageIO()
 
   if( path == NULL)
     {
-    itkExceptionMacro("ITK_AUTOLOAD_PATH is not set, you must set this environment variable and point it to the directory containing the bio-formats.jar file");
+    itkExceptionMacro("ITK_AUTOLOAD_PATH is not set, you must set this environment variable and point it to the directory containing the loci_tools.jar file");
     }
   
 
@@ -159,7 +159,7 @@ BioFormatsImageIO::BioFormatsImageIO()
 #else
   std::string javaCommand = "/usr/bin/java"; // todo: let the user choose the java executable
 #endif
-  itkDebugMacro("BioFormatsImageIO base command: "+javaCommand+" -Xmx256m -Djava.awt.headless=true -cp "+classpath);
+  itkDebugMacro("SCIFIOImageIO base command: "+javaCommand+" -Xmx256m -Djava.awt.headless=true -cp "+classpath);
 
   m_Args.push_back( javaCommand );
   m_Args.push_back( "-Xmx256m" );
@@ -173,7 +173,7 @@ BioFormatsImageIO::BioFormatsImageIO()
   m_Process = NULL;
 }
 
-void BioFormatsImageIO::CreateJavaProcess()
+void SCIFIOImageIO::CreateJavaProcess()
 {
   if( m_Process )
     {
@@ -217,19 +217,19 @@ void BioFormatsImageIO::CreateJavaProcess()
     case itksysProcess_State_Exited:
       {
       int retCode = itksysProcess_GetExitValue( m_Process );
-      itkExceptionMacro(<<"BioFormatsImageIO: ITKReadImageInformation exited with return value: " << retCode);
+      itkExceptionMacro(<<"SCIFIOImageIO: ITKReadImageInformation exited with return value: " << retCode);
       break;
       }
     case itksysProcess_State_Error:
       {
       std::string msg = itksysProcess_GetErrorString( m_Process );
-      itkExceptionMacro(<<"BioFormatsImageIO: ITKReadImageInformation error:" << std::endl << msg);
+      itkExceptionMacro(<<"SCIFIOImageIO: ITKReadImageInformation error:" << std::endl << msg);
       break;
       }
     case itksysProcess_State_Exception:
       {
       std::string msg = itksysProcess_GetExceptionString( m_Process );
-      itkExceptionMacro(<<"BioFormatsImageIO: ITKReadImageInformation exception:" << std::endl << msg);
+      itkExceptionMacro(<<"SCIFIOImageIO: ITKReadImageInformation exception:" << std::endl << msg);
       break;
       }
     case itksysProcess_State_Executing:
@@ -239,17 +239,17 @@ void BioFormatsImageIO::CreateJavaProcess()
       }
     case itksysProcess_State_Expired:
       {
-      itkExceptionMacro(<<"BioFormatsImageIO: internal error: ITKReadImageInformation expired.");
+      itkExceptionMacro(<<"SCIFIOImageIO: internal error: ITKReadImageInformation expired.");
       break;
       }
     case itksysProcess_State_Killed:
       {
-      itkExceptionMacro(<<"BioFormatsImageIO: internal error: ITKReadImageInformation killed.");
+      itkExceptionMacro(<<"SCIFIOImageIO: internal error: ITKReadImageInformation killed.");
       break;
       }
     case itksysProcess_State_Disowned:
       {
-      itkExceptionMacro(<<"BioFormatsImageIO: internal error: ITKReadImageInformation disowned.");
+      itkExceptionMacro(<<"SCIFIOImageIO: internal error: ITKReadImageInformation disowned.");
       break;
       }
 //     case kwsysProcess_State_Starting:
@@ -258,20 +258,20 @@ void BioFormatsImageIO::CreateJavaProcess()
 //       }
     default:
       {
-      itkExceptionMacro(<<"BioFormatsImageIO: internal error: ITKReadImageInformation is in unknown state.");
+      itkExceptionMacro(<<"SCIFIOImageIO: internal error: ITKReadImageInformation is in unknown state.");
       break;
       }
     }
 }
 
-BioFormatsImageIO::~BioFormatsImageIO()
+SCIFIOImageIO::~SCIFIOImageIO()
 {
-  itkDebugMacro( "BioFormatsImageIO::~BioFormatsImageIO");
+  itkDebugMacro( "SCIFIOImageIO::~SCIFIOImageIO");
   DestroyJavaProcess();
   delete m_Argv;
 }
 
-void BioFormatsImageIO::DestroyJavaProcess()
+void SCIFIOImageIO::DestroyJavaProcess()
 {
   if( m_Process == NULL )
     {
@@ -281,12 +281,12 @@ void BioFormatsImageIO::DestroyJavaProcess()
 
   if( itksysProcess_GetState( m_Process ) == itksysProcess_State_Executing )
     {
-    itkDebugMacro("BioFormatsImageIO::DestroyJavaProcess killing java process");
+    itkDebugMacro("SCIFIOImageIO::DestroyJavaProcess killing java process");
     itksysProcess_Kill( m_Process );
     itksysProcess_WaitForExit( m_Process, NULL );
     }
 
-  itkDebugMacro("BioFormatsImageIO::DestroyJavaProcess destroying java process");
+  itkDebugMacro("SCIFIOImageIO::DestroyJavaProcess destroying java process");
   itksysProcess_Delete( m_Process );
   m_Process = NULL;
 
@@ -297,9 +297,9 @@ void BioFormatsImageIO::DestroyJavaProcess()
 #endif
 }
 
-bool BioFormatsImageIO::CanReadFile( const char* FileNameToRead )
+bool SCIFIOImageIO::CanReadFile( const char* FileNameToRead )
 {
-  itkDebugMacro( "BioFormatsImageIO::CanReadFile: FileNameToRead = " << FileNameToRead);
+  itkDebugMacro( "SCIFIOImageIO::CanReadFile: FileNameToRead = " << FileNameToRead);
 
   CreateJavaProcess();
 
@@ -307,7 +307,7 @@ bool BioFormatsImageIO::CanReadFile( const char* FileNameToRead )
   std::string command = "canRead\t";
   command += FileNameToRead;
   command += "\n";
-  itkDebugMacro("BioFormatsImageIO::CanRead command: " << command);
+  itkDebugMacro("SCIFIOImageIO::CanRead command: " << command);
 
   
  
@@ -330,7 +330,7 @@ bool BioFormatsImageIO::CanReadFile( const char* FileNameToRead )
   while( keepReading )
     {
     int retcode = itksysProcess_WaitForData( m_Process, &pipedata, &pipedatalength, NULL );
-    // itkDebugMacro( "BioFormatsImageIO::ReadImageInformation: reading " << pipedatalength << " bytes.");
+    // itkDebugMacro( "SCIFIOImageIO::ReadImageInformation: reading " << pipedatalength << " bytes.");
     if( retcode == itksysProcess_Pipe_STDOUT )
       {
 	  
@@ -352,10 +352,10 @@ bool BioFormatsImageIO::CanReadFile( const char* FileNameToRead )
     else
       {
       DestroyJavaProcess();
-      itkExceptionMacro(<<"BioFormatsImageIO: 'ITKBridgePipe canRead' exited abnormally. " << errorMessage);
+      itkExceptionMacro(<<"SCIFIOImageIO: 'ITKBridgePipe canRead' exited abnormally. " << errorMessage);
       }
     }
-  itkDebugMacro("BioFormatsImageIO::CanRead error output: " << errorMessage);
+  itkDebugMacro("SCIFIOImageIO::CanRead error output: " << errorMessage);
 
   // we have one thing per line
   int p0 = 0;
@@ -368,10 +368,10 @@ bool BioFormatsImageIO::CanReadFile( const char* FileNameToRead )
   return valueOfString<bool>(canRead);
 }
 
-void BioFormatsImageIO::ReadImageInformation()
+void SCIFIOImageIO::ReadImageInformation()
 {
  
-  itkDebugMacro( "BioFormatsImageIO::ReadImageInformation: m_FileName = " << m_FileName);
+  itkDebugMacro( "SCIFIOImageIO::ReadImageInformation: m_FileName = " << m_FileName);
 
   CreateJavaProcess();
 
@@ -379,7 +379,7 @@ void BioFormatsImageIO::ReadImageInformation()
   std::string command = "info\t";
   command += m_FileName;
   command += "\n";
-  itkDebugMacro("BioFormatsImageIO::ReadImageInformation command: " << command);
+  itkDebugMacro("SCIFIOImageIO::ReadImageInformation command: " << command);
 
   
 
@@ -400,7 +400,7 @@ void BioFormatsImageIO::ReadImageInformation()
   while( keepReading )
     {
     int retcode = itksysProcess_WaitForData( m_Process, &pipedata, &pipedatalength, NULL );
-    //itkDebugMacro( "BioFormatsImageIO::ReadImageInformation: reading " << pipedatalength << " bytes.");
+    //itkDebugMacro( "SCIFIOImageIO::ReadImageInformation: reading " << pipedatalength << " bytes.");
 
 	
     if( retcode == itksysProcess_Pipe_STDOUT )
@@ -423,11 +423,11 @@ void BioFormatsImageIO::ReadImageInformation()
     else
       {
       DestroyJavaProcess();
-      itkExceptionMacro(<<"BioFormatsImageIO: 'ITKBridgePipe info' exited abnormally. " << errorMessage);
+      itkExceptionMacro(<<"SCIFIOImageIO: 'ITKBridgePipe info' exited abnormally. " << errorMessage);
       }
     }
 
-  itkDebugMacro("BioFormatsImageIO::ReadImageInformation error output: " << errorMessage);
+  itkDebugMacro("SCIFIOImageIO::ReadImageInformation error output: " << errorMessage);
 
   this->SetNumberOfDimensions(5);
    
@@ -502,7 +502,7 @@ void BioFormatsImageIO::ReadImageInformation()
     // store the values in the dictionary
     if( dict.HasKey(key) )
       {
-      itkDebugMacro("BioFormatsImageIO::ReadImageInformation metadata " << key << " = " << value << " ignored because the key is already defined.");
+      itkDebugMacro("SCIFIOImageIO::ReadImageInformation metadata " << key << " = " << value << " ignored because the key is already defined.");
       }
     else
       {
@@ -593,7 +593,7 @@ void BioFormatsImageIO::ReadImageInformation()
     itkExceptionMacro("Unknown pixel type: "<< i);
     }
   itkDebugMacro("Setting ComponentType: " << i);
-  SetComponentType( bfToTIKComponentType(i) );
+  SetComponentType( scifioToTIKComponentType(i) );
 
   // x, y, z, t, c
   i = GetTypedMetaData<long>(dict, "SizeX");
@@ -646,14 +646,14 @@ void BioFormatsImageIO::ReadImageInformation()
   this->SetSpacing( 4, r );
 }
 
-void BioFormatsImageIO::Read(void* pData)
+void SCIFIOImageIO::Read(void* pData)
 {
-  itkDebugMacro("BioFormatsImageIO::Read");
+  itkDebugMacro("SCIFIOImageIO::Read");
   const ImageIORegion & region = this->GetIORegion();
 
   CreateJavaProcess();
 
-  itkDebugMacro("BioFormatsImageIO::Read region: ");
+  itkDebugMacro("SCIFIOImageIO::Read region: ");
 
 
   // send the command to the java process
@@ -672,7 +672,7 @@ void BioFormatsImageIO::Read(void* pData)
     command += "\t0\t1";
     }
   command += "\n";
-  itkDebugMacro("BioFormatsImageIO::Read command: " << command);
+  itkDebugMacro("SCIFIOImageIO::Read command: " << command);
 
 #ifdef WIN32
   DWORD bytesWritten;
@@ -694,7 +694,7 @@ void BioFormatsImageIO::Read(void* pData)
   while( pos < byteCount )
     {
     int retcode = itksysProcess_WaitForData( m_Process, &pipedata, &pipedatalength, NULL );
-    // itkDebugMacro( "BioFormatsImageIO::ReadImageInformation: reading " << pipedatalength << " bytes.");
+    // itkDebugMacro( "SCIFIOImageIO::ReadImageInformation: reading " << pipedatalength << " bytes.");
     if( retcode == itksysProcess_Pipe_STDOUT )
       {
       // std::cout << "pos: " << pos << "  reading: " << pipedatalength << std::endl;
@@ -708,16 +708,16 @@ void BioFormatsImageIO::Read(void* pData)
     else
       {
       DestroyJavaProcess();
-      itkExceptionMacro(<<"BioFormatsImageIO: 'ITKBridgePipe read' exited abnormally. " << errorMessage);
+      itkExceptionMacro(<<"SCIFIOImageIO: 'ITKBridgePipe read' exited abnormally. " << errorMessage);
       }
     }
 
-  itkDebugMacro("BioFormatsImageIO::Read error output: " << errorMessage);
+  itkDebugMacro("SCIFIOImageIO::Read error output: " << errorMessage);
 }
 
-bool BioFormatsImageIO::CanWriteFile(const char* name)
+bool SCIFIOImageIO::CanWriteFile(const char* name)
 {
-  itkDebugMacro("BioFormatsImageIO::CanWriteFile: name = " << name);
+  itkDebugMacro("SCIFIOImageIO::CanWriteFile: name = " << name);
   CreateJavaProcess();
 
   std::string command = "canWrite\t";
@@ -740,7 +740,7 @@ bool BioFormatsImageIO::CanWriteFile(const char* name)
   while( keepReading )
     {
     int retcode = itksysProcess_WaitForData( m_Process, &pipedata, &pipedatalength, NULL );
-    itkDebugMacro( "BioFormatsImageIO::CanWriteFile: reading " << pipedatalength << " bytes.");
+    itkDebugMacro( "SCIFIOImageIO::CanWriteFile: reading " << pipedatalength << " bytes.");
     if( retcode == itksysProcess_Pipe_STDOUT )
       {
       imgInfo += std::string( pipedata, pipedatalength );
@@ -761,11 +761,11 @@ bool BioFormatsImageIO::CanWriteFile(const char* name)
     else
       {
       DestroyJavaProcess();
-      itkExceptionMacro(<<"BioFormatsImageIO: 'ITKBridgePipe canWrite' exited abnormally. " << errorMessage);
+      itkExceptionMacro(<<"SCIFIOImageIO: 'ITKBridgePipe canWrite' exited abnormally. " << errorMessage);
       }
     }
 
-  itkDebugMacro("BioFormatsImageIO::CanWrite error output: " << errorMessage);
+  itkDebugMacro("SCIFIOImageIO::CanWrite error output: " << errorMessage);
 
   // we have one thing per line
   int p0 = 0;
@@ -778,15 +778,15 @@ bool BioFormatsImageIO::CanWriteFile(const char* name)
   return valueOfString<bool>(canWrite);
 }
 
-void BioFormatsImageIO::WriteImageInformation()
+void SCIFIOImageIO::WriteImageInformation()
 {
-  itkDebugMacro("BioFormatsImageIO::WriteImageInformation");
+  itkDebugMacro("SCIFIOImageIO::WriteImageInformation");
   // NB: Nothing to do.
 }
 
-void BioFormatsImageIO::Write(const void * buffer )
+void SCIFIOImageIO::Write(const void * buffer )
 {
-  itkDebugMacro("BioFormatsImageIO::Write");
+  itkDebugMacro("SCIFIOImageIO::Write");
 
   CreateJavaProcess();
 
@@ -835,8 +835,8 @@ void BioFormatsImageIO::Write(const void * buffer )
     command += "\t";
   }
 
-  itkDebugMacro("Pixel Type: " << itkToBFPixelType(GetComponentType()));
-  command += toString(itkToBFPixelType(GetComponentType()));
+  itkDebugMacro("Pixel Type: " << itkToSCIFIOPixelType(GetComponentType()));
+  command += toString(itkToSCIFIOPixelType(GetComponentType()));
   command += "\t";
 
   int rgbChannelCount = GetNumberOfComponents();
@@ -938,7 +938,7 @@ void BioFormatsImageIO::Write(const void * buffer )
 
   command += "\n";
 
-  itkDebugMacro("BioFormatsImageIO::Write command: " << command);
+  itkDebugMacro("SCIFIOImageIO::Write command: " << command);
 
 #ifdef WIN32
   DWORD bytesWritten;
@@ -953,7 +953,7 @@ void BioFormatsImageIO::Write(const void * buffer )
   char * pipedata;
   int pipedatalength = 1000;
 
-  itkDebugMacro("BioFormatsImageIO::Write reading data back ...");
+  itkDebugMacro("SCIFIOImageIO::Write reading data back ...");
   bool keepReading = true;
   while( keepReading )
     {
@@ -979,11 +979,11 @@ void BioFormatsImageIO::Write(const void * buffer )
     else
       {
       DestroyJavaProcess();
-      itkExceptionMacro(<<"BioFormatsImageIO: 'ITKBridgePipe Write' exited abnormally. " << errorMessage);
+      itkExceptionMacro(<<"SCIFIOImageIO: 'ITKBridgePipe Write' exited abnormally. " << errorMessage);
       }
     }
 
-  itkDebugMacro("BioFormatsImageIO::Write error output: " << errorMessage);
+  itkDebugMacro("SCIFIOImageIO::Write error output: " << errorMessage);
   itkDebugMacro("Read imgInfo: " << imgInfo);
 
   // bytesPerPlane is the first line
@@ -1049,11 +1049,11 @@ void BioFormatsImageIO::Write(const void * buffer )
           else
             {
             DestroyJavaProcess();
-            itkExceptionMacro(<<"BioFormatsImageIO: 'ITKBridgePipe Write' exited abnormally. " << errorMessage);
+            itkExceptionMacro(<<"SCIFIOImageIO: 'ITKBridgePipe Write' exited abnormally. " << errorMessage);
             }
           }
 
-        itkDebugMacro("BioFormatsImageIO::Write error output: " << errorMessage);
+        itkDebugMacro("SCIFIOImageIO::Write error output: " << errorMessage);
         itkDebugMacro("Read bytesDone: " << bytesDone);
       }
 
@@ -1083,11 +1083,11 @@ void BioFormatsImageIO::Write(const void * buffer )
         else
           {
           DestroyJavaProcess();
-          itkExceptionMacro(<<"BioFormatsImageIO: 'ITKBridgePipe Write' exited abnormally. " << errorMessage);
+          itkExceptionMacro(<<"SCIFIOImageIO: 'ITKBridgePipe Write' exited abnormally. " << errorMessage);
           }
         }
 
-       itkDebugMacro("BioFormatsImageIO::Write error output: " << errorMessage);
+       itkDebugMacro("SCIFIOImageIO::Write error output: " << errorMessage);
        itkDebugMacro("Read planeDone: " << planeDone);
   }
 }
