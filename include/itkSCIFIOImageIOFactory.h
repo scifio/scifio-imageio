@@ -23,7 +23,6 @@
 
 namespace itk
 {
-
 class ITK_EXPORT SCIFIOImageIOFactory : public ObjectFactoryBase
 {
 public:
@@ -57,9 +56,7 @@ protected:
 private:
   SCIFIOImageIOFactory(const Self&); // purposely not implemented
   void operator=(const Self&); // purposely not implemented
-
 };
-
 } // end namespace itk
 
 #endif

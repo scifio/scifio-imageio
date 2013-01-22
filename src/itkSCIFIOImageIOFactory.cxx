@@ -22,19 +22,17 @@
 
 namespace itk
 {
-
 SCIFIOImageIOFactory::SCIFIOImageIOFactory()
 {
   this->RegisterOverride("itkImageIOBase",
-    "itkSCIFIOImageIO",
-    "SCIFIO Image IO",
-    1,
-    CreateObjectFunction<SCIFIOImageIO>::New());
+                         "itkSCIFIOImageIO",
+                         "SCIFIO Image IO",
+                         1,
+                         CreateObjectFunction<SCIFIOImageIO>::New());
 }
 
 SCIFIOImageIOFactory::~SCIFIOImageIOFactory()
-{
-}
+{}
 
 const char*
 SCIFIOImageIOFactory::GetITKSourceVersion(void) const

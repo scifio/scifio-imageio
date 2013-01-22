@@ -18,7 +18,6 @@
 #ifndef __itkSCIFIOImageIO_h
 #define __itkSCIFIOImageIO_h
 
-// ITK includes
 #include "itkImageIOBase.h"
 #include "itkStreamingImageIOBase.h"
 #include <sstream>
@@ -27,7 +26,6 @@
 
 namespace itk
 {
-
 /** \class SCIFIOImageIO
  *
  * \brief Interface to the SCIFIO Java Library.
@@ -139,7 +137,6 @@ private:
   itksysProcess_Pipe_Handle    m_Pipe[2];
   itksysProcess *              m_Process;
 };
+} // end namespace itk
 
-}
-
-#endif
+#endif // __itkSCIFIOImageIO_h

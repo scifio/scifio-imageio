@@ -43,54 +43,49 @@
 
 #endif
 
-//--------------------------------------
-//
-// SCIFIOImageIO
-//
-
-namespace itk {
-
-  template <typename ReturnType>
-  ReturnType valueOfString( const std::string &s )
-  {
-    ReturnType res;
-    if( !(std::istringstream(s) >> res) )
-      {
-      itkGenericExceptionMacro(<<"SCIFIOImageIO: error while converting: " << s );
-      }
-    return res;
-  }
-
-  template <typename T>
-  T GetTypedMetaData ( MetaDataDictionary dict, std::string key )
-  {
-    std::string tmp;
-    ExposeMetaData<std::string>(dict, key, tmp);
-    return valueOfString<T>(tmp);
-  }
-
-  template <>
-  bool valueOfString <bool> ( const std::string &s )
-  {
-    std::stringstream ss;
-    ss << s;
-    bool res = false;
-    ss >> res;
-    if( ss.fail() )
+namespace itk
+{
+template <typename ReturnType>
+ReturnType valueOfString( const std::string &s )
+{
+  ReturnType res;
+  if( !(std::istringstream(s) >> res) )
     {
-      ss.clear();
-      ss >> std::boolalpha >> res;
+    itkGenericExceptionMacro(<<"SCIFIOImageIO: error while converting: " << s );
     }
-    return res;
-  }
+  return res;
+}
 
-  template<typename T>
-  std::string toString( const T & Value )
+template <typename T>
+T GetTypedMetaData ( MetaDataDictionary dict, std::string key )
+{
+  std::string tmp;
+  ExposeMetaData<std::string>(dict, key, tmp);
+  return valueOfString<T>(tmp);
+}
+
+template <>
+bool valueOfString <bool> ( const std::string &s )
+{
+  std::stringstream ss;
+  ss << s;
+  bool res = false;
+  ss >> res;
+  if( ss.fail() )
   {
-    std::ostringstream oss;
-    oss << Value;
-    return oss.str();
+    ss.clear();
+    ss >> std::boolalpha >> res;
   }
+  return res;
+}
+
+template<typename T>
+std::string toString( const T & Value )
+{
+  std::ostringstream oss;
+  oss << Value;
+  return oss.str();
+}
 
 SCIFIOImageIO::SCIFIOImageIO()
 {
