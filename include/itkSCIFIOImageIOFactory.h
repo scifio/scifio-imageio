@@ -48,13 +48,12 @@
 #define __itkSCIFIOImageIOFactory_h
 
 #include "itkObjectFactoryBase.h"
-#include "itkSCIFIOIOWin32Header.h"
 #include "itkImageIOBase.h"
 
 namespace itk
 {
 
-class SCIFIOImageIO_EXPORT SCIFIOImageIOFactory : public ObjectFactoryBase
+class ITK_EXPORT SCIFIOImageIOFactory : public ObjectFactoryBase
 {
 public:
   /** Standard class typedefs **/

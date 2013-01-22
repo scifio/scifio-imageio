@@ -50,7 +50,6 @@
 // ITK includes
 #include "itkImageIOBase.h"
 #include "itkStreamingImageIOBase.h"
-#include "itkSCIFIOIOWin32Header.h"
 #include <sstream>
 #include <iostream>
 #include "itksys/Process.h"
@@ -69,7 +68,7 @@ namespace itk
  * license. For details, see   
  * http://www.openmicroscopy.org/site/products/bio-formats
  */
-class SCIFIOImageIO_EXPORT SCIFIOImageIO : public StreamingImageIOBase
+class ITK_EXPORT SCIFIOImageIO : public StreamingImageIOBase
 {
 public:
   typedef SCIFIOImageIO           Self;

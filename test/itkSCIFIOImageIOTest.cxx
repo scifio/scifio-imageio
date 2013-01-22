@@ -60,7 +60,7 @@
   #define SPECIFIC_IMAGEIO_MODULE_TEST
 #endif
 
-int main( int argc, char * argv [] )
+int itkSCIFIOImageIOTest( int argc, char * argv [] )
 {
   if( argc < 3)
     {
