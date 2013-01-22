@@ -44,11 +44,6 @@
  * #L%
  */
 
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
-
-#include <iostream>
 #include "itkSCIFIOImageIO.h"
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
@@ -56,24 +51,26 @@
 #include "itkMetaDataObject.h"
 #include "itkStreamingImageFilter.h"
 
-#if defined(ITK_USE_MODULAR_BUILD)
-  #define SPECIFIC_IMAGEIO_MODULE_TEST
-#endif
-
 int itkSCIFIOImageIOTest( int argc, char * argv [] )
 {
   if( argc < 3)
     {
-    std::cerr << "Usage: " << argv[0] << " input output\n";
+    std::cerr << "Usage: " << argv[0] << " input output [numberOfStreamDivisions]\n";
     return EXIT_FAILURE;
+    }
+  const char * inputFileName = argv[1];
+  const char * outputFileName = argv[2];
+  std::string numberOfStreamDivisions = "4";
+  if( argc > 3 )
+    {
+    numberOfStreamDivisions = argv[3];
     }
 
   typedef unsigned char       PixelType;
   const unsigned int          Dimension = 3;
 
   typedef itk::Image< PixelType, Dimension >   ImageType;
-
-  typedef itk::ImageFileReader<ImageType> ReaderType;
+  typedef itk::ImageFileReader< ImageType >    ReaderType;
 
   itk::SCIFIOImageIO::Pointer io = itk::SCIFIOImageIO::New();
 
@@ -105,26 +102,24 @@ int itkSCIFIOImageIOTest( int argc, char * argv [] )
     return EXIT_FAILURE;
     }
 
-  reader->SetFileName(argv[1]);
+  reader->SetFileName( inputFileName );
 
   typedef itk::StreamingImageFilter<ImageType, ImageType> StreamingFilter;
   StreamingFilter::Pointer streamer = StreamingFilter::New();
   streamer->SetInput( reader->GetOutput() );
-  // should this be argv[2]? Anticipating seg fault as in RGB test
-  streamer->SetNumberOfStreamDivisions( atoi(argv[3]) );
+  streamer->SetNumberOfStreamDivisions( atoi(numberOfStreamDivisions.c_str()) );
 
-  itk::ImageFileWriter<ImageType>::Pointer writer;
-
+  typedef itk::ImageFileWriter< ImageType > WriterType;
+  WriterType::Pointer writer;
   //
   // Use the generic writers to write the image.
   //
-  writer = itk::ImageFileWriter<ImageType>::New();
-  writer->SetInput(streamer->GetOutput());
-  writer->SetFileName(argv[2]);
+  writer = WriterType::New();
+  writer->SetInput( streamer->GetOutput() );
+  writer->SetFileName( outputFileName );
 
   try
     {
-    streamer->Update();
     writer->Update();
     }
   catch (itk::ExceptionObject &e)
