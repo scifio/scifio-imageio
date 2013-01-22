@@ -81,7 +81,7 @@
 //
 
 namespace itk {
- 
+
   template <typename ReturnType>
   ReturnType valueOfString( const std::string &s )
   {
@@ -142,7 +142,7 @@ SCIFIOImageIO::SCIFIOImageIO()
     {
     itkExceptionMacro("ITK_AUTOLOAD_PATH is not set, you must set this environment variable and point it to the directory containing the loci_tools.jar file");
     }
-  
+
 
   dir.assign(path);
   if( dir.at(dir.length() - 1) != SLASH )
@@ -152,7 +152,7 @@ SCIFIOImageIO::SCIFIOImageIO()
   std::string classpath = dir+"loci_tools.jar";
   classpath += PATHSTEP+dir;
 
-  
+
 
 #ifdef WIN32
   std::string javaCommand = "java";
@@ -195,13 +195,13 @@ void SCIFIOImageIO::CreateJavaProcess()
     }
 
 #ifdef WIN32
-   SECURITY_ATTRIBUTES saAttr; 
-   saAttr.nLength = sizeof(SECURITY_ATTRIBUTES); 
-   saAttr.bInheritHandle = TRUE; 
+   SECURITY_ATTRIBUTES saAttr;
+   saAttr.nLength = sizeof(SECURITY_ATTRIBUTES);
+   saAttr.bInheritHandle = TRUE;
    saAttr.lpSecurityDescriptor = NULL;
-  
+
   if( !CreatePipe( &(m_Pipe[0]), &(m_Pipe[1]), &saAttr, 0) )
-	itkExceptionMacro(<<"createpipe() failed");
+    itkExceptionMacro(<<"createpipe() failed");
   if ( ! SetHandleInformation(m_Pipe[1], HANDLE_FLAG_INHERIT, 0) )
     itkExceptionMacro(<<"set inherited failed");
 #else
@@ -211,7 +211,7 @@ void SCIFIOImageIO::CreateJavaProcess()
   m_Process = itksysProcess_New();
   itksysProcess_SetCommand( m_Process, m_Argv );
   itksysProcess_SetPipeNative( m_Process, itksysProcess_Pipe_STDIN, m_Pipe);
-  
+
   itksysProcess_Execute( m_Process );
 
   int state = itksysProcess_GetState( m_Process );
@@ -312,8 +312,8 @@ bool SCIFIOImageIO::CanReadFile( const char* FileNameToRead )
   command += "\n";
   itkDebugMacro("SCIFIOImageIO::CanRead command: " << command);
 
-  
- 
+
+
 #ifdef WIN32
   DWORD bytesWritten;
   bool r = WriteFile( m_Pipe[1], command.c_str(), command.size(), &bytesWritten, NULL );
@@ -336,13 +336,13 @@ bool SCIFIOImageIO::CanReadFile( const char* FileNameToRead )
     // itkDebugMacro( "SCIFIOImageIO::ReadImageInformation: reading " << pipedatalength << " bytes.");
     if( retcode == itksysProcess_Pipe_STDOUT )
       {
-	  
+
       imgInfo += std::string( pipedata, pipedatalength );
       // if the two last char are "\n\n", then we're done
 #ifdef WIN32
       if( imgInfo.size() >= 4 && imgInfo.substr( imgInfo.size()-4, 4 ) == "\r\n\r\n" )
 #else
-	  if( imgInfo.size() >= 2 && imgInfo.substr( imgInfo.size()-2, 2 ) == "\n\n" )
+      if( imgInfo.size() >= 2 && imgInfo.substr( imgInfo.size()-2, 2 ) == "\n\n" )
 #endif
         {
         keepReading = false;
@@ -373,7 +373,7 @@ bool SCIFIOImageIO::CanReadFile( const char* FileNameToRead )
 
 void SCIFIOImageIO::ReadImageInformation()
 {
- 
+
   itkDebugMacro( "SCIFIOImageIO::ReadImageInformation: m_FileName = " << m_FileName);
 
   CreateJavaProcess();
@@ -384,7 +384,7 @@ void SCIFIOImageIO::ReadImageInformation()
   command += "\n";
   itkDebugMacro("SCIFIOImageIO::ReadImageInformation command: " << command);
 
-  
+
 
 #ifdef WIN32
   DWORD bytesWritten;
@@ -405,13 +405,13 @@ void SCIFIOImageIO::ReadImageInformation()
     int retcode = itksysProcess_WaitForData( m_Process, &pipedata, &pipedatalength, NULL );
     //itkDebugMacro( "SCIFIOImageIO::ReadImageInformation: reading " << pipedatalength << " bytes.");
 
-	
+
     if( retcode == itksysProcess_Pipe_STDOUT )
       {
       imgInfo += std::string( pipedata, pipedatalength );
       // if the two last char are "\n\n", then we're done
 #ifdef WIN32
-		if( imgInfo.size() >= 4 && imgInfo.substr( imgInfo.size()-4, 4 ) == "\r\n\r\n" )
+        if( imgInfo.size() >= 4 && imgInfo.substr( imgInfo.size()-4, 4 ) == "\r\n\r\n" )
 #else
         if( imgInfo.size() >= 2 && imgInfo.substr( imgInfo.size()-2, 2 ) == "\n\n" )
 #endif
@@ -433,7 +433,7 @@ void SCIFIOImageIO::ReadImageInformation()
   itkDebugMacro("SCIFIOImageIO::ReadImageInformation error output: " << errorMessage);
 
   this->SetNumberOfDimensions(5);
-   
+
   // fill the metadata dictionary
   MetaDataDictionary & dict = this->GetMetaDataDictionary();
 
@@ -444,7 +444,7 @@ void SCIFIOImageIO::ReadImageInformation()
 
   while( p0 < imgInfo.size() )
     {
-	
+
     // get the key line
 #ifdef WIN32
     p1 = imgInfo.find("\r\n", p0);
@@ -461,7 +461,7 @@ void SCIFIOImageIO::ReadImageInformation()
 #ifdef WIN32
       p0 = p1+2;
 #else
-	  p0 = p1+1;
+      p0 = p1+1;
 #endif
       continue;
       }
@@ -482,7 +482,7 @@ void SCIFIOImageIO::ReadImageInformation()
 #endif
 
     line = imgInfo.substr( p0, p1-p0 );
-	
+
     // ignore the empty lines
 #ifdef WIN32
     if( line == "\r" )
@@ -501,7 +501,7 @@ void SCIFIOImageIO::ReadImageInformation()
 
     std::string value = line;
     //itkDebugMacro("=== " << key << " = " << value << " ===");
-    
+
     // store the values in the dictionary
     if( dict.HasKey(key) )
       {
@@ -513,7 +513,7 @@ void SCIFIOImageIO::ReadImageInformation()
         // we have to unescape \\ and \n
         size_t lp0 = 0;
         size_t lp1 = 0;
-		
+
         while( lp0 < value.size() )
           {
           lp1 = value.find( "\\", lp0 );
@@ -521,7 +521,7 @@ void SCIFIOImageIO::ReadImageInformation()
             {
             tmp += value.substr( lp0, value.size()-lp0 );
             lp0 = value.size();
-			
+
             }
           else
             {
@@ -539,7 +539,7 @@ void SCIFIOImageIO::ReadImageInformation()
               }
             lp0 = lp1 + 2;
             }
-		    
+
           }
         itkDebugMacro("Storing metadata: " << key << " ---> " << tmp);
         EncapsulateMetaData< std::string >( dict, key, tmp );
@@ -551,7 +551,7 @@ void SCIFIOImageIO::ReadImageInformation()
 #else
       p0 = p1+1;
 #endif
-	
+
     }
 
   // save the dicitonary
@@ -749,7 +749,7 @@ bool SCIFIOImageIO::CanWriteFile(const char* name)
       imgInfo += std::string( pipedata, pipedatalength );
       // if the two last char are "\n\n", then we're done
 #ifdef WIN32
-	  if( imgInfo.size() >= 4 && imgInfo.substr( imgInfo.size()-4, 4 ) == "\r\n\r\n" )
+      if( imgInfo.size() >= 4 && imgInfo.substr( imgInfo.size()-4, 4 ) == "\r\n\r\n" )
 #else
       if( imgInfo.size() >= 2 && imgInfo.substr( imgInfo.size()-2, 2 ) == "\n\n" )
 #endif
@@ -968,7 +968,7 @@ void SCIFIOImageIO::Write(const void * buffer )
 #ifdef WIN32
       if( imgInfo.size() >= 4 && imgInfo.substr( imgInfo.size()-4, 4 ) == "\r\n\r\n" )
 #else
-	  if( imgInfo.size() >= 2 && imgInfo.substr( imgInfo.size()-2, 2 ) == "\n\n" )
+      if( imgInfo.size() >= 2 && imgInfo.substr( imgInfo.size()-2, 2 ) == "\n\n" )
 #endif
         {
         keepReading = false;
@@ -1014,12 +1014,12 @@ void SCIFIOImageIO::Write(const void * buffer )
 
         itkDebugMacro("Writing " << bytesToRead << " bytes to plane " << i << ".  Bytes read: " << bytesRead);
 
-		#ifdef WIN32
-		    DWORD bytesWritten;
-		    WriteFile( m_Pipe[1], data, bytesToRead, &bytesWritten, NULL );
-		#else
-			write( m_Pipe[1], data, bytesToRead );
-		#endif
+        #ifdef WIN32
+            DWORD bytesWritten;
+            WriteFile( m_Pipe[1], data, bytesToRead, &bytesWritten, NULL );
+        #else
+            write( m_Pipe[1], data, bytesToRead );
+        #endif
 
         data += bytesToRead;
         bytesRead += bytesToRead;
@@ -1036,7 +1036,7 @@ void SCIFIOImageIO::Write(const void * buffer )
             bytesDone += std::string( pipedata, pipedatalength );
             // if the two last char are "\n\n", then we're done
 #ifdef WIN32
-		    if( bytesDone.size() >= 4 && bytesDone.substr( bytesDone.size()-4, 4 ) == "\r\n\r\n" )
+            if( bytesDone.size() >= 4 && bytesDone.substr( bytesDone.size()-4, 4 ) == "\r\n\r\n" )
 #else
             if( bytesDone.size() >= 2 && bytesDone.substr( bytesDone.size()-2, 2 ) == "\n\n" )
 #endif
@@ -1070,7 +1070,7 @@ void SCIFIOImageIO::Write(const void * buffer )
           planeDone += std::string( pipedata, pipedatalength );
           // if the two last char are "\n\n", then we're done
 #ifdef WIN32
-		  if( planeDone.size() >= 4 && planeDone.substr( planeDone.size()-4, 4 ) == "\r\n\r\n" )
+          if( planeDone.size() >= 4 && planeDone.substr( planeDone.size()-4, 4 ) == "\r\n\r\n" )
 #else
           if( planeDone.size() >= 2 && planeDone.substr( planeDone.size()-2, 2 ) == "\n\n" )
 #endif
