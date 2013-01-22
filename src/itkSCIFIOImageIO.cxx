@@ -43,6 +43,19 @@
 
 #endif
 
+namespace
+{
+  std::string getEnv( const char* name )
+  {
+    char* result = getenv(name);
+    if ( result == NULL )
+      {
+      return "";
+      }
+    return result;
+  }
+}
+
 namespace itk
 {
 template <typename ReturnType>
@@ -94,37 +107,35 @@ SCIFIOImageIO::SCIFIOImageIO()
 
   this->m_FileType = Binary;
 
-  const char name[] = "ITK_AUTOLOAD_PATH";
-  const char* namePtr;
-  namePtr = name;
-  char * path;
-  path = getenv(name);
-  std::string dir("");
-
-  if( path == NULL)
+  // determine Java classpath from SCIFIO_PATH environment variable
+  std::string scifioPath = getEnv("SCIFIO_PATH");
+  if( scifioPath == "" )
     {
-    itkExceptionMacro("ITK_AUTOLOAD_PATH is not set, you must set this environment variable and point it to the directory containing the loci_tools.jar file");
+    itkExceptionMacro("SCIFIO_PATH is not set. " <<
+                      "This environment variable must point to the " <<
+                      "directory containing the SCIFIO JAR files");
+    }
+  std::string classpath = scifioPath + "/*";
+
+  // determine path to java executable from JAVA_HOME, if available
+  std::string javaCmd = "java";
+  std::string javaHome = getEnv("JAVA_HOME");
+  if( javaHome == "" )
+    {
+    itkDebugMacro("Warning: JAVA_HOME not set; assuming Java is on the path");
+    }
+  else
+    {
+    std::vector<std::string> javaCmdPath;
+    javaCmdPath.push_back( "" ); // NB: JoinPath skips the first one (why?).
+    javaCmdPath.push_back( javaHome );
+    javaCmdPath.push_back( "bin" );
+    javaCmdPath.push_back( "java" );
+    javaCmd = itksys::SystemTools::JoinPath(javaCmdPath);
     }
 
-
-  dir.assign(path);
-  if( dir.at(dir.length() - 1) != SLASH )
-    {
-    dir.append(1,SLASH);
-    }
-  std::string classpath = dir+"loci_tools.jar";
-  classpath += PATHSTEP+dir;
-
-
-
-#ifdef WIN32
-  std::string javaCommand = "java";
-#else
-  std::string javaCommand = "/usr/bin/java"; // todo: let the user choose the java executable
-#endif
-  itkDebugMacro("SCIFIOImageIO base command: "+javaCommand+" -Xmx256m -Djava.awt.headless=true -cp "+classpath);
-
-  m_Args.push_back( javaCommand );
+  m_Args.push_back( javaCmd );
+  // TODO: Parse memory settings and other flags from environment variables.
   m_Args.push_back( "-Xmx256m" );
   m_Args.push_back( "-Djava.awt.headless=true" );
   m_Args.push_back( "-cp" );

@@ -23,6 +23,7 @@
 #include <sstream>
 #include <iostream>
 #include "itksys/Process.h"
+#include "itksys/SystemTools.hxx"
 
 namespace itk
 {
