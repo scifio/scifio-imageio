@@ -8,13 +8,25 @@ target_link_libraries(ITKIOSCIFIO  ${ITKIOImageBase_LIBRARIES})
 itk_module_target(ITKIOSCIFIO)
 
 # Download the SCIFIO Java libraries.
+#
+# NB: For now, we use the loci_tools.jar bundle, because it is convenient,
+# and provides support for all supported file formats, including those
+# provided by the GPLed Bio-Formats library. ITK communicates with Java via
+# pipes, which is generally accepted as "indirect" enough to avoid legal
+# complications with linking to GPLed code.
+#
+# However, in the future, if this is deemed unacceptable, we need only
+# change the list of JARs below to include only BSD-licensed SCIFIO JARs
+# (including all their dependencies, of course). The downside is that
+# Bio-Formats-specific file formats, including all proprietary microscopy
+# formats, will no longer work "out of the box" -- the user will instead
+# need to manually add the GPLed Bio-Formats JARs into the mix first.
+#
 set( SCIFIOJars
   loci_tools.jar
-  scifio.jar
   )
 set( SCIFIOJars_SHA256
   3058f1d46da7e7f75f4d230459a7c1ca1ef293b2d1ffe883ff027ed0fcdf210c
-  81b24966e6d08a453a42f1097e3dd3616335ef75cb9aa828edc112050577133f
   )
 set( downloadDirectory Jars )
 set( SCIFIOJarsDownloadPaths )
