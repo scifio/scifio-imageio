@@ -28,13 +28,27 @@
 
 #define METADATA_NOT_FOUND "No value for this key."
 
-int main( int argc, char * argv[] )
+int itkSCIFIOImageInfoTest( int argc, char * argv[] )
 {
-  if( argc < 2)
+  std::cout << "--------- asdfasdfasdf ----------" << std::endl;
+  if( argc < 4)
   {
-    std::cerr << "Usage: " << argv[0] << " input\n";
+    std::cerr << "Usage: " << argv[0] << " sizeZ sizeC sizeT\n";
     return EXIT_FAILURE;
   }
+
+  char* sZ = argv[1];
+  char* sC = argv[2];
+  char* sT = argv[3];
+  std::string inputFile = "scifioImageInfo"
+                          "&sizeZ=" + std::string(sZ) +
+                          "&sizeC=" + std::string(sC) +
+                          "&sizeT=" + std::string(sT) +
+                          ".fake";
+  int sizeZ = atoi(sZ);
+  int sizeC = atoi(sC);
+  int sizeT = atoi(sT);
+  std::cout << "--------- itkSCIFIOImageInfoTest ----------" << std::endl;
 
   typedef unsigned char     PixelType;
   const unsigned int        Dimension = 3;
@@ -46,7 +60,7 @@ int main( int argc, char * argv[] )
   ReaderType::Pointer reader = ReaderType::New();
   ImageType::Pointer img;
 
-  reader->SetFileName(argv[1]);
+  reader->SetFileName(inputFile);
   reader->Update();
   img = reader->GetOutput();
 
@@ -87,4 +101,8 @@ int main( int argc, char * argv[] )
   std::cout << "Pixel Type: " << reader->GetImageIO()->GetComponentTypeAsString(reader->GetImageIO()->GetComponentType()) << std::endl;
   std::cout << "RGB Channel Count: " << reader->GetImageIO()->GetNumberOfComponents() << std::endl;
   std::cout << "Number of Dimensions: " << reader->GetImageIO()->GetNumberOfDimensions() << std::endl;
+
+  // TODO: Compare region attributes with input parameters.
+
+  return EXIT_SUCCESS;
 }
