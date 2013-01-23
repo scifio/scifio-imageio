@@ -134,9 +134,17 @@ SCIFIOImageIO::SCIFIOImageIO()
   std::string scifioPath = getEnv("SCIFIO_PATH");
   if( scifioPath == "" )
     {
-    itkExceptionMacro("SCIFIO_PATH is not set. " <<
-                      "This environment variable must point to the " <<
-                      "directory containing the SCIFIO JAR files");
+    scifioPath = "@JAR_BUILD_TREE_LOCATION@";
+    if( !itksys::SystemTools::FileExists( scifioPath.c_str(), false ) )
+      {
+      scifioPath = "@JAR_INSTALL_TREE_LOCATION@";
+      if( !itksys::SystemTools::FileExists( scifioPath.c_str(), false ) )
+        {
+        itkExceptionMacro("SCIFIO_PATH is not set. " <<
+                          "This environment variable must point to the " <<
+                          "directory containing the SCIFIO JAR files");
+        }
+      }
     }
   std::string classpath = scifioPath + "/*";
 

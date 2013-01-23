@@ -1,14 +1,3 @@
-set(ITKIOSCIFIO_SRC
-itkSCIFIOImageIOFactory.cxx
-itkSCIFIOImageIO.cxx
-)
-
-add_library(ITKIOSCIFIO ${ITKIOSCIFIO_SRC})
-target_link_libraries(ITKIOSCIFIO  ${ITKIOImageBase_LIBRARIES})
-itk_module_target(ITKIOSCIFIO)
-
-# Download the SCIFIO Java libraries.
-#
 # NB: For now, we use the loci_tools.jar bundle, because it is convenient,
 # and provides support for all supported file formats, including those
 # provided by the GPLed Bio-Formats library. ITK communicates with Java via
@@ -28,12 +17,32 @@ set( SCIFIOJars
 set( SCIFIOJars_SHA256
   3058f1d46da7e7f75f4d230459a7c1ca1ef293b2d1ffe883ff027ed0fcdf210c
   )
-set( downloadDirectory Jars )
+set( downloadDirectory jars )
 set( SCIFIOJarsDownloadPaths )
 foreach( jar ${SCIFIOJars} )
   set( SCIFIOJarsDownloadPaths "${SCIFIOJarsDownloadPaths}
   ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${downloadDirectory}/${jar}" )
 endforeach()
+set( JAR_BUILD_TREE_LOCATION 
+  ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${downloadDirectory}/
+  )
+set( JAR_INSTALL_TREE_LOCATION
+  ${CMAKE_INSTALL_PREFIX}/${${ITKIOSCIFIO}_INSTALL_LIBRARY_DIR}/${downloadDirectory}
+  )
+
+configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/itkSCIFIOImageIO.cxx.in
+  ${CMAKE_CURRENT_BINARY_DIR}/itkSCIFIOImageIO.cxx
+  )
+set(ITKIOSCIFIO_SRC
+  itkSCIFIOImageIOFactory.cxx
+  ${CMAKE_CURRENT_BINARY_DIR}/itkSCIFIOImageIO.cxx
+  )
+
+add_library(ITKIOSCIFIO ${ITKIOSCIFIO_SRC})
+target_link_libraries(ITKIOSCIFIO  ${ITKIOImageBase_LIBRARIES})
+itk_module_target(ITKIOSCIFIO)
+
+# Download the SCIFIO Java libraries.
 configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/DownloadSCIFIO.cmake.in
   ${CMAKE_CURRENT_BINARY_DIR}/DownloadSCIFIO.cmake
   @ONLY
@@ -46,8 +55,8 @@ add_custom_command(TARGET ITKIOSCIFIO
   COMMENT "Downloading SCIFIO libraries..."
   )
 
-install( DIRECTORY ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${downloadDirectory}/
-  DESTINATION ${${ITKIOSCIFIO}_INSTALL_LIBRARY_DIR}/${downloadDirectory}
+install( DIRECTORY ${JAR_BUILD_TREE_LOCATION}
+  DESTINATION ${JAR_INSTALL_TREE_LOCATION}
   COMPONENT RuntimeLibraries
   FILES_MATCHING PATTERN "*.jar"
   )
