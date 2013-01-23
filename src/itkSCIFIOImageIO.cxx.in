@@ -232,7 +232,11 @@ void SCIFIOImageIO::CreateJavaProcess()
   if ( ! SetHandleInformation(m_Pipe[1], HANDLE_FLAG_INHERIT, 0) )
     itkExceptionMacro(<<"set inherited failed");
 #else
-  pipe( m_Pipe );
+  const int pipeResult = pipe( m_Pipe );
+  if( pipeResult != 0 )
+    {
+    itkExceptionMacro(<<"Error with SCIFIOImageIO pipe.");
+    }
 #endif
 
   m_Process = itksysProcess_New();
