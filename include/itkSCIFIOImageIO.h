@@ -43,7 +43,8 @@ namespace itk
  * - SCIFIO Java libraries (i.e., JAR files) -- for open [file formats]
  * - optionally, Bio-Formats Java libraries -- for additional [file formats]
  *
- * Note that none of the above are required at build time.
+ * Note that none of the above are required at build time.  By default, the
+ * Bio-Formats Java libraries (loci_tools.jar) are downloaded at build time.
  *
  * The following environment variables can optionally be set to control the
  * behavior of the SCIFIO ImageIO plugin -- in particular, how it interfaces
@@ -53,7 +54,7 @@ namespace itk
  *   binary. If not set, "java" must be on the system path.
  * - SCIFIO_PATH - Specifies the location of the required SCIFIO JAR
  *   libraries. If unset, the default behavior is to first check the
- *   lib/Jars subfolder of the build directory. Failing that, it looks for
+ *   lib/jars subfolder of the build directory. Failing that, it looks for
  *   the same subfolder in the install directory given at build time.
  * - JAVA_FLAGS - Used to pass any additional desired parameters to the Java
  *   execution. This is especially useful to override Java's maximum heap
