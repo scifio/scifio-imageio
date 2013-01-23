@@ -90,23 +90,24 @@ private:
   }
 
   ITKComponent scifioToTIKComponentType( int pixelType ) {
-    switch ( pixelType ) {
-      case 0:
-        return CHAR;
-      case 1:
-        return UCHAR;
-      case 2:
-        return INT;
-      case 3:
-        return UINT;
-      case 4:
-        return LONG;
-      case 5:
-         return ULONG;
-      case 6:
-        return FLOAT;
-      default:
-        return DOUBLE;
+    switch ( pixelType )
+    {
+    case 0:
+      return CHAR;
+    case 1:
+      return UCHAR;
+    case 2:
+      return INT;
+    case 3:
+      return UINT;
+    case 4:
+      return LONG;
+    case 5:
+       return ULONG;
+    case 6:
+      return FLOAT;
+    default:
+      return DOUBLE;
     }
   }
 
