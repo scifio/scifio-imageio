@@ -39,7 +39,7 @@ namespace itk
 class ITK_EXPORT SCIFIOImageIO : public StreamingImageIOBase
 {
 public:
-  typedef SCIFIOImageIO           Self;
+  typedef SCIFIOImageIO               Self;
   typedef ImageIOBase                 Superclass;
   typedef SmartPointer<Self>          Pointer;
   typedef SmartPointer<const Self>    ConstPointer;
@@ -72,10 +72,10 @@ protected:
   virtual SizeType GetHeaderSize() const { return 0; }
 
 private:
-  typedef itk::ImageIOBase::IOComponentType ITKComponent;
-  typedef itk::MetaDataDictionary ITKMeta;
+  typedef itk::ImageIOBase::IOComponentType  ITKComponent;
+  typedef itk::MetaDataDictionary            ITKMeta;
 
-  ITKMeta itkMeta;
+  ITKMeta m_Meta;
 
   char ** toCArray( std::vector< std::string > & args )
   {

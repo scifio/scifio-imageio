@@ -331,8 +331,6 @@ bool SCIFIOImageIO::CanReadFile( const char* FileNameToRead )
   command += "\n";
   scifioDebug("SCIFIOImageIO::CanRead command: " << command);
 
-
-
 #ifdef WIN32
   DWORD bytesWritten;
   bool r = WriteFile( m_Pipe[1], command.c_str(), command.size(), &bytesWritten, NULL );
@@ -402,8 +400,6 @@ void SCIFIOImageIO::ReadImageInformation()
   command += m_FileName;
   command += "\n";
   scifioDebug("SCIFIOImageIO::ReadImageInformation command: " << command);
-
-
 
 #ifdef WIN32
   DWORD bytesWritten;
@@ -575,7 +571,7 @@ void SCIFIOImageIO::ReadImageInformation()
 
   // save the dicitonary
 
-  itkMeta = dict;
+  m_Meta = dict;
 
   // set the values needed by the reader
   std::string s;
@@ -901,7 +897,7 @@ void SCIFIOImageIO::Write(const void * buffer )
 
   // build lut if necessary
 
-  MetaDataDictionary & dict = itkMeta;
+  MetaDataDictionary & dict = m_Meta;
 
   bool useLut = GetTypedMetaData<bool>(dict, "UseLUT");
 

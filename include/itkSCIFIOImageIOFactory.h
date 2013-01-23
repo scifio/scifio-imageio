@@ -27,7 +27,7 @@ class ITK_EXPORT SCIFIOImageIOFactory : public ObjectFactoryBase
 {
 public:
   /** Standard class typedefs **/
-  typedef SCIFIOImageIOFactory  Self;
+  typedef SCIFIOImageIOFactory      Self;
   typedef ObjectFactoryBase         Superclass;
   typedef SmartPointer<Self>        Pointer;
   typedef SmartPointer<const Self>  ConstPointer;
