@@ -59,4 +59,4 @@ private:
 };
 } // end namespace itk
 
-#endif
+#endif // __itkSCIFIOImageIOFactory_h
