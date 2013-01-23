@@ -33,6 +33,8 @@ namespace itk
  *
  * This class provides an adaptor gate to use all the file formats supported by
  * the SCIFIO Java library.
+ *
+ * \ingroup ITKIOSCIFIO
  */
 class ITK_EXPORT SCIFIOImageIO : public StreamingImageIOBase
 {
