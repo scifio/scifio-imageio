@@ -27,6 +27,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <string>
+#include <sstream>
+#include <vector>
+
 #if defined (_WIN32)
 #define PATHSTEP ';'
 #define SLASH '\\'
@@ -58,6 +62,30 @@ namespace
       return "";
       }
     return result;
+  }
+
+  /*
+   * Splits a string into tokens using the given delimiter.
+   *
+   * Thanks to SO #236129 for this solution:
+   * http://stackoverflow.com/a/236803
+   */
+  std::vector<std::string> &split( const std::string &s, char delim,
+                                   std::vector<std::string> &elems )
+  {
+    std::stringstream ss(s);
+    std::string item;
+    while(std::getline(ss, item, delim)) {
+      elems.push_back(item);
+    }
+    return elems;
+  }
+
+
+  std::vector<std::string> split( const std::string &s, char delim )
+  {
+    std::vector<std::string> elems;
+    return split(s, delim, elems);
   }
 }
 
@@ -138,19 +166,34 @@ SCIFIOImageIO::SCIFIOImageIO()
     javaCmd = itksys::SystemTools::JoinPath(javaCmdPath);
     }
 
+  // use the appropriate java command
   m_Args.push_back( javaCmd );
-  // TODO: Parse memory settings and other flags from environment variables.
+
+  // allocate 256MB by default (can be overridden using JAVA_FLAGS variable)
   m_Args.push_back( "-Xmx256m" );
+
+  // run headless, to avoid any problems with AWT
   m_Args.push_back( "-Djava.awt.headless=true" );
+
+  // append Java classpath
   m_Args.push_back( "-cp" );
   m_Args.push_back( classpath );
+
+  // append any user-given parameters
+  std::string javaFlags = getEnv("JAVA_FLAGS");
+  split(javaFlags, ' ', m_Args);
+
+  // append the name of the main class to execute
   // NB: The package "loci.formats" will change to "ome.scifio" in a future
   // release. When SCIFIO is updated to a 4.5.x version, this string will
   // likely need to change to something like "ome.scifio.itk.SCIFIOImageIO".
   m_Args.push_back( "loci.formats.itk.ITKBridgePipes" );
+
+  // append the command to pass to the ITK bridge
   m_Args.push_back( "waitForInput" );
 
-  // output full Java command, for debugging
+  // output the full Java command line, for debugging
+  scifioDebug("");
   scifioDebug("-- JAVA COMMAND --");
   for (unsigned int i=0; i<m_Args.size(); i++) {
    scifioDebug("\t" << m_Args.at(i));
