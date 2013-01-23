@@ -31,20 +31,11 @@
 #include <sstream>
 #include <vector>
 
-#if defined (_WIN32)
-#define PATHSTEP ';'
-#define SLASH '\\'
-#else
-#define PATHSTEP ':'
-#define SLASH '/'
-#endif
-
 #ifdef WIN32
 #include <io.h>
 #include <fcntl.h>
 #include <process.h>
 #include <math.h>
-
 #endif
 
 #define scifioDebug(msg)          \
