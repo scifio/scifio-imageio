@@ -43,8 +43,8 @@ SCIFIOImageIOFactory::GetITKSourceVersion(void) const
 const char*
 SCIFIOImageIOFactory::GetDescription() const
 {
-  return "SCIFIO ImageIO Factory, allows the loading of " +
-         "SCIFIO-compatible images into Insight; see " +
+  return "SCIFIO ImageIO Factory, allows the loading of "
+         "SCIFIO-compatible images into Insight; see "
          "http://openmicroscopy.org/site/support/bio-formats/users/itk";
 }
 
