@@ -153,7 +153,15 @@ SCIFIOImageIO::SCIFIOImageIO()
   std::string javaHome = getEnv("JAVA_HOME");
   if( javaHome == "" )
     {
-    scifioDebug("Warning: JAVA_HOME not set; assuming Java is on the path");
+    javaHome = "@JRE_BUILD_TREE_LOCATION@";
+    if( !itksys::SystemTools::FileExists( javaHome.c_str(), false ) )
+      {
+      javaHome = "@JRE_INSTALL_TREE_LOCATION@";
+      if( !itksys::SystemTools::FileExists( javaHome.c_str(), false ) )
+        {
+        scifioDebug("Warning: JAVA_HOME not set; assuming Java is on the path");
+        }
+      }
     }
   else
     {

@@ -18,17 +18,40 @@ set( SCIFIOJars_SHA256
   3058f1d46da7e7f75f4d230459a7c1ca1ef293b2d1ffe883ff027ed0fcdf210c
   )
 set( downloadDirectory jars )
-set( SCIFIOJarsDownloadPaths )
-foreach( jar ${SCIFIOJars} )
-  set( SCIFIOJarsDownloadPaths "${SCIFIOJarsDownloadPaths}
-  ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${downloadDirectory}/${jar}" )
-endforeach()
 set( JAR_BUILD_TREE_LOCATION 
   ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${downloadDirectory}/
   )
 set( JAR_INSTALL_TREE_LOCATION
-  ${CMAKE_INSTALL_PREFIX}/${${ITKIOSCIFIO}_INSTALL_LIBRARY_DIR}/${downloadDirectory}
+  ${CMAKE_INSTALL_PREFIX}/${${ITKIOSCIFIO}_INSTALL_LIBRARY_DIR}/jre
   )
+
+# Java Runtime Environment
+set( jreTarballDownloadDirectory "${CMAKE_CURRENT_BINARY_DIR}" )
+set( JRE_BUILD_TREE_LOCATION 
+  ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${downloadDirectory}/
+  )
+set( JRE_INSTALL_TREE_LOCATION
+  ${CMAKE_INSTALL_PREFIX}/${${ITKIOSCIFIO}_INSTALL_LIBRARY_DIR}/jre
+  )
+set( jreTarballMD5 "" )
+if( WIN32 )
+  if( "${CMAKE_SIZEOF_VOID_P}" EQUAL 8 )
+    # win64
+    set( jreTarballMD5 "5be3a27fc46997785ee70e0e0f140135" )
+  else()
+    # win32
+    set( jreTarballMD5 "a0f445bbe2f44e52a56f99e0e9d33c1a" )
+  endif()
+elseif( "${CMAKE_SYSTEM_NAME}" MATCHES "Linux" )
+  if( "${CMAKE_SIZEOF_VOID_P}" EQUAL 8 )
+    # linux-amd64
+    set( jreTarballMD5 "4c75412942f7d36c5e8b8fb38ba975bc" )
+  else()
+    # linux
+    set( jreTarballMD5 "777bd36ea81ca1b732ef8115a347fd66" )
+  endif()
+endif()
+
 
 configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/itkSCIFIOImageIO.cxx.in
   ${CMAKE_CURRENT_BINARY_DIR}/itkSCIFIOImageIO.cxx
@@ -47,16 +70,29 @@ configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/DownloadSCIFIO.cmake.in
   ${CMAKE_CURRENT_BINARY_DIR}/DownloadSCIFIO.cmake
   @ONLY
   )
-
 add_custom_command(TARGET ITKIOSCIFIO
   POST_BUILD
   COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/DownloadSCIFIO.cmake
   WORKING_DIRECTORY ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}
   COMMENT "Downloading SCIFIO libraries..."
   )
-
 install( DIRECTORY ${JAR_BUILD_TREE_LOCATION}
   DESTINATION ${JAR_INSTALL_TREE_LOCATION}
   COMPONENT RuntimeLibraries
   FILES_MATCHING PATTERN "*.jar"
+  )
+
+configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/DownloadJRE.cmake.in
+  ${CMAKE_CURRENT_BINARY_DIR}/DownloadJRE.cmake
+  @ONLY
+  )
+add_custom_command(TARGET ITKIOSCIFIO
+  POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/DownloadJRE.cmake
+  WORKING_DIRECTORY ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}
+  COMMENT "Downloading JRE libraries..."
+  )
+install( DIRECTORY ${JRE_BUILD_TREE_LOCATION}
+  DESTINATION ${JRE_INSTALL_TREE_LOCATION}
+  COMPONENT RuntimeLibraries
   )
