@@ -31,8 +31,38 @@ namespace itk
  *
  * \brief Interface to the SCIFIO Java Library.
  *
- * This class provides an adaptor gate to use all the file formats supported by
- * the SCIFIO Java library.
+ * This class provides the ability to read and write all the file formats
+ * supported by the [SCIFIO] Java library, including [Bio-Formats].
+ *
+ * It invokes a Java process via a system call, and uses pipes to
+ * communicate with it.
+ *
+ * The SCIFIO ImageIO module has the following runtime requirements:
+ *
+ * - Java Runtime Environment (JRE)
+ * - SCIFIO Java libraries (i.e., JAR files) -- for open [file formats]
+ * - optionally, Bio-Formats Java libraries -- for additional [file formats]
+ *
+ * Note that none of the above are required at build time.
+ *
+ * The following environment variables can optionally be set to control the
+ * behavior of the SCIFIO ImageIO plugin -- in particular, how it interfaces
+ * with the Java Runtime Environment:
+ *
+ * - JAVA_HOME - Environment variable to determine the location of the java
+ *   binary. If not set, "java" must be on the system path.
+ * - SCIFIO_PATH - Specifies the location of the required SCIFIO JAR
+ *   libraries. If unset, the default behavior is to first check the
+ *   lib/Jars subfolder of the build directory. Failing that, it looks for
+ *   the same subfolder in the install directory given at build time.
+ * - JAVA_FLAGS - Used to pass any additional desired parameters to the Java
+ *   execution. This is especially useful to override Java's maximum heap
+ *   size, but also nice for tweaking the VM in many other ways (e.g.,
+ *   garbage collection settings).
+ *
+ * [scifio]:       http://openmicroscopy.org/site/support/bio-formats/developers/scifio.html
+ * [bio-formats]:  http://openmicroscopy.org/site/products/bio-formats
+ * [file formats]: http://openmicroscopy.org/site/support/bio-formats/formats
  *
  * \ingroup ITKIOSCIFIO
  */
