@@ -29,7 +29,7 @@ namespace itk
 {
 /** \class SCIFIOImageIO
  *
- * \brief Interface to the SCIFIO Java Library.
+ * \brief Interface to the OME SCIFIO Java Library.
  *
  * This class provides the ability to read and write all the file formats
  * supported by the [SCIFIO] Java library, including [Bio-Formats].
@@ -40,11 +40,19 @@ namespace itk
  * The SCIFIO ImageIO module has the following runtime requirements:
  *
  * - Java Runtime Environment (JRE)
- * - SCIFIO Java libraries (i.e., JAR files) -- for open [file formats]
- * - optionally, Bio-Formats Java libraries -- for additional [file formats]
+ * - SCIFIO Java libraries (i.e., JAR files) -- for open [file formats].
+ *   SCIFIO (which stands for "SCientific Image Formats Input and Output)
+ *   is a framework for image I/O in Java. It is permissively licensed
+ *   (BSD-2) and includes support for reading and writing several formats.
+ * - Optionally, Bio-Formats Java libraries -- for additional [file formats].
+ *   Bio-Formats is an extension of SCIFIO, licensed under the GPL, which
+ *   provides support for a large number (more than 120) proprietary file
+ *   formats (PFFs), particularly those in life sciences disciplines.
  *
- * Note that none of the above are required at build time.  By default, the
- * Bio-Formats Java libraries (loci_tools.jar) are downloaded at build time.
+ * Note that none of the above are required at build time. By default, the
+ * Bio-Formats Java libraries (loci_tools.jar, which is a bundle of all
+ * SCIFIO & Bio-Formats libraries including dependencies) are downloaded at
+ * build time and placed into the lib/Jars subfolder of the build tree.
  *
  * The following environment variables can optionally be set to control the
  * behavior of the SCIFIO ImageIO plugin -- in particular, how it interfaces
