@@ -30,6 +30,17 @@
 
 #define METADATA_NOT_FOUND "No value for this key."
 
+#define assertEquals(name, expected, actual)                \
+  {                                                         \
+  if( expected != actual )                                  \
+    {                                                       \
+    std::cerr << "[ERROR] " << name << " does not match: "  \
+                 "expected=" << expected << "; "            \
+                 "actual=" << actual << std::endl;          \
+    return EXIT_FAILURE;                                    \
+    }                                                       \
+  }
+
 namespace
 {
   /*
@@ -70,31 +81,35 @@ int itkSCIFIOImageInfoTest( int argc, char * argv[] )
   // so instead we simply split the arguments here, which suffices.
   std::vector<std::string> argList = split(std::string(argv[1]), ' ');
 
-  if( argList.size() != 3 )
+  if( argList.size() != 5 )
   {
-    std::cerr << "Argument not of the form: sizeZ sizeC sizeT\n";
+    std::cerr << "Argument not of the form: sizeX sizeY sizeZ sizeT sizeC\n";
     return EXIT_FAILURE;
   }
-  std::string sZ = argList[0];
-  std::string sC = argList[1];
-  std::string sT = argList[2];
+  std::string sX = argList[0];
+  std::string sY = argList[1];
+  std::string sZ = argList[2];
+  std::string sT = argList[3];
+  std::string sC = argList[4];
 
   // Create a fake file on disk, for use with testing the SCIFIO ImageIO
   // reader. SCIFIO does not actually care whether the file exists.
   std::string id = "scifioImageInfo"
+                   "&sizeX=" + sX +
+                   "&sizeY=" + sY +
                    "&sizeZ=" + sZ +
-                   "&sizeC=" + sC +
                    "&sizeT=" + sT +
+                   "&sizeC=" + sC +
                    ".fake";
 
+  int sizeX = atoi(sX.c_str());
+  int sizeY = atoi(sY.c_str());
   int sizeZ = atoi(sZ.c_str());
-  int sizeC = atoi(sC.c_str());
   int sizeT = atoi(sT.c_str());
-
-  std::cout << "--------- itkSCIFIOImageInfoTest ----------" << std::endl;
+  int sizeC = atoi(sC.c_str());
 
   typedef unsigned char     PixelType;
-  const unsigned int        Dimension = 3;
+  const unsigned int        Dimension = 5;
 
   typedef itk::Image< PixelType, Dimension >  ImageType;
   typedef itk::ImageFileReader<ImageType> ReaderType;
@@ -106,10 +121,25 @@ int itkSCIFIOImageInfoTest( int argc, char * argv[] )
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetImageIO(io);
 
-  reader->SetFileName(inputFile);
+  reader->SetFileName(id);
   reader->Update();
 
   ImageType::Pointer img = reader->GetOutput();
+
+  int actualSizeX = img->GetLargestPossibleRegion().GetSize()[0];
+  int actualSizeY = img->GetLargestPossibleRegion().GetSize()[1];
+  int actualSizeZ = img->GetLargestPossibleRegion().GetSize()[2];
+  int actualSizeT = img->GetLargestPossibleRegion().GetSize()[3];
+  int actualSizeC = img->GetLargestPossibleRegion().GetSize()[4];
+
+  assertEquals("sizeX", sizeX, actualSizeX);
+  assertEquals("sizeY", sizeY, actualSizeY);
+  assertEquals("sizeZ", sizeZ, actualSizeZ);
+  assertEquals("sizeT", sizeT, actualSizeT);
+  assertEquals("sizeC", sizeC, actualSizeC);
+
+  // TODO: Pass more parameters (e.g., pixelType) to this test class,
+  // and assert that the itk::Image structure matches those values.
 
   std::string metaString (METADATA_NOT_FOUND);
   itk::MetaDataDictionary imgMetaDictionary = img->GetMetaDataDictionary();

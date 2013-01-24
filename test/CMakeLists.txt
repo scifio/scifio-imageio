@@ -12,9 +12,9 @@ CreateTestDriver(ITKIOSCIFIO  "${ITKIOSCIFIO-Test_LIBRARIES}" "${ITKIOSCIFIOTest
 
 # Test input using itk::Image
 set(scifioImageInfoTests
-"1 1 1"
-"1 2 3"
-"11 7 5"
+"37 41 1 1 1"
+"23 90 1 2 3"
+"1 1 11 7 5"
 )
 list(LENGTH scifioImageInfoTests scifioImageInfoTestCount)
 math(EXPR scifioImageInfoTestRange "${scifioImageInfoTestCount} - 1")
