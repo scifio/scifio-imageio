@@ -141,45 +141,52 @@ int itkSCIFIOImageInfoTest( int argc, char * argv[] )
   // TODO: Pass more parameters (e.g., pixelType) to this test class,
   // and assert that the itk::Image structure matches those values.
 
-  std::string metaString (METADATA_NOT_FOUND);
+  // Dump the metadata dictionary
+  std::cout << std::endl;
+  std::cout << "--== Metadata from dictionary ==--" << std::endl;
   itk::MetaDataDictionary imgMetaDictionary = img->GetMetaDataDictionary();
   std::vector<std::string> imgMetaKeys = imgMetaDictionary.GetKeys();
-  std::vector<std::string>::const_iterator itKey = imgMetaKeys.begin();
-
-  // Iterate through the keys and print their paired values
-  std::cout << "Metadata Key ---> Value pairs, from dictionary:" << std::endl;
-  for(; itKey != imgMetaKeys.end(); ++itKey)
-  {
+  for(std::vector<std::string>::const_iterator itKey = imgMetaKeys.begin();
+      itKey != imgMetaKeys.end(); ++itKey)
+    {
     std::string tmp;
     itk::ExposeMetaData<std::string>( imgMetaDictionary, *itKey, tmp );
-    std::cout << *itKey << " ---> " << tmp << std::endl;
-    //std::cout << "Metadata: " << notes1 << std::endl;
-    metaString = METADATA_NOT_FOUND;
-  }
+    std::cout << "\t" << *itKey << " ---> " << tmp << std::endl;
+    }
+  std::cout << std::endl;
 
-  // Print out the metadata naturally contained within itkImageIOBase
-  itk::ImageIORegion region = reader->GetImageIO()->GetIORegion();
+  // Dump the metadata naturally contained within ImageIOBase
+  itk::ImageIOBase *imageIO = reader->GetImageIO();
+  itk::ImageIORegion region = imageIO->GetIORegion();
   int regionDim = region.GetImageDimension();
-
-  std::cout << "Metadata Key ---> Value pairs, from ImageIOBase:" << std::endl;
-
+  std::cout << "--== Metadata from ImageIOBase ==--" << std::endl;
+  for(int i = 0; i < regionDim; i++)
+    {
+    std::cout << "\tDimension " << i + 1 << " Size: "
+              << region.GetSize(i) << std::endl;
+    }
   for(int i = 0; i < regionDim; i++)
   {
-    std::cout << "Dimension " << i + 1 << " Size: " << region.GetSize(i) << std::endl;
+    std::cout << "\tSpacing " << i + 1 << ": "
+              << imageIO->GetSpacing(i) << std::endl;
   }
-  for(int i = 0; i < regionDim; i++)
-  {
-    std::cout << "Spacing " << i + 1 << ": " << reader->GetImageIO()->GetSpacing(i) << std::endl;
-  }
-  std::cout << "Byte Order: " << reader->GetImageIO()->GetByteOrderAsString(reader->GetImageIO()->GetByteOrder()) << std::endl;
-  std::cout << "Pixel Stride: " << reader->GetImageIO()->GetPixelStride() << std::endl;
-  std::cout << "Pixel Type: " << reader->GetImageIO()->GetPixelTypeAsString(reader->GetImageIO()->GetPixelType()) << std::endl;
-  std::cout << "Image Size (in pixels): " << reader->GetImageIO()->GetImageSizeInPixels() << std::endl;
-  std::cout << "Pixel Type: " << reader->GetImageIO()->GetComponentTypeAsString(reader->GetImageIO()->GetComponentType()) << std::endl;
-  std::cout << "RGB Channel Count: " << reader->GetImageIO()->GetNumberOfComponents() << std::endl;
-  std::cout << "Number of Dimensions: " << reader->GetImageIO()->GetNumberOfDimensions() << std::endl;
-
-  // TODO: Compare region attributes with input parameters.
+  std::cout << "\tByte Order: "
+            << imageIO->GetByteOrderAsString(imageIO->GetByteOrder())
+            << std::endl;
+  std::cout << "\tPixel Stride: " << imageIO->GetPixelStride() << std::endl;
+  std::cout << "\tPixel Type: "
+            << imageIO->GetPixelTypeAsString(imageIO->GetPixelType())
+            << std::endl;
+  std::cout << "\tImage Size (in pixels): "
+            << imageIO->GetImageSizeInPixels() << std::endl;
+  std::cout << "\tPixel Type: "
+            << imageIO->GetComponentTypeAsString(imageIO->GetComponentType())
+            << std::endl;
+  std::cout << "\tRGB Channel Count: "
+            << imageIO->GetNumberOfComponents() << std::endl;
+  std::cout << "\tNumber of Dimensions: "
+            << imageIO->GetNumberOfDimensions() << std::endl;
+  std::cout << std::endl;
 
   return EXIT_SUCCESS;
 }
