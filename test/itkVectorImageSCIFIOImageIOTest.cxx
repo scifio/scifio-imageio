@@ -31,7 +31,7 @@
   #define SPECIFIC_IMAGEIO_MODULE_TEST
 #endif
 
-int main( int argc, char * argv [] )
+int itkVectorImageSCIFIOImageIOTest( int argc, char * argv [] )
 {
   if( argc < 3)
     {
@@ -59,7 +59,7 @@ int main( int argc, char * argv [] )
   typedef itk::StreamingImageFilter<ImageType, ImageType> StreamingFilter;
   StreamingFilter::Pointer streamer = StreamingFilter::New();
   streamer->SetInput( reader->GetOutput() );
-  streamer->SetNumberOfStreamDivisions( atoi(argv[3]) );
+  streamer->SetNumberOfStreamDivisions( 3 );
 
   itk::ImageFileWriter<ImageType>::Pointer writer;
 
