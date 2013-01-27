@@ -146,10 +146,14 @@ SCIFIOImageIO::SCIFIOImageIO()
         }
       }
     }
-  std::string classpath = scifioPath + "/*";
+  std::string classpath = scifioPath + "loci_tools.jar";
 
   // determine path to java executable from JAVA_HOME, if available
+#if defined(WIN32)
+  std::string javaCmd = "javaw.exe";
+#else
   std::string javaCmd = "java";
+#endif
   std::string javaHome = getEnv("JAVA_HOME");
   if( javaHome == "" )
     {
@@ -159,9 +163,13 @@ SCIFIOImageIO::SCIFIOImageIO()
       javaHome = "@JRE_INSTALL_TREE_LOCATION@";
       if( !itksys::SystemTools::FileExists( javaHome.c_str(), false ) )
         {
-        scifioDebug("Warning: JAVA_HOME not set; assuming Java is on the path");
+        javaHome = "";
         }
       }
+    }
+  if( javaHome == "" )
+    {
+    scifioDebug("Warning: JAVA_HOME not set; assuming Java is on the path");
     }
   else
     {
@@ -169,7 +177,11 @@ SCIFIOImageIO::SCIFIOImageIO()
     javaCmdPath.push_back( "" ); // NB: JoinPath skips the first one (why?).
     javaCmdPath.push_back( javaHome );
     javaCmdPath.push_back( "bin" );
+#if defined(WIN32)
+    javaCmdPath.push_back( "javaw.exe" );
+#else
     javaCmdPath.push_back( "java" );
+#endif
     javaCmd = itksys::SystemTools::JoinPath(javaCmdPath);
     }
 
