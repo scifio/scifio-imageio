@@ -1,6 +1,6 @@
 set(DOCUMENTATION "This module contains classes for reading and writing image
-files with the OME SCIFIO library.  To use the module, a Java runtime
-must be installed on the system.")
+files with the Open Microscopy Envionment (OME) Scientific Imaging Formats
+Input and Output (SCIFIO) library.")
 
 itk_module(ITKIOSCIFIO
   DEPENDS

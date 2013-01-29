@@ -15,11 +15,6 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#include <fstream>
-#include <iostream>
-#include <sstream>
-#include <string>
-#include <vector>
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
 #include "itkImage.h"
@@ -27,6 +22,11 @@
 #include "itkMetaDataDictionary.h"
 #include "itkImageIOBase.h"
 #include "itkSCIFIOImageIO.h"
+
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <vector>
 
 #define METADATA_NOT_FOUND "No value for this key."
 
@@ -67,6 +67,7 @@ namespace
   }
 }
 
+
 int itkSCIFIOImageInfoTest( int argc, char * argv[] )
 {
   if( argc < 2)
@@ -86,15 +87,15 @@ int itkSCIFIOImageInfoTest( int argc, char * argv[] )
     std::cerr << "Argument not of the form: sizeX sizeY sizeZ sizeT sizeC\n";
     return EXIT_FAILURE;
   }
-  std::string sX = argList[0];
-  std::string sY = argList[1];
-  std::string sZ = argList[2];
-  std::string sT = argList[3];
-  std::string sC = argList[4];
+  const std::string sX = argList[0];
+  const std::string sY = argList[1];
+  const std::string sZ = argList[2];
+  const std::string sT = argList[3];
+  const std::string sC = argList[4];
 
   // Create a fake file on disk, for use with testing the SCIFIO ImageIO
   // reader. SCIFIO does not actually care whether the file exists.
-  std::string id = "scifioImageInfo"
+  const std::string id = "scifioImageInfo"
                    "&sizeX=" + sX +
                    "&sizeY=" + sY +
                    "&sizeZ=" + sZ +
@@ -126,11 +127,11 @@ int itkSCIFIOImageInfoTest( int argc, char * argv[] )
 
   ImageType::Pointer img = reader->GetOutput();
 
-  int actualSizeX = img->GetLargestPossibleRegion().GetSize()[0];
-  int actualSizeY = img->GetLargestPossibleRegion().GetSize()[1];
-  int actualSizeZ = img->GetLargestPossibleRegion().GetSize()[2];
-  int actualSizeT = img->GetLargestPossibleRegion().GetSize()[3];
-  int actualSizeC = img->GetLargestPossibleRegion().GetSize()[4];
+  const int actualSizeX = img->GetLargestPossibleRegion().GetSize()[0];
+  const int actualSizeY = img->GetLargestPossibleRegion().GetSize()[1];
+  const int actualSizeZ = img->GetLargestPossibleRegion().GetSize()[2];
+  const int actualSizeT = img->GetLargestPossibleRegion().GetSize()[3];
+  const int actualSizeC = img->GetLargestPossibleRegion().GetSize()[4];
 
   assertEquals("sizeX", sizeX, actualSizeX);
   assertEquals("sizeY", sizeY, actualSizeY);

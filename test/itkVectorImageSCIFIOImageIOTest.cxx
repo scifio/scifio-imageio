@@ -15,21 +15,12 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
-
-#include <iostream>
 #include "itkSCIFIOImageIO.h"
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
 #include "itkVectorImage.h"
 #include "itkMetaDataObject.h"
 #include "itkStreamingImageFilter.h"
-
-#if defined(ITK_USE_MODULAR_BUILD)
-  #define SPECIFIC_IMAGEIO_MODULE_TEST
-#endif
 
 int itkVectorImageSCIFIOImageIOTest( int argc, char * argv [] )
 {

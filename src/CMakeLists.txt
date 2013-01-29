@@ -18,7 +18,7 @@ set( SCIFIOJars_SHA256
   3058f1d46da7e7f75f4d230459a7c1ca1ef293b2d1ffe883ff027ed0fcdf210c
   )
 set( jarsDownloadDirectory jars )
-set( JAR_BUILD_TREE_LOCATION 
+set( JAR_BUILD_TREE_LOCATION
   ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${jarsDownloadDirectory}/
   )
 set( JAR_INSTALL_TREE_LOCATION
@@ -27,7 +27,7 @@ set( JAR_INSTALL_TREE_LOCATION
 
 # Java Runtime Environment
 set( jreTarballDownloadDirectory "${CMAKE_CURRENT_BINARY_DIR}" )
-set( JRE_BUILD_TREE_LOCATION 
+set( JRE_BUILD_TREE_LOCATION
   ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/jre
   )
 set( JRE_INSTALL_TREE_LOCATION

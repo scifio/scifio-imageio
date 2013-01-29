@@ -18,12 +18,12 @@
 #ifndef __itkSCIFIOImageIO_h
 #define __itkSCIFIOImageIO_h
 
-#include "itkImageIOBase.h"
 #include "itkStreamingImageIOBase.h"
-#include <sstream>
-#include <iostream>
+
 #include "itksys/Process.h"
 #include "itksys/SystemTools.hxx"
+
+#include <sstream>
 
 namespace itk
 {
@@ -53,6 +53,7 @@ namespace itk
  * Bio-Formats Java libraries (loci_tools.jar, which is a bundle of all
  * SCIFIO & Bio-Formats libraries including dependencies) are downloaded at
  * build time and placed into the lib/Jars subfolder of the build tree.
+ * A distributable JRE is also downloaded at build time.
  *
  * The following environment variables can optionally be set to control the
  * behavior of the SCIFIO ImageIO plugin -- in particular, how it interfaces
@@ -82,27 +83,32 @@ public:
   typedef ImageIOBase                 Superclass;
   typedef SmartPointer<Self>          Pointer;
   typedef SmartPointer<const Self>    ConstPointer;
+
   /** Method for creation through the object factory **/
   itkNewMacro(Self);
+
   /** RTTI (and related methods) **/
   itkTypeMacro(SCIFIOImageIO, Superclass);
 
   /**--------------- Read the data----------------- **/
+
   virtual bool CanReadFile(const char* FileNameToRead);
+
   /* Set the spacing and dimension information for the set file name */
   virtual void ReadImageInformation();
+
   /* Read the data from the disk into provided memory buffer */
   virtual void Read(void* buffer);
 
   /**---------------Write the data------------------**/
+
   virtual bool CanWriteFile(const char* FileNameToWrite);
+
   /* Set the spacing and dimension information for the set file name */
   virtual void WriteImageInformation();
+
   /* Write the data to the disk from the provided memory buffer */
   virtual void Write(const void* buffer);
-
-  void CreateJavaProcess();
-  void DestroyJavaProcess();
 
 protected:
   SCIFIOImageIO();
@@ -111,13 +117,11 @@ protected:
   virtual SizeType GetHeaderSize() const { return 0; }
 
 private:
-  typedef itk::ImageIOBase::IOComponentType  ITKComponent;
-  typedef itk::MetaDataDictionary            ITKMeta;
-
-  ITKMeta m_Meta;
+  void CreateJavaProcess();
+  void DestroyJavaProcess();
 
   char ** toCArray( std::vector< std::string > & args )
-  {
+    {
     char **argv = new char *[args.size() + 1];
     for( int i = 0; i < static_cast< int >( args.size() ); i++ )
       {
@@ -126,31 +130,32 @@ private:
       }
     argv[args.size()] = NULL;
     return argv;
-  }
-
-  ITKComponent scifioToTIKComponentType( int pixelType ) {
-    switch ( pixelType )
-    {
-    case 0:
-      return CHAR;
-    case 1:
-      return UCHAR;
-    case 2:
-      return INT;
-    case 3:
-      return UINT;
-    case 4:
-      return LONG;
-    case 5:
-       return ULONG;
-    case 6:
-      return FLOAT;
-    default:
-      return DOUBLE;
     }
-  }
 
-  int itkToSCIFIOPixelType( ITKComponent cmp )
+  ImageIOBase::IOComponentType scifioToITKComponentType( int pixelType )
+    {
+    switch ( pixelType )
+      {
+      case 0:
+        return CHAR;
+      case 1:
+        return UCHAR;
+      case 2:
+        return INT;
+      case 3:
+        return UINT;
+      case 4:
+        return LONG;
+      case 5:
+         return ULONG;
+      case 6:
+        return FLOAT;
+      default:
+        return DOUBLE;
+      }
+    }
+
+  int itkToSCIFIOPixelType( ImageIOBase::IOComponentType cmp )
   {
     switch ( cmp )
     {
@@ -175,6 +180,7 @@ private:
     }
   }
 
+  MetaDataDictionary           m_MetaDataDictionary;
   std::vector< std::string >   m_Args;
   char **                      m_Argv;
   itksysProcess_Pipe_Handle    m_Pipe[2];
