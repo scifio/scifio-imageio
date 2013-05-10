@@ -113,7 +113,7 @@ int itkSCIFIOImageInfoTest( int argc, char * argv[] )
   const unsigned int        Dimension = 5;
 
   typedef itk::Image< PixelType, Dimension >  ImageType;
-  typedef itk::ImageFileReader<ImageType> ReaderType;
+  typedef itk::ImageFileReader<ImageType>     ReaderType;
 
   itk::SCIFIOImageIO::Pointer io = itk::SCIFIOImageIO::New();
 
@@ -157,7 +157,7 @@ int itkSCIFIOImageInfoTest( int argc, char * argv[] )
   std::cout << std::endl;
 
   // Dump the metadata naturally contained within ImageIOBase
-  itk::ImageIOBase *imageIO = reader->GetImageIO();
+  const itk::ImageIOBase * imageIO = reader->GetImageIO();
   itk::ImageIORegion region = imageIO->GetIORegion();
   int regionDim = region.GetImageDimension();
   std::cout << "--== Metadata from ImageIOBase ==--" << std::endl;

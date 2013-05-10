@@ -12,10 +12,12 @@
 # need to manually add the GPLed Bio-Formats JARs into the mix first.
 #
 set( SCIFIOJars
-  loci_tools.jar
+  http://cvs.openmicroscopy.org.uk/snapshots/bioformats/4.4.5/loci_tools.jar
+  http://jenkins.imagej.net/view/SCIFIO/job/SCIFIOITKBridge/lastSuccessfulBuild/artifact/target/scifio-itk-bridge-1.0.0.jar
   )
-set( SCIFIOJars_SHA256
-  3058f1d46da7e7f75f4d230459a7c1ca1ef293b2d1ffe883ff027ed0fcdf210c
+set( SCIFIOJarNames
+  loci_tools.jar
+  scifio-itk-bridge-1.0.0.jar
   )
 set( jarsDownloadDirectory jars )
 set( JAR_BUILD_TREE_LOCATION

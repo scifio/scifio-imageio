@@ -30,7 +30,7 @@ int itkVectorImageSCIFIOImageIOTest( int argc, char * argv [] )
     return EXIT_FAILURE;
     }
 
-  typedef unsigned char       PixelType;
+  typedef unsigned short      PixelType;
   const unsigned int          Dimension = 3;
 
   typedef itk::VectorImage< PixelType, Dimension >   ImageType;
@@ -72,6 +72,8 @@ int itkVectorImageSCIFIOImageIOTest( int argc, char * argv [] )
     return EXIT_FAILURE;
     }
 
+  std::cout<<"Num components: "<<reader->GetOutput()->GetNumberOfComponentsPerPixel()
+    <<std::endl;
   std::string notes;
   itk::ExposeMetaData<std::string>( reader->GetMetaDataDictionary(), "Recording #1 Notes", notes );
   std::cout << "Notes: " << notes << std::endl;

@@ -90,6 +90,8 @@ public:
   /** RTTI (and related methods) **/
   itkTypeMacro(SCIFIOImageIO, Superclass);
 
+  virtual bool SupportsDimension( unsigned long dim );
+
   /**--------------- Read the data----------------- **/
 
   virtual bool CanReadFile(const char* FileNameToRead);
@@ -119,6 +121,9 @@ protected:
 private:
   void CreateJavaProcess();
   void DestroyJavaProcess();
+  std::string FindDimensionOrder(const ImageIORegion & region );
+  std::string WaitForNewLines(int pipedatalength);
+  void CheckError(std::string message);
 
   char ** toCArray( std::vector< std::string > & args )
     {
@@ -141,13 +146,13 @@ private:
       case 1:
         return UCHAR;
       case 2:
-        return INT;
+        return SHORT;
       case 3:
-        return UINT;
+        return USHORT;
       case 4:
-        return LONG;
+        return INT;
       case 5:
-         return ULONG;
+         return UINT;
       case 6:
         return FLOAT;
       default:
@@ -164,17 +169,18 @@ private:
     case UCHAR:
       return 1;
     case SHORT:
-    case INT:
       return 2;
     case USHORT:
-    case UINT:
       return 3;
-    case LONG:
+    case INT:
       return 4;
-    case ULONG:
+    case UINT:
       return 5;
     case FLOAT:
       return 6;
+    case LONG:
+    case ULONG:
+    case DOUBLE:
     default:
       return 7;
     }

@@ -38,8 +38,8 @@ int itkSCIFIOImageIOTest( int argc, char * argv [] )
     numberOfStreamDivisions = argv[3];
     }
 
-  typedef unsigned char       PixelType;
-  const unsigned int          Dimension = 3;
+  typedef unsigned short       PixelType;
+  const unsigned int           Dimension = 2;
 
   typedef itk::Image< PixelType, Dimension >   ImageType;
   typedef itk::ImageFileReader< ImageType >    ReaderType;
@@ -52,6 +52,7 @@ int itkSCIFIOImageIOTest( int argc, char * argv [] )
   std::cout << "reader->GetUseStreaming(): " << reader->GetUseStreaming() << std::endl;
 
   std::cout << "done checking streaming usage";
+
 
   reader->SetImageIO(io);
   /*
