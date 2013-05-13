@@ -48,4 +48,18 @@ SCIFIOImageIOFactory::GetDescription() const
          "http://openmicroscopy.org/site/support/bio-formats/users/itk";
 }
 
+// Undocumented API used to register during static initialization.
+// DO NOT CALL DIRECTLY.
+
+static bool SCIFIOImageIOFactoryHasBeenRegistered;
+
+void SCIFIOImageIOFactoryRegister__Private(void)
+{
+  if( !SCIFIOImageIOFactoryHasBeenRegistered )
+    {
+    SCIFIOImageIOFactoryHasBeenRegistered = true;
+    SCIFIOImageIOFactory::RegisterOneFactory();
+    }
+}
+
 } // end namespace itk
