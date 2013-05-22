@@ -30,11 +30,13 @@
 #include <sstream>
 
 #ifdef WIN32
+#define SCIFIO_SEP ";"
 #include <io.h>
 #include <fcntl.h>
 #include <process.h>
 #include <cmath>
 #else
+#define SCIFIO_SEP ":"
 #include <unistd.h>
 #endif
 
@@ -261,7 +263,7 @@ SCIFIOImageIO::SCIFIOImageIO()
         }
       }
     }
-  std::string classpath = scifioPath + "loci_tools.jar:" + scifioPath + "scifio-itk-bridge-1.0.0.jar";
+  std::string classpath = scifioPath + "loci_tools.jar" + SCIFIO_SEP + scifioPath + "scifio-itk-bridge-1.0.0.jar";
 
   // determine path to java executable from JAVA_HOME, if available
 #if defined(WIN32)
