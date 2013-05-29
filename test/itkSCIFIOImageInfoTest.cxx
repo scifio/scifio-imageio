@@ -168,8 +168,10 @@ int itkSCIFIOImageInfoTest( int argc, char * argv[] )
     }
   for(int i = 0; i < regionDim; i++)
   {
-    std::cout << "\tSpacing " << i + 1 << ": "
-              << imageIO->GetSpacing(i) << std::endl;
+    if ( region.GetSize(i) > 1 ) {
+      std::cout << "\tSpacing " << i + 1 << ": "
+                << imageIO->GetSpacing(i) << std::endl;
+    }
   }
   std::cout << "\tByte Order: "
             << imageIO->GetByteOrderAsString(imageIO->GetByteOrder())
