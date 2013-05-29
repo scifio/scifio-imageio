@@ -143,6 +143,7 @@ std::string SCIFIOImageIO::WaitForNewLines(int pipedatalength)
 {
   char * pipedata;
   std::string readBack;
+  size_t findStart = 0;
   bool keepReading = true;
   std::string errorMessage( "" );
   while( keepReading )
@@ -151,12 +152,16 @@ std::string SCIFIOImageIO::WaitForNewLines(int pipedatalength)
     if( retcode == itksysProcess_Pipe_STDOUT )
       {
       readBack += std::string( pipedata, pipedatalength );
+
+      // Remove any \r so that we only dealing with unix-style line endings
+      size_t backslashRIndex = readBack.find_first_of( '\r', findStart );
+      while ( backslashRIndex != std::string::npos ) {
+        readBack.erase( backslashRIndex );
+        findStart = backslashRIndex;
+      }
+
       // if the two last char are "\n\n", then we're done
-#ifdef WIN32
-      if( readBack.size() >= 4 && readBack.substr( readBack.size()-4, 4 ) == "\r\n\r\n" )
-#else
       if( readBack.size() >= 2 && readBack.substr( readBack.size()-2, 2 ) == "\n\n" )
-#endif
         {
         keepReading = false;
         }
@@ -563,11 +568,7 @@ void SCIFIOImageIO::ReadImageInformation()
     {
 
     // get the key line
-#ifdef WIN32
-    p1 = imgInfo.find("\r\n", p0);
-#else
     p1 = imgInfo.find("\n", p0);
-#endif
 
     line = imgInfo.substr( p0, p1-p0 );
 
@@ -575,44 +576,24 @@ void SCIFIOImageIO::ReadImageInformation()
     if( line == "" )
       {
       // go to the next line
-#ifdef WIN32
-      p0 = p1+2;
-#else
       p0 = p1+1;
-#endif
       continue;
       }
 
     std::string key = line;
     // go to the next line
-#ifdef WIN32
-      p0 = p1+2;
-#else
-      p0 = p1+1;
-#endif
+    p0 = p1+1;
 
     // get the value line
-#ifdef WIN32
-    p1 = imgInfo.find("\r\n", p0);
-#else
     p1 = imgInfo.find("\n", p0);
-#endif
 
     line = imgInfo.substr( p0, p1-p0 );
 
     // ignore the empty lines
-#ifdef WIN32
-    if( line == "\r" )
-#else
     if( line == "" )
-#endif
       {
       // go to the next line
-#ifdef WIN32
-      p0 = p1+2;
-#else
       p0 = p1+1;
-#endif
       continue;
       }
 
@@ -662,11 +643,7 @@ void SCIFIOImageIO::ReadImageInformation()
       }
 
     // go to the next line
-#ifdef WIN32
-      p0 = p1+2;
-#else
-      p0 = p1+1;
-#endif
+    p0 = p1+1;
 
     }
 
