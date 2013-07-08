@@ -523,6 +523,50 @@ bool SCIFIOImageIO::CanReadFile( const char* FileNameToRead )
   return valueOfString<bool>(canRead);
 }
 
+bool SCIFIOImageIO::SetSeries(int series)
+{
+  itkDebugMacro( "SCIFIOImageIO::SetSeries: series = " << series);
+
+  CreateJavaProcess();
+
+  std::string command = "series";
+  command += "\t";
+  command += toString(series);
+  command += "\n";
+
+  itkDebugMacro("SCIFIOImageIO::SetSeries command: " << command);
+
+#ifdef WIN32
+  DWORD bytesWritten;
+  WriteFile( m_Pipe[1], command.c_str(), command.size(), &bytesWritten, NULL );
+#else
+  const ssize_t writtenBytes = write( m_Pipe[1], command.c_str(), command.size() );
+  if( writtenBytes < static_cast< ssize_t >( command.size() ))
+    {
+    itkExceptionMacro(<< "Only wrote " << writtenBytes << " of " << command.size() << " bytes!");
+    }
+#endif
+
+  // fflush( m_Pipe[1] );
+
+  std::string commandOutput;
+  int pipedatalength = 1000;
+
+  itkDebugMacro("Waiting for confirmation of command.");
+  commandOutput = WaitForNewLines(pipedatalength);
+  itkDebugMacro("Command finished.");
+
+  // we have one thing per line
+  int p0 = 0;
+  int p1 = 0;
+  std::string seriesResult;
+  p1 = commandOutput.find("\n", p0);
+  seriesResult = commandOutput.substr( p0, p1 );
+  itkDebugMacro("SetSeries result: " << seriesResult);
+
+  return true;
+}
+
 
 void SCIFIOImageIO::ReadImageInformation()
 {
@@ -1016,6 +1060,7 @@ void SCIFIOImageIO::Write(const void * buffer )
     }
 
   command += "\n";
+
 
   itkDebugMacro("SCIFIOImageIO::Write command: " << command);
 

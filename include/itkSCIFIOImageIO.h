@@ -96,6 +96,9 @@ public:
 
   virtual bool CanReadFile(const char* FileNameToRead);
 
+  /* Sets the series to read in a multi-series dataset */
+  virtual bool SetSeries(int series);
+
   /* Set the spacing and dimension information for the set file name */
   virtual void ReadImageInformation();
 
