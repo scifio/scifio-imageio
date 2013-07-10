@@ -83,22 +83,6 @@ int RunTest ( const char * inputFileName, const char * outputFileName, int serie
 
     std::string fileOut = ssout.str() + outputFileName;
 
-    std::stringstream ssin;
-
-//    if ( seriesEnd > seriesStart + 1 )
-//      {
-//      ssin << '@';
-//      ssin << seriesStart;
-//      ssin << '@';
-//      }
-//    else
-//      {
-//      ssin << "";
-//      }
-
-    std::string fileIn = ssin.str() + inputFileName;
-
-    reader->SetFileName( fileIn );
     writer->SetFileName( fileOut );
 
     try
@@ -115,7 +99,6 @@ int RunTest ( const char * inputFileName, const char * outputFileName, int serie
     if ( seriesStart < seriesEnd)
       {
       io->SetSeries(seriesStart);
-      std::cout << "marking modified" << std::endl;
       reader->Modified();
       }
     }
