@@ -29,7 +29,7 @@
  */
 int fail(char * argv [])
 {
-  std::cerr << "Usage: " << argv[0] << " input output [OPTIONS]\n\nOPTIONS:\n-r, --rgb\n\tEnabled RGB mode. The specified pixel type will be as an itk::RGBPixel.\n-v <n>, --divs <n>\n\tUse n streaming divisions\n-s <n1 n2>, --series <n1 n2>\n\tAfter reading the first series specified by @@ notation (0 default) will read all series from n1+1 to n2, exclusive. NB: this flag is mutually exclusive with manual @series@ filename annotation.\n-d <2-5>, --dims <2-5>\n\tSets the dimensionality. This should be equal to or less than your target image\'s dimensionality. If less, dimensions will be truncated in reverse dimension order\n-t <T>, --type <T>\n\tSets the pixel type. T should be one of: int, uint, char, uchar, short, ushort, float, long, double. Default is ushort.\n";
+  std::cerr << "Usage: " << argv[0] << " input output [OPTIONS]\n\nOPTIONS:\n-w, --write-scifio\n\tEnable the SCIFIOImageIO to be used for output. By default, the standard ITK ImageIO are used for writing. This flag will allow Bio-Formats-specific formats to be written (e.g. ome.tiff).\n-r, --rgb\n\tEnabled RGB mode. The specified pixel type will be as an itk::RGBPixel.\n-v <n>, --divs <n>\n\tUse n streaming divisions\n-s <n1 n2>, --series <n1 n2>\n\tAfter reading the first series specified by @@ notation (0 default) will read all series from n1+1 to n2, exclusive. NB: this flag is mutually exclusive with manual @series@ filename annotation.\n-d <2-5>, --dims <2-5>\n\tSets the dimensionality. This should be equal to or less than your target image\'s dimensionality. If less, dimensions will be truncated in reverse dimension order\n-t <T>, --type <T>\n\tSets the pixel type. T should be one of: int, uint, char, uchar, short, ushort, float, long, double. Default is ushort.\n";
   return EXIT_FAILURE;
 }
 
@@ -37,16 +37,13 @@ int fail(char * argv [])
  * Templated method performs the actual image io
  */
 template < class PixelType, unsigned int Dimension >
-int RunTest ( const char * inputFileName, const char * outputFileName, int seriesStart, int seriesEnd, std::string numberOfStreamDivisions )
+int RunTest ( const char * inputFileName, const char * outputFileName, int seriesStart, int seriesEnd, std::string numberOfStreamDivisions, bool writeSCIFIO )
 {
   typedef itk::Image<PixelType, Dimension> ImageType;
   typedef typename itk::ImageFileReader< ImageType >    ReaderType;
 
   itk::SCIFIOImageIO::Pointer io = itk::SCIFIOImageIO::New();
-  itk::SCIFIOImageIO::Pointer ioOut = itk::SCIFIOImageIO::New();
-
   io->DebugOn();
-  ioOut->DebugOn();
 
   typename ReaderType::Pointer reader = ReaderType::New();
   std::cout << "reader->GetUseStreaming(): " << reader->GetUseStreaming() << std::endl;
@@ -65,7 +62,13 @@ int RunTest ( const char * inputFileName, const char * outputFileName, int serie
   typename WriterType::Pointer writer;
   writer = WriterType::New();
   writer->SetInput( streamer->GetOutput() );
-  //writer->SetImageIO( ioOut );
+
+  if ( writeSCIFIO )
+    {
+    itk::SCIFIOImageIO::Pointer ioOut = itk::SCIFIOImageIO::New();
+    ioOut->DebugOn();
+    writer->SetImageIO( ioOut );
+    }
 
   while ( seriesStart < seriesEnd )
     {
@@ -114,23 +117,23 @@ int RunTest ( const char * inputFileName, const char * outputFileName, int serie
  * Helper method to type narrow the dimension
  */
 template < class PixelType >
-int ProcessDimension ( std::string dim, char * argv [], const char * inputFileName, const char * outputFileName, int seriesStart, int seriesEnd, std::string numberOfStreamDivisions )
+int ProcessDimension ( std::string dim, char * argv [], const char * inputFileName, const char * outputFileName, int seriesStart, int seriesEnd, std::string numberOfStreamDivisions, bool writeSCIFIO )
 {
   if (dim == "2")
     {
-    return RunTest <PixelType, 2> (inputFileName, outputFileName, seriesStart, seriesEnd, numberOfStreamDivisions);
+    return RunTest <PixelType, 2> (inputFileName, outputFileName, seriesStart, seriesEnd, numberOfStreamDivisions, writeSCIFIO);
     }
   else if (dim == "3")
     {
-    return RunTest <PixelType, 3> (inputFileName, outputFileName, seriesStart, seriesEnd, numberOfStreamDivisions);
+    return RunTest <PixelType, 3> (inputFileName, outputFileName, seriesStart, seriesEnd, numberOfStreamDivisions, writeSCIFIO);
     }
   else if (dim == "4")
     {
-    return RunTest <PixelType, 4> (inputFileName, outputFileName, seriesStart, seriesEnd, numberOfStreamDivisions);
+    return RunTest <PixelType, 4> (inputFileName, outputFileName, seriesStart, seriesEnd, numberOfStreamDivisions, writeSCIFIO);
     }
   else if (dim == "5")
     {
-    return RunTest <PixelType, 5> (inputFileName, outputFileName, seriesStart, seriesEnd, numberOfStreamDivisions);
+    return RunTest <PixelType, 5> (inputFileName, outputFileName, seriesStart, seriesEnd, numberOfStreamDivisions, writeSCIFIO);
     }
   else
     {
@@ -142,13 +145,13 @@ int ProcessDimension ( std::string dim, char * argv [], const char * inputFileNa
  * Helper method to type narrow pixel type based on RGB status
  */
 template < class PixelType >
-int ProcessRGB ( bool rgb, std::string dim, char * argv [], const char * inputFileName, const char * outputFileName, int seriesStart, int seriesEnd, std::string numberOfStreamDivisions )
+int ProcessRGB ( bool rgb, std::string dim, char * argv [], const char * inputFileName, const char * outputFileName, int seriesStart, int seriesEnd, std::string numberOfStreamDivisions, bool writeSCIFIO )
 {
   if (rgb)
     {
-    return ProcessDimension < itk::RGBPixel< PixelType > > (dim, argv, inputFileName, outputFileName, seriesStart, seriesEnd, numberOfStreamDivisions);
+    return ProcessDimension < itk::RGBPixel< PixelType > > (dim, argv, inputFileName, outputFileName, seriesStart, seriesEnd, numberOfStreamDivisions, writeSCIFIO);
     }
-  return ProcessDimension < PixelType > (dim, argv, inputFileName, outputFileName, seriesStart, seriesEnd, numberOfStreamDivisions);
+  return ProcessDimension < PixelType > (dim, argv, inputFileName, outputFileName, seriesStart, seriesEnd, numberOfStreamDivisions, writeSCIFIO);
 }
 
 /**
@@ -171,6 +174,7 @@ int itkSCIFIOImageIOTest( int argc, char * argv [] )
   std::string ptype = "ushort";
   std::string dim = "2";
   bool rgb = false;
+  bool writeSCIFIO = false;
   typedef std::string PixelType;
   typedef std::string ImageType;
 
@@ -206,6 +210,10 @@ int itkSCIFIOImageIOTest( int argc, char * argv [] )
       i++;
 
       }
+    else if (strcmp (argv[i], "-w") == 0 || strcmp (argv[i], "--write-scifio") == 0)
+      {
+      writeSCIFIO = true;
+      }
     else if (strcmp (argv[i], "-r") == 0 || strcmp (argv[i], "--rgb") == 0)
       {
       rgb = true;
@@ -223,39 +231,39 @@ int itkSCIFIOImageIOTest( int argc, char * argv [] )
   // Narrow pixel type
   if (ptype == "int")
     {
-    return ProcessRGB<int> ( rgb, dim, argv, inputFileName, outputFileName, seriesStart, seriesEnd, numberOfStreamDivisions );
+    return ProcessRGB<int> ( rgb, dim, argv, inputFileName, outputFileName, seriesStart, seriesEnd, numberOfStreamDivisions, writeSCIFIO );
     }
   else if (ptype == "uint")
     {
-    return ProcessRGB<unsigned int> ( rgb, dim, argv, inputFileName, outputFileName, seriesStart, seriesEnd, numberOfStreamDivisions );
+    return ProcessRGB<unsigned int> ( rgb, dim, argv, inputFileName, outputFileName, seriesStart, seriesEnd, numberOfStreamDivisions, writeSCIFIO );
     }
   else if (ptype == "char")
     {
-    return ProcessRGB<char> ( rgb, dim, argv, inputFileName, outputFileName, seriesStart, seriesEnd, numberOfStreamDivisions );
+    return ProcessRGB<char> ( rgb, dim, argv, inputFileName, outputFileName, seriesStart, seriesEnd, numberOfStreamDivisions, writeSCIFIO );
     }
   else if (ptype == "uchar")
     {
-    return ProcessRGB<unsigned char> ( rgb, dim, argv, inputFileName, outputFileName, seriesStart, seriesEnd, numberOfStreamDivisions );
+    return ProcessRGB<unsigned char> ( rgb, dim, argv, inputFileName, outputFileName, seriesStart, seriesEnd, numberOfStreamDivisions, writeSCIFIO );
     }
   else if (ptype == "short")
     {
-    return ProcessRGB<short> ( rgb, dim, argv, inputFileName, outputFileName, seriesStart, seriesEnd, numberOfStreamDivisions );
+    return ProcessRGB<short> ( rgb, dim, argv, inputFileName, outputFileName, seriesStart, seriesEnd, numberOfStreamDivisions, writeSCIFIO );
     }
   else if (ptype == "ushort")
     {
-    return ProcessRGB<unsigned short> ( rgb, dim, argv, inputFileName, outputFileName, seriesStart, seriesEnd, numberOfStreamDivisions );
+    return ProcessRGB<unsigned short> ( rgb, dim, argv, inputFileName, outputFileName, seriesStart, seriesEnd, numberOfStreamDivisions, writeSCIFIO );
     }
   else if (ptype == "long")
     {
-    return ProcessRGB<long> ( rgb, dim, argv, inputFileName, outputFileName, seriesStart, seriesEnd, numberOfStreamDivisions );
+    return ProcessRGB<long> ( rgb, dim, argv, inputFileName, outputFileName, seriesStart, seriesEnd, numberOfStreamDivisions, writeSCIFIO );
     }
   else if (ptype == "float")
     {
-    return ProcessRGB<float> ( rgb, dim, argv, inputFileName, outputFileName, seriesStart, seriesEnd, numberOfStreamDivisions );
+    return ProcessRGB<float> ( rgb, dim, argv, inputFileName, outputFileName, seriesStart, seriesEnd, numberOfStreamDivisions, writeSCIFIO );
     }
   else if (ptype == "double")
     {
-    return ProcessRGB<double> ( rgb, dim, argv, inputFileName, outputFileName, seriesStart, seriesEnd, numberOfStreamDivisions );
+    return ProcessRGB<double> ( rgb, dim, argv, inputFileName, outputFileName, seriesStart, seriesEnd, numberOfStreamDivisions, writeSCIFIO );
     }
   else
     {
