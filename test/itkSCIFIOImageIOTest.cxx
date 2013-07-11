@@ -70,12 +70,22 @@ int RunTest ( const char * inputFileName, const char * outputFileName, int serie
     writer->SetImageIO( ioOut );
     }
 
+  reader->UpdateOutputInformation();
+  io->SetSeries(seriesStart);
+  reader->Modified();
+
+  if ( allSeries )
+    {
+    seriesEnd = io->GetSeriesCount();
+    allSeries = false;
+    }
+
   while ( seriesStart < seriesEnd )
     {
     // Adjust file names if converting multiple series
     std::stringstream ssout;
 
-    if ( seriesEnd > seriesStart + 1 || allSeries )
+    if ( seriesEnd > seriesStart + 1 )
       {
       ssout << seriesStart;
       }
@@ -98,12 +108,6 @@ int RunTest ( const char * inputFileName, const char * outputFileName, int serie
       return EXIT_FAILURE;
       }
     seriesStart++;
-
-    if ( allSeries )
-      {
-      seriesEnd = io->GetSeriesCount();
-      allSeries = false;
-      }
 
     if ( seriesStart < seriesEnd)
       {
