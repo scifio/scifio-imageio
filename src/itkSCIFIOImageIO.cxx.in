@@ -871,7 +871,9 @@ void SCIFIOImageIO::Read(void* pData)
   char * pipedata;
   int pipedatalength;
 
-  size_t byteCount = this->GetComponentSize() * region.GetNumberOfPixels();
+  MetaDataDictionary & dict = this->GetMetaDataDictionary();
+  const long rgbChannelCount = GetTypedMetaData<long>(dict, "RGBChannelCount");
+  size_t byteCount = this->GetComponentSize() * region.GetNumberOfPixels() * rgbChannelCount;
 
   while( pos < byteCount )
     {
