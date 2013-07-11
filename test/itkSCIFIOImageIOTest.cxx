@@ -77,24 +77,46 @@ int RunTest ( const char * inputFileName, const char * outputFileName, int serie
   if ( allSeries )
     {
     seriesEnd = io->GetSeriesCount();
-    allSeries = false;
+    }
+
+  bool insertSeries = seriesEnd > (seriesStart + 1);
+
+  int seriesCount = seriesEnd - seriesStart;
+  int sigFigs = 0;
+
+  while (seriesCount >= 10)
+    {
+    seriesCount /= 10;
+    sigFigs++;
     }
 
   while ( seriesStart < seriesEnd )
     {
-    // Adjust file names if converting multiple series
-    std::stringstream ssout;
 
-    if ( seriesEnd > seriesStart + 1 )
+    std::string fileOut = outputFileName;
+
+    if (insertSeries)
       {
+      // Adjust file names if converting multiple series
+      std::stringstream ssout;
+
+      int currentSigFigs = 0;
+      int currentSeries = seriesStart;
+
+      while (currentSeries >= 10)
+        {
+        currentSeries /= 10;
+        currentSigFigs++;
+        }
+
+      for (int i=0; i<(sigFigs - currentSigFigs); i++)
+        {
+        ssout << 0;
+        }
+
       ssout << seriesStart;
+      fileOut.insert(fileOut.find_first_of('.'), ssout.str());
       }
-    else
-      {
-      ssout << "";
-      }
-
-    std::string fileOut = ssout.str() + outputFileName;
 
     writer->SetFileName( fileOut );
 
