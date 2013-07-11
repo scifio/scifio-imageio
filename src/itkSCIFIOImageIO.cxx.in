@@ -567,6 +567,50 @@ bool SCIFIOImageIO::SetSeries(int series)
   return true;
 }
 
+int SCIFIOImageIO::GetSeriesCount()
+{
+  itkDebugMacro( "SCIFIOImageIO::GetSeriesCount");
+
+  CreateJavaProcess();
+
+  std::string command = "seriesCount";
+  command += "\n";
+
+  itkDebugMacro("SCIFIOImageIO::GetSeriesCount command: " << command);
+
+#ifdef WIN32
+  DWORD bytesWritten;
+  WriteFile( m_Pipe[1], command.c_str(), command.size(), &bytesWritten, NULL );
+#else
+  const ssize_t writtenBytes = write( m_Pipe[1], command.c_str(), command.size() );
+  if( writtenBytes < static_cast< ssize_t >( command.size() ))
+    {
+    itkExceptionMacro(<< "Only wrote " << writtenBytes << " of " << command.size() << " bytes!");
+    }
+#endif
+
+  // fflush( m_Pipe[1] );
+
+  int seriesCount = -1;
+  std::string commandOutput;
+  int pipedatalength = 1000;
+
+  itkDebugMacro("Waiting for confirmation of command.");
+  commandOutput = WaitForNewLines(pipedatalength);
+  itkDebugMacro("Command finished.");
+
+  // we have one thing per line
+  int p0 = 0;
+  int p1 = 0;
+  std::string seriesResult;
+  p1 = commandOutput.find("\n", p0);
+  seriesResult = commandOutput.substr( p0, p1 );
+  itkDebugMacro("GetSeriesCount result: " << seriesResult);
+
+  seriesCount = valueOfString<int>(commandOutput);
+
+  return seriesCount;
+}
 
 void SCIFIOImageIO::ReadImageInformation()
 {

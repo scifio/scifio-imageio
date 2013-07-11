@@ -99,6 +99,9 @@ public:
   /* Sets the series to read in a multi-series dataset */
   virtual bool SetSeries(int series);
 
+  /* Sets the series to read in a multi-series dataset */
+  virtual int GetSeriesCount();
+
   /* Set the spacing and dimension information for the set file name */
   virtual void ReadImageInformation();
 
