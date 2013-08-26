@@ -74,7 +74,7 @@ namespace itk
  * [bio-formats]:  http://openmicroscopy.org/site/products/bio-formats
  * [file formats]: http://openmicroscopy.org/site/support/bio-formats/formats
  *
- * \ingroup ITKIOSCIFIO
+ * \ingroup SCIFIO
  */
 class ITK_EXPORT SCIFIOImageIO : public StreamingImageIOBase
 {

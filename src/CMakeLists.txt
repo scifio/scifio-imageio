@@ -24,7 +24,7 @@ set( JAR_BUILD_TREE_LOCATION
   ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${jarsDownloadDirectory}/
   )
 set( JAR_INSTALL_TREE_LOCATION
-  ${CMAKE_INSTALL_PREFIX}/${${ITKIOSCIFIO}_INSTALL_LIBRARY_DIR}/${jarsDownloadDirectory}
+  ${CMAKE_INSTALL_PREFIX}/${${SCIFIO}_INSTALL_LIBRARY_DIR}/${jarsDownloadDirectory}
   )
 
 # Java Runtime Environment
@@ -33,7 +33,7 @@ set( JRE_BUILD_TREE_LOCATION
   ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/jre
   )
 set( JRE_INSTALL_TREE_LOCATION
-  ${CMAKE_INSTALL_PREFIX}/${${ITKIOSCIFIO}_INSTALL_LIBRARY_DIR}/jre
+  ${CMAKE_INSTALL_PREFIX}/${${SCIFIO}_INSTALL_LIBRARY_DIR}/jre
   )
 set( jreTarballMD5 "" )
 if( WIN32 )
@@ -58,21 +58,21 @@ endif()
 configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/itkSCIFIOImageIO.cxx.in
   ${CMAKE_CURRENT_BINARY_DIR}/itkSCIFIOImageIO.cxx
   )
-set(ITKIOSCIFIO_SRC
+set(SCIFIO_SRC
   itkSCIFIOImageIOFactory.cxx
   ${CMAKE_CURRENT_BINARY_DIR}/itkSCIFIOImageIO.cxx
   )
 
-add_library(ITKIOSCIFIO ${ITKIOSCIFIO_SRC})
-target_link_libraries(ITKIOSCIFIO  ${ITKIOImageBase_LIBRARIES})
-itk_module_target(ITKIOSCIFIO)
+add_library(SCIFIO ${SCIFIO_SRC})
+target_link_libraries(SCIFIO  ${ImageBase_LIBRARIES})
+itk_module_target(SCIFIO)
 
 # Download the SCIFIO Java libraries.
 configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/DownloadSCIFIO.cmake.in
   ${CMAKE_CURRENT_BINARY_DIR}/DownloadSCIFIO.cmake
   @ONLY
   )
-add_custom_command(TARGET ITKIOSCIFIO
+add_custom_command(TARGET SCIFIO
   POST_BUILD
   COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/DownloadSCIFIO.cmake
   WORKING_DIRECTORY ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}
@@ -88,7 +88,7 @@ configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/DownloadJRE.cmake.in
   ${CMAKE_CURRENT_BINARY_DIR}/DownloadJRE.cmake
   @ONLY
   )
-add_custom_command(TARGET ITKIOSCIFIO
+add_custom_command(TARGET SCIFIO
   POST_BUILD
   COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/DownloadJRE.cmake
   WORKING_DIRECTORY ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}
