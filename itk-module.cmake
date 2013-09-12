@@ -7,6 +7,7 @@ itk_module(SCIFIO
     ITKIOImageBase
   TEST_DEPENDS
     ITKTestKernel
+  EXCLUDE_FROM_DEFAULT
   DESCRIPTION
     "${DOCUMENTATION}"
 )
