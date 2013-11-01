@@ -12,7 +12,7 @@
 # need to manually add the GPLed Bio-Formats JARs into the mix first.
 #
 set( SCIFIOJars
-  http://cvs.openmicroscopy.org.uk/snapshots/bioformats/4.4.5/loci_tools.jar
+  http://downloads.openmicroscopy.org/bio-formats/4.4.9/artifacts/loci_tools.jar
   http://jenkins.imagej.net/view/SCIFIO/job/SCIFIOITKBridge/lastSuccessfulBuild/artifact/target/scifio-itk-bridge-1.0.0.jar
   )
 set( SCIFIOJarNames
