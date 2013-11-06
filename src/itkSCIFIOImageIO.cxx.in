@@ -154,11 +154,12 @@ std::string SCIFIOImageIO::WaitForNewLines(int pipedatalength)
       readBack += std::string( pipedata, pipedatalength );
 
       // Remove any \r so that we only dealing with unix-style line endings
-      size_t backslashRIndex = readBack.find_first_of( '\r', findStart );
-      while ( backslashRIndex != std::string::npos ) {
-        readBack.erase( backslashRIndex );
-        findStart = backslashRIndex;
-      }
+      for( size_t backslashRIndex = readBack.find( "\r", findStart );
+           backslashRIndex != std::string::npos;
+           findStart = backslashRIndex )
+        {
+        readBack.erase( backslashRIndex, 1 );
+        }
 
       // if the two last char are "\n\n", then we're done
       if( readBack.size() >= 2 && readBack.substr( readBack.size()-2, 2 ) == "\n\n" )
