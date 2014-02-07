@@ -64,7 +64,7 @@ set(SCIFIO_SRC
   )
 
 add_library(SCIFIO ${SCIFIO_SRC})
-target_link_libraries(SCIFIO  ${ImageBase_LIBRARIES})
+target_link_libraries(SCIFIO  ${ITKIOImageBase_LIBRARIES})
 itk_module_target(SCIFIO)
 
 # Download the SCIFIO Java libraries.
