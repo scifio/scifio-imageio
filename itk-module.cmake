@@ -3,6 +3,7 @@ files with the Open Microscopy Envionment (OME) Scientific Imaging Formats
 Input and Output (SCIFIO) library.")
 
 itk_module(SCIFIO
+  ENABLE_SHARED
   DEPENDS
     ITKIOImageBase
   TEST_DEPENDS
