@@ -18,6 +18,7 @@
 #ifndef __itkSCIFIOImageIO_h
 #define __itkSCIFIOImageIO_h
 
+#include "SCIFIOExport.h"
 #include "itkStreamingImageIOBase.h"
 
 #include "itksys/Process.h"
@@ -76,7 +77,7 @@ namespace itk
  *
  * \ingroup SCIFIO
  */
-class ITK_EXPORT SCIFIOImageIO : public StreamingImageIOBase
+class SCIFIO_EXPORT SCIFIOImageIO : public StreamingImageIOBase
 {
 public:
   typedef SCIFIOImageIO               Self;
