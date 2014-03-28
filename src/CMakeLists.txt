@@ -11,7 +11,12 @@
 # formats, will no longer work "out of the box" -- the user will instead
 # need to manually add the GPLed Bio-Formats JARs into the mix first.
 #
-# JRE is not downloaded for OS X as JAVA is always installed for this OS.
+# JRE is not downloaded for OS X. The cleanest way to have a JRE installed
+# is to let the OS X take care of it. Once the tests are run or if you call
+# scifio-imageio in your code, the OS will :
+# - ask you to install JAVA through the system update on OS 10.7 and 10.8
+# - ask you to download JAVA from Java's website and install it by yourself
+# for OS 10.9.
 #
 set( SCIFIOJars
   http://downloads.openmicroscopy.org/bio-formats/4.4.9/artifacts/loci_tools.jar
