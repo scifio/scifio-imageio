@@ -775,10 +775,6 @@ void SCIFIOImageIO::ReadImageInformation()
   // component type
   itkAssertOrThrowMacro( dict.HasKey("PixelType"), "PixelType is not in the metadata dictionary!");
   const long pixelType = GetTypedMetaData<long>(dict, "PixelType");
-  if( pixelType == UNKNOWNCOMPONENTTYPE)
-    {
-    itkExceptionMacro("Unknown pixel type: "<< pixelType);
-    }
   itkDebugMacro("Setting ComponentType: " << pixelType);
   this->SetComponentType( scifioToITKComponentType(pixelType) );
 
