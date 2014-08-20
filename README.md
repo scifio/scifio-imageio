@@ -16,5 +16,11 @@ Jim Miller for fixes and suggestions.
 For further details, including usage instructions, see the [Bio-Formats
 ITK page](http://openmicroscopy.org/site/support/bio-formats/users/itk).
 
-Please [direct any questions to the OME
-team](http://www.openmicroscopy.org/site/community).
+For general troubleshooting issues using this plugin, please e-mail the [SCIFIO
+mailing list](mailto:scifio@scif.io).
+
+Any questions about the capabilities of Bio-Formats can be
+[directed to the OME team](http://www.openmicroscopy.org/site/community).
+
+For ITK questions, see the [ITK mailing
+lists](http://www.itk.org/ITK/help/mailing.html).
