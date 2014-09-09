@@ -19,7 +19,7 @@
 # for OS 10.9.
 #
 set( SCIFIOJars
-  http://downloads.openmicroscopy.org/bio-formats/5.0.4/artifacts/loci_tools.jar
+  http://downloads.openmicroscopy.org/bio-formats/5.0.4/artifacts/bioformats_package.jar
   http://jenkins.imagej.net/view/SCIFIO/job/SCIFIOITKBridge/lastSuccessfulBuild/artifact/target/scifio-itk-bridge-1.0.0.jar
   )
 set( SCIFIOJarNames
