@@ -332,7 +332,7 @@ SCIFIOImageIO::SCIFIOImageIO()
   split(javaFlags, ' ', m_Args);
 
   // append the name of the main class to execute
-  m_Args.push_back( "loci.scifio.itk.SCIFIOITKBridge" );
+  m_Args.push_back( "io.scif.itk.SCIFIOITKBridge" );
 
   // append the command to pass to the ITK bridge
   m_Args.push_back( "waitForInput" );
