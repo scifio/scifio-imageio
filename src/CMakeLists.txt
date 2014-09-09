@@ -20,11 +20,11 @@
 #
 set( SCIFIOJars
   http://downloads.openmicroscopy.org/bio-formats/5.0.4/artifacts/bioformats_package.jar
-  http://jenkins.imagej.net/view/SCIFIO/job/SCIFIOITKBridge/lastSuccessfulBuild/artifact/target/scifio-itk-bridge-1.0.0.jar
+  http://maven.imagej.net/service/local/repositories/releases/content/io/scif/scifio-itk-bridge/1.1.0/scifio-itk-bridge-1.1.0.jar
   )
 set( SCIFIOJarNames
   loci_tools.jar
-  scifio-itk-bridge-1.0.0.jar
+  scifio-itk-bridge-1.1.0.jar
   )
 set( jarsDownloadDirectory jars )
 set( JAR_BUILD_TREE_LOCATION
