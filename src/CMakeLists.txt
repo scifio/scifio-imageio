@@ -23,8 +23,8 @@ set( SCIFIOJars
   http://maven.imagej.net/service/local/repositories/releases/content/io/scif/scifio-itk-bridge/1.1.0/scifio-itk-bridge-1.1.0.jar
   )
 set( SCIFIOJarNames
-  loci_tools.jar
-  scifio-itk-bridge-1.1.0.jar
+  bioformats_package.jar
+  scifio-itk-bridge.jar
   )
 set( jarsDownloadDirectory jars )
 set( JAR_BUILD_TREE_LOCATION

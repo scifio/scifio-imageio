@@ -275,7 +275,7 @@ SCIFIOImageIO::SCIFIOImageIO()
         }
       }
     }
-  std::string classpath = scifioPath + "loci_tools.jar" + SCIFIO_SEP + scifioPath + "scifio-itk-bridge-1.0.0.jar";
+  std::string classpath = scifioPath + "bioformats_package.jar" + SCIFIO_SEP + scifioPath + "scifio-itk-bridge.jar";
 
   // determine path to java executable from JAVA_HOME, if available
 #if defined(WIN32)
