@@ -51,7 +51,7 @@ namespace itk
  *   formats (PFFs), particularly those in life sciences disciplines.
  *
  * Note that none of the above are required at build time. By default, the
- * Bio-Formats Java libraries (loci_tools.jar, which is a bundle of all
+ * Bio-Formats Java libraries (bioformats_package.jar, which is a bundle of all
  * SCIFIO & Bio-Formats libraries including dependencies) are downloaded at
  * build time and placed into the lib/Jars subfolder of the build tree.
  * A distributable JRE is also downloaded at build time.

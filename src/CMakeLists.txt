@@ -1,4 +1,4 @@
-# NB: For now, we use the loci_tools.jar bundle, because it is convenient,
+# NB: For now, we use the bioformats_package.jar bundle, because it is convenient,
 # and provides support for all supported file formats, including those
 # provided by the GPLed Bio-Formats library. ITK communicates with Java via
 # pipes, which is generally accepted as "indirect" enough to avoid legal
