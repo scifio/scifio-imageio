@@ -571,6 +571,13 @@ bool SCIFIOImageIO::SetSeries(int series)
   seriesResult = commandOutput.substr( p0, p1 );
   itkDebugMacro("SetSeries result: " << seriesResult);
 
+  // Clear the previous dictionary entries, since we do not
+  // allow overwriting of pre-existing entries - this will
+  // allow critical metadata (such as dimension extents)
+  // to be recorded properly.
+  MetaDataDictionary & dict = this->GetMetaDataDictionary();
+  dict.Clear();
+
   return true;
 }
 
