@@ -1155,6 +1155,7 @@ void SCIFIOImageIO::Write(const void * buffer )
 
   typedef unsigned char BYTE;
   BYTE* data = (BYTE*)buffer;
+  char donemsg[] = { 'O', 'K' };
 
   const int pipelength = 10000;
 
@@ -1199,11 +1200,27 @@ void SCIFIOImageIO::Write(const void * buffer )
 
     std::string planeDone;
 
+    // Hand-shake with Java signaling it's OK to send end of plane msg.
+    #ifdef WIN32
+        DWORD bytesWritten;
+        WriteFile( m_Pipe[1], donemsg, 2, &bytesWritten, NULL );
+    #else
+        writtenBytes = write( m_Pipe[1], donemsg, 2 );
+    #endif
+
     itkDebugMacro("Waiting for confirmation of plane read");
     planeDone = WaitForNewLines(pipedatalength);
     itkDebugMacro("Done waiting for confirmation of plane read");
   }
   std::string imageDone;
+
+  // Hand-shake with Java signaling it's OK to send end of image msg.
+  #ifdef WIN32
+      DWORD bytesWritten;
+      WriteFile( m_Pipe[1], donemsg, 2, &bytesWritten, NULL );
+  #else
+      writtenBytes = write( m_Pipe[1], donemsg, 2 );
+  #endif
 
   itkDebugMacro("Waiting for confirmation of image read");
   imageDone = WaitForNewLines(pipedatalength);

@@ -20,7 +20,7 @@
 #
 set( SCIFIOJars
   http://downloads.openmicroscopy.org/bio-formats/5.0.4/artifacts/bioformats_package.jar
-  http://maven.imagej.net/service/local/repositories/releases/content/io/scif/scifio-itk-bridge/1.1.0/scifio-itk-bridge-1.1.0.jar
+  http://maven.imagej.net/service/local/repositories/releases/content/io/scif/scifio-itk-bridge/1.2.0/scifio-itk-bridge-1.2.0.jar
   )
 set( SCIFIOJarNames
   bioformats_package.jar
