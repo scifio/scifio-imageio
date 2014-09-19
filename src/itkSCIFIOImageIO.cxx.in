@@ -1178,7 +1178,6 @@ void SCIFIOImageIO::Write(const void * buffer )
       itkDebugMacro("Writing " << bytesToRead << " bytes to plane " << i << ".  Bytes read: " << bytesRead);
 
       #ifdef WIN32
-          DWORD bytesWritten;
           WriteFile( m_Pipe[1], data, bytesToRead, &bytesWritten, NULL );
       #else
           writtenBytes = write( m_Pipe[1], data, bytesToRead );
@@ -1202,7 +1201,6 @@ void SCIFIOImageIO::Write(const void * buffer )
 
     // Hand-shake with Java signaling it's OK to send end of plane msg.
     #ifdef WIN32
-        DWORD bytesWritten;
         WriteFile( m_Pipe[1], donemsg, 2, &bytesWritten, NULL );
     #else
         writtenBytes = write( m_Pipe[1], donemsg, 2 );
@@ -1216,7 +1214,6 @@ void SCIFIOImageIO::Write(const void * buffer )
 
   // Hand-shake with Java signaling it's OK to send end of image msg.
   #ifdef WIN32
-      DWORD bytesWritten;
       WriteFile( m_Pipe[1], donemsg, 2, &bytesWritten, NULL );
   #else
       writtenBytes = write( m_Pipe[1], donemsg, 2 );
