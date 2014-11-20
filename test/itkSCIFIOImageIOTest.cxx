@@ -208,8 +208,6 @@ int itkSCIFIOImageIOTest( int argc, char * argv [] )
   bool rgb = false;
   bool writeSCIFIO = false;
   bool allSeries = false;
-  typedef std::string PixelType;
-  typedef std::string ImageType;
 
   // parse flags
   for (int i = 3; i < argc; i++)
