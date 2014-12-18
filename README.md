@@ -1,5 +1,7 @@
 # SCIFIO ImageIO plugin
 
+__NB: This `scifio-imageio` provides the _C++_ side of SCIFIO-ITK integration. For the _Java_ side, see [scifio-itk-bridge](https://github.com/scifio/scifio-itk-bridge).__
+
 This package provides an ImageIO plugin for the
 [Insight Toolkit](http://itk.org/) (ITK) that uses
 [Bio-Formats](https://github.com/openmicroscopy/bioformats)
