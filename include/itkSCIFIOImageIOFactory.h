@@ -15,8 +15,8 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#ifndef __itkSCIFIOImageIOFactory_h
-#define __itkSCIFIOImageIOFactory_h
+#ifndef itkSCIFIOImageIOFactory_h
+#define itkSCIFIOImageIOFactory_h
 
 #include "SCIFIOExport.h"
 #include "itkObjectFactoryBase.h"
@@ -60,4 +60,4 @@ private:
 };
 } // end namespace itk
 
-#endif // __itkSCIFIOImageIOFactory_h
+#endif // itkSCIFIOImageIOFactory_h

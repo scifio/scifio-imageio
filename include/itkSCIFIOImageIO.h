@@ -15,8 +15,8 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#ifndef __itkSCIFIOImageIO_h
-#define __itkSCIFIOImageIO_h
+#ifndef itkSCIFIOImageIO_h
+#define itkSCIFIOImageIO_h
 
 #include "SCIFIOExport.h"
 #include "itkStreamingImageIOBase.h"
@@ -201,4 +201,4 @@ private:
 };
 } // end namespace itk
 
-#endif // __itkSCIFIOImageIO_h
+#endif // itkSCIFIOImageIO_h
