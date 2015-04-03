@@ -29,17 +29,43 @@
  */
 int fail(char * argv [])
 {
-  std::cerr << "Usage: " << argv[0] << " input output [OPTIONS]\n\nOPTIONS:\n-w, --write-scifio\n\tEnable the SCIFIOImageIO to be used for output. By default, the standard ITK ImageIO are used for writing. This flag will allow Bio-Formats-specific formats to be written (e.g. ome.tiff).\n-r, --rgb\n\tEnabled RGB mode. The specified pixel type will be as an itk::RGBPixel.\n-v <n>, --divs <n>\n\tUse n streaming divisions\n-s <n1 n2>, --series <n1 n2>\n\tAfter reading the first series specified by @@ notation (0 default) will read all series from n1+1 to n2, exclusive. NB: this flag is mutually exclusive with manual @series@ filename annotation.\n-a, --all\n\tProcesses all discovered series.\n-d <2-5>, --dims <2-5>\n\tSets the dimensionality. This should be equal to or less than your target image\'s dimensionality. If less, dimensions will be truncated in reverse dimension order\n-t <T>, --type <T>\n\tSets the pixel type. T should be one of: int, uint, char, uchar, short, ushort, float, long, double. Default is ushort.\n";
+  std::cerr << "Usage: " << argv[0] << " input output [OPTIONS]\n"
+            << "\n"
+            << "OPTIONS:\n"
+            << "-w, --write-scifio\n"
+            << "\tEnable the SCIFIOImageIO to be used for output. By default, the standard ITK ImageIO are used for writing."
+               << " This flag will allow Bio-Formats-specific formats to be written (e.g. ome.tiff).\n"
+            << "-r, --rgb\n"
+            << "\tEnabled RGB mode. The specified pixel type will be as an itk::RGBPixel.\n"
+            << "-v <n>, --divs <n>\n"
+            << "\tUse n streaming divisions\n"
+            << "-s <n1 n2>, --series <n1 n2>\n"
+            << "\tAfter reading the first series specified by @@ notation (0 default) will read all series from n1+1 to n2,"
+               << " exclusive. NB: this flag is mutually exclusive with manual @series@ filename annotation.\n"
+            << "-a, --all\n"
+            << "\tProcesses all discovered series.\n"
+            << "-d <2-5>, --dims <2-5>\n"
+            << "\tSets the dimensionality. This should be equal to or less than your target image\'s dimensionality."
+              << " If less, dimensions will be truncated in reverse dimension order\n"
+            << "-t <T>, --type <T>\n"
+            << "\tSets the pixel type. T should be one of: int, uint, char, uchar, short, ushort, float, long, double."
+              << " Default is ushort.\n";
   return EXIT_FAILURE;
 }
 
 /**
  * Templated method performs the actual image io
  */
-template < class PixelType, unsigned int Dimension >
-int RunTest ( const char * inputFileName, const char * outputFileName, int seriesStart, int seriesEnd, std::string numberOfStreamDivisions, bool writeSCIFIO, bool allSeries )
+template < class PixelType, unsigned int NDimension >
+int RunTest ( const char * inputFileName,
+              const char * outputFileName,
+              int seriesStart,
+              int seriesEnd,
+              std::string numberOfStreamDivisions,
+              bool writeSCIFIO,
+              bool allSeries )
 {
-  typedef itk::Image<PixelType, Dimension> ImageType;
+  typedef itk::Image<PixelType, NDimension>             ImageType;
   typedef typename itk::ImageFileReader< ImageType >    ReaderType;
 
   itk::SCIFIOImageIO::Pointer io = itk::SCIFIOImageIO::New();
@@ -149,7 +175,14 @@ int RunTest ( const char * inputFileName, const char * outputFileName, int serie
  * Helper method to type narrow the dimension
  */
 template < class PixelType >
-int ProcessDimension ( std::string dim, char * argv [], const char * inputFileName, const char * outputFileName, int seriesStart, int seriesEnd, std::string numberOfStreamDivisions, bool writeSCIFIO, bool allSeries)
+int ProcessDimension ( std::string dim, char * argv [],
+                       const char * inputFileName,
+                       const char * outputFileName,
+                       int seriesStart,
+                       int seriesEnd,
+                       std::string numberOfStreamDivisions,
+                       bool writeSCIFIO,
+                       bool allSeries)
 {
   if (dim == "2")
     {
@@ -177,7 +210,14 @@ int ProcessDimension ( std::string dim, char * argv [], const char * inputFileNa
  * Helper method to type narrow pixel type based on RGB status
  */
 template < class PixelType >
-int ProcessRGB ( bool rgb, std::string dim, char * argv [], const char * inputFileName, const char * outputFileName, int seriesStart, int seriesEnd, std::string numberOfStreamDivisions, bool writeSCIFIO, bool allSeries )
+int ProcessRGB ( bool rgb, std::string dim,
+                 char * argv [],
+                 const char * inputFileName,
+                 const char * outputFileName,
+                 int seriesStart, int seriesEnd,
+                 std::string numberOfStreamDivisions,
+                 bool writeSCIFIO,
+                 bool allSeries )
 {
   if (rgb)
     {
@@ -229,7 +269,7 @@ int itkSCIFIOImageIOTest( int argc, char * argv [] )
         }
       seriesStart = atoi(argv[i+1]);
       seriesEnd = atoi(argv[i+2]);
-      i+=2;
+      i += 2;
       }
     else if (strcmp (argv[i], "-t") == 0 || strcmp (argv[i], "--type") == 0)
       {
