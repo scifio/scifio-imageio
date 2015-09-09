@@ -21,6 +21,7 @@ RUN apt-get update && apt-get install -y \
   vim \
   zlib1g-dev
 
+RUN mkdir -p /usr/src/scifio-imageio-build
 WORKDIR /usr/src
 
 # 2015-09-02
@@ -35,14 +36,15 @@ RUN git clone git://itk.org/ITK.git && \
     -G Ninja \
     -DCMAKE_INSTALL_PREFIX:PATH=/usr \
     -DBUILD_EXAMPLES:BOOL=OFF \
-    -DBUILD_TESTING:BOOL=ON \
+    -DBUILD_TESTING:BOOL=OFF \
     -DBUILD_SHARED_LIBS:BOOL=ON \
     -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=ON \
-    -DCMAKE_SKIP_RPATH:BOOL=ON \
     -DITK_LEGACY_REMOVE:BOOL=ON \
-    -DITK_BUILD_DEFAULT_MODULES:BOOL=ON \
+    -DITK_BUILD_DEFAULT_MODULES:BOOL=OFF \
     -DITK_USE_SYSTEM_LIBRARIES:BOOL=ON \
+    -DModule_ITKIOImageBase:BOOL=ON \
+    -DModule_ITKTestKernel:BOOL=ON \
     ../ITK && \
-  ninja
+  ninja && \
+  find . -name '*.o' -delete
 
-RUN mkdir -p /usr/src/scifio-imageio-build
