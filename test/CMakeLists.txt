@@ -30,23 +30,23 @@ endforeach()
 # Test I/O using itk::Image
 itk_add_test( NAME ITKSCIFIOImageIOTest
   COMMAND SCIFIOTestDriver
-  --compare DATA{${ITK_DATA_ROOT}/Input/cthead1.tif}
+  --compare DATA{Input/cthead1.tif}
                  ${ITK_TEST_OUTPUT_DIR}/cthead1_scifio.tif
-  itkSCIFIOImageIOTest DATA{${ITK_DATA_ROOT}/Input/cthead1.tif}
+  itkSCIFIOImageIOTest DATA{Input/cthead1.tif}
                             ${ITK_TEST_OUTPUT_DIR}/cthead1_scifio.tif )
 
 # Test I/O using itk::RGBPixel
 itk_add_test( NAME ITKRGBSCIFIOImageIOTest
   COMMAND SCIFIOTestDriver
-  --compare DATA{${ITK_DATA_ROOT}/Input/image_color.bmp}
+  --compare DATA{Input/image_color.bmp}
                  ${ITK_TEST_OUTPUT_DIR}/image_color_scifio.png
-  itkRGBSCIFIOImageIOTest DATA{${ITK_DATA_ROOT}/Input/image_color.bmp}
+  itkRGBSCIFIOImageIOTest DATA{Input/image_color.bmp}
                                ${ITK_TEST_OUTPUT_DIR}/image_color_scifio.png )
 
 # Test I/O using itk::VectorImage
 itk_add_test( NAME ITKVectorImageSCIFIOImageIOTest
   COMMAND SCIFIOTestDriver
-  --compare DATA{${ITK_DATA_ROOT}/Input/cthead1.tif}
+  --compare DATA{Input/cthead1.tif}
                  ${ITK_TEST_OUTPUT_DIR}/cthead1_scifio_vector.tif
-  itkVectorImageSCIFIOImageIOTest DATA{${ITK_DATA_ROOT}/Input/cthead1.tif}
+  itkVectorImageSCIFIOImageIOTest DATA{Input/cthead1.tif}
                                        ${ITK_TEST_OUTPUT_DIR}/cthead1_scifio_vector.tif )
