@@ -1,0 +1,13 @@
+machine:
+  services:
+    - docker
+
+dependencies:
+  override:
+    - docker info
+    - docker pull insighttoolkit/scifio-imageio-test
+
+test:
+  override:
+    - mkdir ~/scifio-imageio-build
+    - docker run -v ~/scifio-imageio:/usr/src/scifio-imageio -v ~/scifio-imageio-build:/usr/src/scifio-imageio-build insighttoolkit/scifio-imageio-test /usr/src/scifio-imageio/test/Docker/test.sh
