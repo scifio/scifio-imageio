@@ -23,9 +23,11 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /usr/src
 
+# 2015-09-02
+ENV ITK_GIT_TAG 63443634e35e63073b218e6edd14864c08c4089e
 RUN git clone git://itk.org/ITK.git && \
   cd ITK && \
-  git checkout v4.8.0 && \
+  git checkout ${ITK_GIT_TAG} && \
   cd ../ && \
   mkdir ITK-build && \
   cd ITK-build && \
@@ -40,5 +42,7 @@ RUN git clone git://itk.org/ITK.git && \
     -DITK_LEGACY_REMOVE:BOOL=ON \
     -DITK_BUILD_DEFAULT_MODULES:BOOL=ON \
     -DITK_USE_SYSTEM_LIBRARIES:BOOL=ON \
-    -DModule_SCIFIO:BOOL=ON \
-    ../ITK
+    ../ITK && \
+  ninja
+
+RUN mkdir -p /usr/src/scifio-imageio-build
