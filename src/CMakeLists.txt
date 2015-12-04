@@ -70,7 +70,7 @@ set(SCIFIO_SRC
   ${CMAKE_CURRENT_BINARY_DIR}/itkSCIFIOImageIO.cxx
   )
 
-add_library(SCIFIO ${SCIFIO_SRC})
+add_library(SCIFIO ${ITK_LIBRARY_BUILD_TYPE} ${SCIFIO_SRC})
 target_link_libraries(SCIFIO  ${ITKIOImageBase_LIBRARIES})
 itk_module_target(SCIFIO)
 
