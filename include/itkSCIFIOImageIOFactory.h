@@ -47,7 +47,7 @@ public:
   static void RegisterOneFactory(void)
     {
     SCIFIOImageIOFactory::Pointer SCIFIOFactory = SCIFIOImageIOFactory::New();
-    ObjectFactoryBase::RegisterFactory(SCIFIOFactory);
+    ObjectFactoryBase::RegisterFactoryInternal(SCIFIOFactory);
     }
 
 protected:
