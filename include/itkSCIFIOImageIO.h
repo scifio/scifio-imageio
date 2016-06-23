@@ -91,11 +91,11 @@ public:
   /** RTTI (and related methods) **/
   itkTypeMacro(SCIFIOImageIO, Superclass);
 
-  virtual bool SupportsDimension( unsigned long dim );
+  virtual bool SupportsDimension( unsigned long dim ) ITK_OVERRIDE;
 
   /**--------------- Read the data----------------- **/
 
-  virtual bool CanReadFile(const char* FileNameToRead);
+  virtual bool CanReadFile(const char* FileNameToRead) ITK_OVERRIDE;
 
   /* Sets the series to read in a multi-series dataset */
   virtual bool SetSeries(int series);
@@ -104,26 +104,26 @@ public:
   virtual int GetSeriesCount();
 
   /* Set the spacing and dimension information for the set file name */
-  virtual void ReadImageInformation();
+  virtual void ReadImageInformation() ITK_OVERRIDE;
 
   /* Read the data from the disk into provided memory buffer */
-  virtual void Read(void* buffer);
+  virtual void Read(void* buffer) ITK_OVERRIDE;
 
   /**---------------Write the data------------------**/
 
-  virtual bool CanWriteFile(const char* FileNameToWrite);
+  virtual bool CanWriteFile(const char* FileNameToWrite) ITK_OVERRIDE;
 
   /* Set the spacing and dimension information for the set file name */
-  virtual void WriteImageInformation();
+  virtual void WriteImageInformation() ITK_OVERRIDE;
 
   /* Write the data to the disk from the provided memory buffer */
-  virtual void Write(const void* buffer);
+  virtual void Write(const void* buffer) ITK_OVERRIDE;
 
 protected:
   SCIFIOImageIO();
   ~SCIFIOImageIO();
 
-  virtual SizeType GetHeaderSize() const { return 0; }
+  virtual SizeType GetHeaderSize() const ITK_OVERRIDE { return 0; }
 
 private:
   void CreateJavaProcess();
