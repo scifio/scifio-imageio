@@ -255,6 +255,28 @@ std::string SCIFIOImageIO::FindDimensionOrder(const ImageIORegion & region)
   return command;
 }
 
+bool SCIFIOImageIO::CheckJavaPath(std::string javaHome, std::string &javaCmd)
+{
+  std::vector<std::string> javaCmdPath;
+#if defined(WIN32)
+  javaCmd = "javaw.exe" ;
+#else
+  javaCmd = "java" ;
+#endif
+  javaCmdPath.push_back( "" ); // NB: JoinPath skips the first one (why?).
+  javaCmdPath.push_back( javaHome );
+  javaCmdPath.push_back( "bin" );
+  javaCmdPath.push_back( javaCmd );
+  std::string path = itksys::SystemTools::JoinPath(javaCmdPath);
+  if( itksys::SystemTools::FileExists( path, false ) )
+    {
+    javaCmd = path;
+    return true;
+    }
+  // Else assuming Java is on the path
+  return false;
+}
+
 SCIFIOImageIO::SCIFIOImageIO()
 {
   this->m_FileType = Binary;
@@ -287,10 +309,10 @@ SCIFIOImageIO::SCIFIOImageIO()
   if( javaHome == "" )
     {
     javaHome = "@JRE_BUILD_TREE_LOCATION@";
-    if( !itksys::SystemTools::FileExists( javaHome.c_str(), false ) )
-      {
+    if( !CheckJavaPath(javaHome, javaCmd) )
+    {
       javaHome = "@JRE_INSTALL_TREE_LOCATION@";
-      if( !itksys::SystemTools::FileExists( javaHome.c_str(), false ) )
+      if( !CheckJavaPath( javaHome.c_str(), javaCmd) )
         {
         javaHome = "";
         }
@@ -299,19 +321,6 @@ SCIFIOImageIO::SCIFIOImageIO()
   if( javaHome == "" )
     {
     itkDebugMacro("Warning: JAVA_HOME not set; assuming Java is on the path");
-    }
-  else
-    {
-    std::vector<std::string> javaCmdPath;
-    javaCmdPath.push_back( "" ); // NB: JoinPath skips the first one (why?).
-    javaCmdPath.push_back( javaHome );
-    javaCmdPath.push_back( "bin" );
-#if defined(WIN32)
-    javaCmdPath.push_back( "javaw.exe" );
-#else
-    javaCmdPath.push_back( "java" );
-#endif
-    javaCmd = itksys::SystemTools::JoinPath(javaCmdPath);
     }
 
   // use the appropriate java command

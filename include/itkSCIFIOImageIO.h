@@ -131,6 +131,7 @@ private:
   std::string FindDimensionOrder(const ImageIORegion & region );
   std::string WaitForNewLines(int pipedatalength);
   void CheckError(std::string message);
+  bool CheckJavaPath(std::string javaHome, std::string &javaCmd);
 
   char ** toCArray( std::vector< std::string > & args )
     {
