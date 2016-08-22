@@ -29,7 +29,7 @@
 #include <string>
 #include <sstream>
 
-#ifdef WIN32
+#ifdef _WIN32
 #define SCIFIO_SEP ";"
 #include <io.h>
 #include <fcntl.h>
@@ -258,7 +258,7 @@ std::string SCIFIOImageIO::FindDimensionOrder(const ImageIORegion & region)
 bool SCIFIOImageIO::CheckJavaPath(std::string javaHome, std::string &javaCmd)
 {
   std::vector<std::string> javaCmdPath;
-#if defined(WIN32)
+#if defined(_WIN32)
   javaCmd = "javaw.exe" ;
 #else
   javaCmd = "java" ;
@@ -300,7 +300,7 @@ SCIFIOImageIO::SCIFIOImageIO()
   std::string classpath = scifioPath + "bioformats_package.jar" + SCIFIO_SEP + scifioPath + "scifio-itk-bridge.jar";
 
   // determine path to java executable from JAVA_HOME, if available
-#if defined(WIN32)
+#if defined(_WIN32)
   std::string javaCmd = "javaw.exe";
 #else
   std::string javaCmd = "java";
@@ -378,7 +378,7 @@ void SCIFIOImageIO::CreateJavaProcess()
       }
     }
 
-#ifdef WIN32
+#ifdef _WIN32
    SECURITY_ATTRIBUTES saAttr;
    saAttr.nLength = sizeof(SECURITY_ATTRIBUTES);
    saAttr.bInheritHandle = TRUE;
@@ -482,7 +482,7 @@ void SCIFIOImageIO::DestroyJavaProcess()
   itksysProcess_Delete( m_Process );
   m_Process = NULL;
 
-#ifdef WIN32
+#ifdef _WIN32
   CloseHandle( m_Pipe[1] );
 #else
   close( m_Pipe[1] );
@@ -507,7 +507,7 @@ bool SCIFIOImageIO::CanReadFile( const char* FileNameToRead )
   command += "\n";
   itkDebugMacro("SCIFIOImageIO::CanRead command: " << command);
 
-#ifdef WIN32
+#ifdef _WIN32
   DWORD bytesWritten;
   bool r = WriteFile( m_Pipe[1], command.c_str(), command.size(), &bytesWritten, NULL );
 #else
@@ -552,7 +552,7 @@ bool SCIFIOImageIO::SetSeries(int series)
 
   itkDebugMacro("SCIFIOImageIO::SetSeries command: " << command);
 
-#ifdef WIN32
+#ifdef _WIN32
   DWORD bytesWritten;
   WriteFile( m_Pipe[1], command.c_str(), command.size(), &bytesWritten, NULL );
 #else
@@ -601,7 +601,7 @@ int SCIFIOImageIO::GetSeriesCount()
 
   itkDebugMacro("SCIFIOImageIO::GetSeriesCount command: " << command);
 
-#ifdef WIN32
+#ifdef _WIN32
   DWORD bytesWritten;
   WriteFile( m_Pipe[1], command.c_str(), command.size(), &bytesWritten, NULL );
 #else
@@ -647,7 +647,7 @@ void SCIFIOImageIO::ReadImageInformation()
   command += "\n";
   itkDebugMacro("SCIFIOImageIO::ReadImageInformation command: " << command);
 
-#ifdef WIN32
+#ifdef _WIN32
   DWORD bytesWritten;
   WriteFile( m_Pipe[1], command.c_str(), command.size(), &bytesWritten, NULL );
 #else
@@ -870,7 +870,7 @@ void SCIFIOImageIO::Read(void* pData)
   command += "\n";
   itkDebugMacro("SCIFIOImageIO::Read command: " << command);
 
-#ifdef WIN32
+#ifdef _WIN32
   DWORD bytesWritten;
   WriteFile( m_Pipe[1], command.c_str(), command.size(), &bytesWritten, NULL );
 #else
@@ -926,7 +926,7 @@ bool SCIFIOImageIO::CanWriteFile(const char* name)
   command += name;
   command += "\n";
 
-#ifdef WIN32
+#ifdef _WIN32
  DWORD bytesWritten;
   WriteFile( m_Pipe[1], command.c_str(), command.size(), &bytesWritten, NULL );
 #else
@@ -1129,7 +1129,7 @@ void SCIFIOImageIO::Write(const void * buffer )
 
   itkDebugMacro("SCIFIOImageIO::Write command: " << command);
 
-#ifdef WIN32
+#ifdef _WIN32
   DWORD bytesWritten;
   WriteFile( m_Pipe[1], command.c_str(), command.size(), &bytesWritten, NULL );
 #else
@@ -1186,7 +1186,7 @@ void SCIFIOImageIO::Write(const void * buffer )
 
       itkDebugMacro("Writing " << bytesToRead << " bytes to plane " << i << ".  Bytes read: " << bytesRead);
 
-      #ifdef WIN32
+      #ifdef _WIN32
           WriteFile( m_Pipe[1], data, bytesToRead, &bytesWritten, NULL );
       #else
           writtenBytes = write( m_Pipe[1], data, bytesToRead );
@@ -1209,7 +1209,7 @@ void SCIFIOImageIO::Write(const void * buffer )
     std::string planeDone;
 
     // Hand-shake with Java signaling it's OK to send end of plane msg.
-    #ifdef WIN32
+    #ifdef _WIN32
         WriteFile( m_Pipe[1], donemsg, 2, &bytesWritten, NULL );
     #else
         writtenBytes = write( m_Pipe[1], donemsg, 2 );
@@ -1222,7 +1222,7 @@ void SCIFIOImageIO::Write(const void * buffer )
   std::string imageDone;
 
   // Hand-shake with Java signaling it's OK to send end of image msg.
-  #ifdef WIN32
+  #ifdef _WIN32
       WriteFile( m_Pipe[1], donemsg, 2, &bytesWritten, NULL );
   #else
       writtenBytes = write( m_Pipe[1], donemsg, 2 );
