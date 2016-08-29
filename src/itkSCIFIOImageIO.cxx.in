@@ -311,7 +311,7 @@ SCIFIOImageIO::SCIFIOImageIO()
     javaHome = "@JRE_BUILD_TREE_LOCATION@";
     if( !CheckJavaPath(javaHome, javaCmd) )
     {
-      javaHome = "@JRE_INSTALL_TREE_LOCATION@";
+      javaHome = "@JRE_INSTALL_TREE_LOCATION@/jre";
       if( !CheckJavaPath( javaHome.c_str(), javaCmd) )
         {
         javaHome = "";

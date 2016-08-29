@@ -31,7 +31,7 @@ set( JAR_BUILD_TREE_LOCATION
   ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${jarsDownloadDirectory}/
   )
 set( JAR_INSTALL_TREE_LOCATION
-  ${CMAKE_INSTALL_PREFIX}/${SCIFIO_INSTALL_LIBRARY_DIR}/${jarsDownloadDirectory}
+  ${CMAKE_INSTALL_PREFIX}/${SCIFIO_INSTALL_LIBRARY_DIR}/${jarsDownloadDirectory}/
   )
 
 # Java Runtime Environment
