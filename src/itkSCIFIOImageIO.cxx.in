@@ -277,7 +277,7 @@ bool SCIFIOImageIO::CheckJavaPath(std::string javaHome, std::string &javaCmd)
   return false;
 }
 
-SCIFIOImageIO::SCIFIOImageIO()
+SCIFIOImageIO::SCIFIOImageIO():m_Argv(0)
 {
   this->m_FileType = Binary;
 
@@ -355,6 +355,7 @@ SCIFIOImageIO::SCIFIOImageIO()
     }
 
   // convert to something usable by itksys
+  delete [] m_Argv;
   m_Argv = toCArray( m_Args );
   m_Process = NULL;
 }
@@ -459,7 +460,7 @@ void SCIFIOImageIO::CreateJavaProcess()
 SCIFIOImageIO::~SCIFIOImageIO()
 {
   DestroyJavaProcess();
-  delete m_Argv;
+  delete [] m_Argv;
 }
 
 
