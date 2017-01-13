@@ -283,7 +283,7 @@ SCIFIOImageIO::SCIFIOImageIO():m_Argv(0)
 
   // determine Java classpath from SCIFIO_PATH environment variable
   std::string scifioPath = getEnv("SCIFIO_PATH");
-  if( scifioPath == "" )
+  if( scifioPath == "" || !itksys::SystemTools::FileExists( scifioPath.c_str(), false ) )
     {
     scifioPath = "@JAR_BUILD_TREE_LOCATION@";
     if( !itksys::SystemTools::FileExists( scifioPath.c_str(), false ) )
@@ -297,7 +297,14 @@ SCIFIOImageIO::SCIFIOImageIO():m_Argv(0)
         }
       }
     }
-  std::string classpath = scifioPath + "bioformats_package.jar" + SCIFIO_SEP + scifioPath + "scifio-itk-bridge.jar";
+  std::vector<std::string> packageCmdPath;
+  packageCmdPath.push_back(""); // NB: JoinPath skips the first one (why?).
+  packageCmdPath.push_back(scifioPath);
+  packageCmdPath.push_back("bioformats_package.jar");
+  std::string bioformatsPackagePath = itksys::SystemTools::JoinPath(packageCmdPath);
+  packageCmdPath[2] = "scifio-itk-bridge.jar";
+  std::string scifioITKBridgePath = itksys::SystemTools::JoinPath(packageCmdPath);
+  std::string classpath = bioformatsPackagePath + SCIFIO_SEP + scifioITKBridgePath;
 
   // determine path to java executable from JAVA_HOME, if available
 #if defined(_WIN32)
@@ -306,7 +313,7 @@ SCIFIOImageIO::SCIFIOImageIO():m_Argv(0)
   std::string javaCmd = "java";
 #endif
   std::string javaHome = getEnv("JAVA_HOME");
-  if( javaHome == "" )
+  if( javaHome == "" || !CheckJavaPath(javaHome, javaCmd) )
     {
     javaHome = "@JRE_BUILD_TREE_LOCATION@";
     if( !CheckJavaPath(javaHome, javaCmd) )
@@ -322,7 +329,6 @@ SCIFIOImageIO::SCIFIOImageIO():m_Argv(0)
     {
     itkDebugMacro("Warning: JAVA_HOME not set; assuming Java is on the path");
     }
-
   // use the appropriate java command
   m_Args.push_back( javaCmd );
 
