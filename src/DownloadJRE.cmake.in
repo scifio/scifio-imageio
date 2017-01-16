@@ -11,7 +11,7 @@ endif()
 
 if( NOT "${jreTarballMD5}" STREQUAL "" AND NOT EXISTS "${outputFile}" )
   file( DOWNLOAD
-    "http://midas3.kitware.com/midas/api/rest?method=midas.bitstream.download&checksum=${jreTarballMD5}&name=${outputFile}&algorithm=MD5"
+    "https://midas3.kitware.com/midas/api/rest?method=midas.bitstream.download&checksum=${jreTarballMD5}&name=${outputFile}&algorithm=MD5"
     "${outputFile}"
     EXPECTED_HASH MD5=${jreTarballMD5} SHOW_PROGRESS
     )
