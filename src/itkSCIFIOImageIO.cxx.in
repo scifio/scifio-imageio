@@ -277,18 +277,27 @@ bool SCIFIOImageIO::CheckJavaPath(std::string javaHome, std::string &javaCmd)
   return false;
 }
 
+std::string SCIFIOImageIO::RemoveFinalSlash(std::string path) const
+{
+  if(path[path.size()-1] == '/' || path[path.size()-1] == '\\')
+    {
+    path.resize(path.size()-1);
+    }
+  return path;
+}
+
 SCIFIOImageIO::SCIFIOImageIO():m_Argv(0)
 {
   this->m_FileType = Binary;
 
   // determine Java classpath from SCIFIO_PATH environment variable
-  std::string scifioPath = getEnv("SCIFIO_PATH");
+  std::string scifioPath = RemoveFinalSlash(getEnv("SCIFIO_PATH"));
   if( scifioPath == "" || !itksys::SystemTools::FileExists( scifioPath.c_str(), false ) )
     {
-    scifioPath = "@JAR_BUILD_TREE_LOCATION@";
+    scifioPath = RemoveFinalSlash("@JAR_BUILD_TREE_LOCATION@");
     if( !itksys::SystemTools::FileExists( scifioPath.c_str(), false ) )
       {
-      scifioPath = "@JAR_INSTALL_TREE_LOCATION@";
+      scifioPath = RemoveFinalSlash("@JAR_INSTALL_TREE_LOCATION@");
       if( !itksys::SystemTools::FileExists( scifioPath.c_str(), false ) )
         {
         itkExceptionMacro("SCIFIO_PATH is not set. " <<
@@ -298,12 +307,9 @@ SCIFIOImageIO::SCIFIOImageIO():m_Argv(0)
       }
     }
   std::vector<std::string> packageCmdPath;
-  packageCmdPath.push_back(""); // NB: JoinPath skips the first one (why?).
-  packageCmdPath.push_back(scifioPath);
-  packageCmdPath.push_back("bioformats_package.jar");
-  std::string bioformatsPackagePath = itksys::SystemTools::JoinPath(packageCmdPath);
-  packageCmdPath[2] = "scifio-itk-bridge.jar";
-  std::string scifioITKBridgePath = itksys::SystemTools::JoinPath(packageCmdPath);
+  
+  std::string bioformatsPackagePath = scifioPath + "/" + "bioformats_package.jar";
+  std::string scifioITKBridgePath = scifioPath + "/" + "scifio-itk-bridge.jar";
   std::string classpath = bioformatsPackagePath + SCIFIO_SEP + scifioITKBridgePath;
 
   // determine path to java executable from JAVA_HOME, if available
@@ -312,13 +318,13 @@ SCIFIOImageIO::SCIFIOImageIO():m_Argv(0)
 #else
   std::string javaCmd = "java";
 #endif
-  std::string javaHome = getEnv("JAVA_HOME");
+  std::string javaHome = RemoveFinalSlash(getEnv("JAVA_HOME"));
   if( javaHome == "" || !CheckJavaPath(javaHome, javaCmd) )
     {
-    javaHome = "@JRE_BUILD_TREE_LOCATION@";
+    javaHome = RemoveFinalSlash("@JRE_BUILD_TREE_LOCATION@");
     if( !CheckJavaPath(javaHome, javaCmd) )
     {
-      javaHome = "@JRE_INSTALL_TREE_LOCATION@/jre";
+      javaHome = RemoveFinalSlash("@JRE_INSTALL_TREE_LOCATION@/jre");
       if( !CheckJavaPath( javaHome.c_str(), javaCmd) )
         {
         javaHome = "";
