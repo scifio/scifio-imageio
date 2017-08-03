@@ -279,7 +279,7 @@ bool SCIFIOImageIO::CheckJavaPath(std::string javaHome, std::string &javaCmd)
 
 std::string SCIFIOImageIO::RemoveFinalSlash(std::string path) const
 {
-  if(path[path.size()-1] == '/' || path[path.size()-1] == '\\')
+  if(!path.empty() && (path[path.size()-1] == '/' || path[path.size()-1] == '\\'))
     {
     path.resize(path.size()-1);
     }
