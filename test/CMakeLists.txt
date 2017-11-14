@@ -37,7 +37,7 @@ itk_add_test( NAME ITKSCIFIOImageIOTest
 
 # Test I/O using itk::RGBPixel
 itk_add_test( NAME ITKRGBSCIFIOImageIOTest
-  COMMAND SCIFIOTestDriver
+  COMMAND SCIFIOTestDriver --ignoreInputInformation
   --compare DATA{Input/image_color.bmp}
                  ${ITK_TEST_OUTPUT_DIR}/image_color_scifio.png
   itkRGBSCIFIOImageIOTest DATA{Input/image_color.bmp}
