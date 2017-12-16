@@ -67,7 +67,7 @@ namespace itk
  *   lib/jars subfolder of the build directory. Failing that, it looks for
  *   the same subfolder in the install directory given at build time.
  * - JAVA_FLAGS - Used to pass any additional desired parameters to the Java
- *   execution. This is especially useful to override Java's maximum heap
+ *   execution. This is especially useful to ITK_OVERRIDE Java's maximum heap
  *   size, but also nice for tweaking the VM in many other ways (e.g.,
  *   garbage collection settings).
  *
@@ -91,11 +91,11 @@ public:
   /** RTTI (and related methods) **/
   itkTypeMacro(SCIFIOImageIO, Superclass);
 
-  virtual bool SupportsDimension( unsigned long dim ) ITK_OVERRIDE;
+  bool SupportsDimension( unsigned long dim ) ITK_OVERRIDE;
 
   /**--------------- Read the data----------------- **/
 
-  virtual bool CanReadFile(const char* FileNameToRead) ITK_OVERRIDE;
+  bool CanReadFile(const char* FileNameToRead) ITK_OVERRIDE;
 
   /* Sets the series to read in a multi-series dataset */
   virtual bool SetSeries(int series);
@@ -104,26 +104,26 @@ public:
   virtual int GetSeriesCount();
 
   /* Set the spacing and dimension information for the set file name */
-  virtual void ReadImageInformation() ITK_OVERRIDE;
+  void ReadImageInformation() ITK_OVERRIDE;
 
   /* Read the data from the disk into provided memory buffer */
-  virtual void Read(void* buffer) ITK_OVERRIDE;
+  void Read(void* buffer) ITK_OVERRIDE;
 
   /**---------------Write the data------------------**/
 
-  virtual bool CanWriteFile(const char* FileNameToWrite) ITK_OVERRIDE;
+  bool CanWriteFile(const char* FileNameToWrite) ITK_OVERRIDE;
 
   /* Set the spacing and dimension information for the set file name */
-  virtual void WriteImageInformation() ITK_OVERRIDE;
+  void WriteImageInformation() ITK_OVERRIDE;
 
   /* Write the data to the disk from the provided memory buffer */
-  virtual void Write(const void* buffer) ITK_OVERRIDE;
+  void Write(const void* buffer) ITK_OVERRIDE;
 
 protected:
   SCIFIOImageIO();
-  ~SCIFIOImageIO();
+  ~SCIFIOImageIO() ITK_OVERRIDE;
 
-  virtual SizeType GetHeaderSize() const ITK_OVERRIDE { return 0; }
+  SizeType GetHeaderSize() const ITK_OVERRIDE { return 0; }
 
 private:
   void CreateJavaProcess();
