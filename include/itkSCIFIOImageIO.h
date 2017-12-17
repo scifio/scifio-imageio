@@ -142,7 +142,7 @@ private:
       itkDebugMacro( "SCIFIOImageIO::toCArray::args["<<i<<"] = " << args[i]);
       argv[i] = (char*)args[i].c_str();
       }
-    argv[args.size()] = NULL;
+    argv[args.size()] = nullptr;
     return argv;
     }
 
