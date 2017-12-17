@@ -52,7 +52,7 @@ public:
 
 protected:
   SCIFIOImageIOFactory();
-  ~SCIFIOImageIOFactory() override;
+  ~SCIFIOImageIOFactory() ITK_OVERRIDE;
 
 private:
   SCIFIOImageIOFactory(const Self&); // purposely not implemented
