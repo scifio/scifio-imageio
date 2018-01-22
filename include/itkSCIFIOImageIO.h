@@ -91,11 +91,11 @@ public:
   /** RTTI (and related methods) **/
   itkTypeMacro(SCIFIOImageIO, Superclass);
 
-  virtual bool SupportsDimension( unsigned long dim ) ITK_OVERRIDE;
+  bool SupportsDimension( unsigned long dim ) override;
 
   /**--------------- Read the data----------------- **/
 
-  virtual bool CanReadFile(const char* FileNameToRead) ITK_OVERRIDE;
+  bool CanReadFile(const char* FileNameToRead) override;
 
   /* Sets the series to read in a multi-series dataset */
   virtual bool SetSeries(int series);
@@ -104,26 +104,26 @@ public:
   virtual int GetSeriesCount();
 
   /* Set the spacing and dimension information for the set file name */
-  virtual void ReadImageInformation() ITK_OVERRIDE;
+  void ReadImageInformation() override;
 
   /* Read the data from the disk into provided memory buffer */
-  virtual void Read(void* buffer) ITK_OVERRIDE;
+  void Read(void* buffer) override;
 
   /**---------------Write the data------------------**/
 
-  virtual bool CanWriteFile(const char* FileNameToWrite) ITK_OVERRIDE;
+  bool CanWriteFile(const char* FileNameToWrite) override;
 
   /* Set the spacing and dimension information for the set file name */
-  virtual void WriteImageInformation() ITK_OVERRIDE;
+  void WriteImageInformation() override;
 
   /* Write the data to the disk from the provided memory buffer */
-  virtual void Write(const void* buffer) ITK_OVERRIDE;
+  void Write(const void* buffer) override;
 
 protected:
   SCIFIOImageIO();
-  ~SCIFIOImageIO();
+  ~SCIFIOImageIO() override;
 
-  virtual SizeType GetHeaderSize() const ITK_OVERRIDE { return 0; }
+  SizeType GetHeaderSize() const override { return 0; }
 
 private:
   void CreateJavaProcess();
@@ -142,7 +142,7 @@ private:
       itkDebugMacro( "SCIFIOImageIO::toCArray::args["<<i<<"] = " << args[i]);
       argv[i] = (char*)args[i].c_str();
       }
-    argv[args.size()] = NULL;
+    argv[args.size()] = nullptr;
     return argv;
     }
 
