@@ -1179,7 +1179,7 @@ void SCIFIOImageIO::Write(const void * buffer )
   BYTE* data = (BYTE*)buffer;
   char donemsg[] = { 'O', 'K' };
 
-  const int pipelength = 10000;
+  constexpr int pipelength = 10000;
 
   for (int i = 0; i < numPlanes; ++i)
     {

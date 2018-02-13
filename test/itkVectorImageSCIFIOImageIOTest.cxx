@@ -31,7 +31,7 @@ int itkVectorImageSCIFIOImageIOTest( int argc, char * argv [] )
     }
 
   using PixelType = unsigned short;
-  const unsigned int          Dimension = 3;
+  constexpr unsigned int Dimension = 3;
 
   using ImageType = itk::VectorImage< PixelType, Dimension >;
 
