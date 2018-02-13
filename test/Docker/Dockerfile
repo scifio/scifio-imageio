@@ -4,7 +4,6 @@ MAINTAINER Insight Software Consortium <community@itk.org>
 RUN apt-get update && apt-get install -y \
   build-essential \
   curl \
-  cmake \
   git \
   libexpat1-dev \
   libhdf5-dev \
@@ -21,12 +20,17 @@ RUN apt-get update && apt-get install -y \
   vim \
   zlib1g-dev
 
+RUN wget https://cmake.org/files/v3.10/cmake-3.10.2-Linux-x86_64.sh && \
+  chmod +x cmake-3.10.2-Linux-x86_64.sh && \
+  ./cmake-3.10.2-Linux-x86_64.sh --prefix /usr/local --skip-license && \
+  rm cmake-3.10.2-Linux-x86_64.sh
+
 RUN mkdir -p /usr/src/scifio-imageio-build
 WORKDIR /usr/src
 
-# 2015-09-02
-ENV ITK_GIT_TAG 63443634e35e63073b218e6edd14864c08c4089e
-RUN git clone git://itk.org/ITK.git && \
+# 2018-02-12
+ENV ITK_GIT_TAG 801dab44fe6cf3a25acb80616add7cd2c799962a
+RUN git clone https://github.com/InsightSoftwareConsortium/ITK.git && \
   cd ITK && \
   git checkout ${ITK_GIT_TAG} && \
   cd ../ && \
