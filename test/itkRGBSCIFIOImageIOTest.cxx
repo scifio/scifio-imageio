@@ -31,12 +31,12 @@ int itkRGBSCIFIOImageIOTest( int argc, char * argv [] )
     return EXIT_FAILURE;
     }
 
-  typedef itk::RGBPixel<unsigned char>       PixelType;
+  using PixelType = itk::RGBPixel<unsigned char>;
   const unsigned int                         Dimension = 3;
 
-  typedef itk::Image< PixelType, Dimension >   ImageType;
+  using ImageType = itk::Image< PixelType, Dimension >;
 
-  typedef itk::ImageFileReader<ImageType> ReaderType;
+  using ReaderType = itk::ImageFileReader<ImageType>;
 
   itk::SCIFIOImageIO::Pointer io = itk::SCIFIOImageIO::New();
 
@@ -48,7 +48,7 @@ int itkRGBSCIFIOImageIOTest( int argc, char * argv [] )
   reader->SetFileName(argv[1]);
   reader->SetImageIO(io);
 
-  typedef itk::StreamingImageFilter<ImageType, ImageType> StreamingFilter;
+  using StreamingFilter = itk::StreamingImageFilter<ImageType, ImageType>;
   StreamingFilter::Pointer streamer = StreamingFilter::New();
   streamer->SetInput( reader->GetOutput() );
   streamer->SetNumberOfStreamDivisions( 3 );

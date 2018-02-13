@@ -80,10 +80,10 @@ namespace itk
 class SCIFIO_EXPORT SCIFIOImageIO : public StreamingImageIOBase
 {
 public:
-  typedef SCIFIOImageIO               Self;
-  typedef ImageIOBase                 Superclass;
-  typedef SmartPointer<Self>          Pointer;
-  typedef SmartPointer<const Self>    ConstPointer;
+  using Self = SCIFIOImageIO;
+  using Superclass = ImageIOBase;
+  using Pointer = SmartPointer<Self>;
+  using ConstPointer = SmartPointer<const Self>;
 
   /** Method for creation through the object factory **/
   itkNewMacro(Self);
