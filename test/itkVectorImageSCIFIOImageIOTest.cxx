@@ -30,12 +30,12 @@ int itkVectorImageSCIFIOImageIOTest( int argc, char * argv [] )
     return EXIT_FAILURE;
     }
 
-  typedef unsigned short      PixelType;
+  using PixelType = unsigned short;
   const unsigned int          Dimension = 3;
 
-  typedef itk::VectorImage< PixelType, Dimension >   ImageType;
+  using ImageType = itk::VectorImage< PixelType, Dimension >;
 
-  typedef itk::ImageFileReader<ImageType> ReaderType;
+  using ReaderType = itk::ImageFileReader<ImageType>;
 
   itk::SCIFIOImageIO::Pointer io = itk::SCIFIOImageIO::New();
 
@@ -47,7 +47,7 @@ int itkVectorImageSCIFIOImageIOTest( int argc, char * argv [] )
   reader->SetFileName(argv[1]);
   reader->SetImageIO(io);
 
-  typedef itk::StreamingImageFilter<ImageType, ImageType> StreamingFilter;
+  using StreamingFilter = itk::StreamingImageFilter<ImageType, ImageType>;
   StreamingFilter::Pointer streamer = StreamingFilter::New();
   streamer->SetInput( reader->GetOutput() );
   streamer->SetNumberOfStreamDivisions( 3 );

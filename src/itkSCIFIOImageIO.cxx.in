@@ -244,7 +244,7 @@ std::string SCIFIOImageIO::FindDimensionOrder(const ImageIORegion & region)
     maxSizeIndex++;
     }
 
-  for( ; maxSizeIndex<5; maxSizeIndex++ )
+  for(; maxSizeIndex<5; maxSizeIndex++ )
     {
     command += "\t";
     command += toString(0);
@@ -259,9 +259,9 @@ bool SCIFIOImageIO::CheckJavaPath(std::string javaHome, std::string &javaCmd)
 {
   std::vector<std::string> javaCmdPath;
 #if defined(_WIN32)
-  javaCmd = "javaw.exe" ;
+  javaCmd = "javaw.exe";
 #else
-  javaCmd = "java" ;
+  javaCmd = "java";
 #endif
   javaCmdPath.push_back( "" ); // NB: JoinPath skips the first one (why?).
   javaCmdPath.push_back( javaHome );
@@ -1175,7 +1175,7 @@ void SCIFIOImageIO::Write(const void * buffer )
   p1 = imgInfo.find("\n", p0);
   vals = imgInfo.substr(p0, p1);
 
-  typedef unsigned char BYTE;
+  using BYTE = unsigned char;
   BYTE* data = (BYTE*)buffer;
   char donemsg[] = { 'O', 'K' };
 

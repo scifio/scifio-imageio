@@ -65,8 +65,8 @@ int RunTest ( const char * inputFileName,
               bool writeSCIFIO,
               bool allSeries )
 {
-  typedef itk::Image<PixelType, NDimension>             ImageType;
-  typedef typename itk::ImageFileReader< ImageType >    ReaderType;
+  using ImageType = itk::Image<PixelType, NDimension>;
+  using ReaderType = typename itk::ImageFileReader< ImageType >;
 
   itk::SCIFIOImageIO::Pointer io = itk::SCIFIOImageIO::New();
   io->DebugOn();
@@ -79,12 +79,12 @@ int RunTest ( const char * inputFileName,
 
   reader->SetFileName( inputFileName );
 
-  typedef itk::StreamingImageFilter< ImageType, ImageType > StreamingFilter;
+  using StreamingFilter = itk::StreamingImageFilter< ImageType, ImageType >;
   typename StreamingFilter::Pointer streamer = StreamingFilter::New();
   streamer->SetInput( reader->GetOutput() );
   streamer->SetNumberOfStreamDivisions( atoi(numberOfStreamDivisions.c_str()) );
 
-  typedef itk::ImageFileWriter< ImageType > WriterType;
+  using WriterType = itk::ImageFileWriter< ImageType >;
   typename WriterType::Pointer writer;
   writer = WriterType::New();
   writer->SetInput( streamer->GetOutput() );

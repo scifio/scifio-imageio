@@ -109,11 +109,11 @@ int itkSCIFIOImageInfoTest( int argc, char * argv[] )
   int sizeT = atoi(sT.c_str());
   int sizeC = atoi(sC.c_str());
 
-  typedef unsigned char     PixelType;
+  using PixelType = unsigned char;
   const unsigned int        Dimension = 5;
 
-  typedef itk::Image< PixelType, Dimension >  ImageType;
-  typedef itk::ImageFileReader<ImageType>     ReaderType;
+  using ImageType = itk::Image< PixelType, Dimension >;
+  using ReaderType = itk::ImageFileReader<ImageType>;
 
   itk::SCIFIOImageIO::Pointer io = itk::SCIFIOImageIO::New();
 
