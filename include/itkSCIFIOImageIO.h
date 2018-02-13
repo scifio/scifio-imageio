@@ -136,7 +136,7 @@ private:
 
   char ** toCArray( std::vector< std::string > & args )
     {
-    char **argv = new char *[args.size() + 1];
+    auto **argv = new char *[args.size() + 1];
     for( int i = 0; i < static_cast< int >( args.size() ); i++ )
       {
       itkDebugMacro( "SCIFIOImageIO::toCArray::args["<<i<<"] = " << args[i]);
