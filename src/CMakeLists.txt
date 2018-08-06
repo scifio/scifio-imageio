@@ -75,9 +75,7 @@ set(SCIFIO_SRC
   ${CMAKE_CURRENT_BINARY_DIR}/itkSCIFIOImageIO.cxx
   )
 
-add_library(SCIFIO ${ITK_LIBRARY_BUILD_TYPE} ${SCIFIO_SRC})
-target_link_libraries(SCIFIO  ${ITKIOImageBase_LIBRARIES})
-itk_module_target(SCIFIO)
+itk_module_add_library(SCIFIO ${SCIFIO_SRC})
 
 # Download the SCIFIO Java libraries.
 configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/DownloadSCIFIO.cmake.in
