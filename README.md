@@ -1,5 +1,9 @@
 # SCIFIO ImageIO plugin
 
+| Linux                                                                                                                                                              | macOS                                                                                                                                                           | Windows                                                                                                                                |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| [![CircleCI](https://circleci.com/gh/scifio/scifio-imageio.svg?style=shield)](https://circleci.com/gh/scifio/scifio-imageio) | [![TravisCI](https://travis-ci.org/scifio/scifio-imageio.svg?branch=master)](https://travis-ci.org/scifio/scifio-imageio) | [![AppVeyor](https://img.shields.io/appveyor/ci/scijava/scifio-imageio.svg)](https://ci.appveyor.com/project/scijava/scifio-imageio) |
+
 __NB: This `scifio-imageio` provides the _C++_ side of SCIFIO-ITK integration. For the _Java_ side, see [scifio-itk-bridge](https://github.com/scifio/scifio-itk-bridge).__
 
 This package provides an ImageIO plugin for the
