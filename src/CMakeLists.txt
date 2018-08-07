@@ -19,8 +19,8 @@
 # for OS 10.9.
 #
 set( SCIFIOJars
-  https://downloads.openmicroscopy.org/bio-formats/5.0.4/artifacts/bioformats_package.jar
-  https://maven.imagej.net/service/local/repositories/releases/content/io/scif/scifio-itk-bridge/1.2.0/scifio-itk-bridge-1.2.0.jar
+  https://downloads.openmicroscopy.org/bio-formats/5.9.2/artifacts/bioformats_package.jar
+  https://maven.imagej.net/content/groups/public/io/scif/scifio-itk-bridge/1.2.1/scifio-itk-bridge-1.2.1.jar
   )
 set( SCIFIOJarNames
   bioformats_package.jar
@@ -96,6 +96,8 @@ elseif( "${CMAKE_SYSTEM_NAME}" MATCHES "Linux" )
   endif()
 endif()
 
+# Disable download of old java version
+unset(jreFileNameBase)
 
 # Download JRE if defined
 IF (DEFINED jreFileName)
