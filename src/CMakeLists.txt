@@ -47,25 +47,6 @@ set( JRE_INSTALL_LOCATION
 set( JRE_INSTALL_TREE_LOCATION
   ${CMAKE_INSTALL_PREFIX}/${SCIFIO_INSTALL_LIBRARY_DIR}
   )
-set( jreTarballMD5 "" )
-if( WIN32 )
-  if( "${CMAKE_SIZEOF_VOID_P}" EQUAL 8 )
-    # win64
-    set( jreTarballMD5 "5be3a27fc46997785ee70e0e0f140135" )
-  else()
-    # win32
-    set( jreTarballMD5 "a0f445bbe2f44e52a56f99e0e9d33c1a" )
-  endif()
-elseif( "${CMAKE_SYSTEM_NAME}" MATCHES "Linux" )
-  if( "${CMAKE_SIZEOF_VOID_P}" EQUAL 8 )
-    # linux-amd64
-    set( jreTarballMD5 "4c75412942f7d36c5e8b8fb38ba975bc" )
-  else()
-    # linux
-    set( jreTarballMD5 "777bd36ea81ca1b732ef8115a347fd66" )
-  endif()
-endif()
-
 
 configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/itkSCIFIOImageIO.cxx.in
   ${CMAKE_CURRENT_BINARY_DIR}/itkSCIFIOImageIO.cxx
@@ -96,15 +77,44 @@ install( DIRECTORY ${JAR_BUILD_TREE_LOCATION}
   FILES_MATCHING PATTERN "*.jar"
   )
 
-# Download JRE except for OS X
-IF (NOT APPLE)
-  configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/DownloadJRE.cmake.in
-    ${CMAKE_CURRENT_BINARY_DIR}/DownloadJRE.cmake
-    @ONLY
+
+
+set(jreFileNameBase "jdk1.6.0_24")
+if( WIN32 )
+  if( "${CMAKE_SIZEOF_VOID_P}" EQUAL 8 )
+    # win64
+    set( jreFileName "${jreFileNameBase}-windows-x64.tar.bz2" )
+  else()
+    # win32
+    set( jreFileName "${jreFileNameBase}-windows-i586.tar.bz2" )
+  endif()
+elseif( "${CMAKE_SYSTEM_NAME}" MATCHES "Linux" )
+  if( "${CMAKE_SIZEOF_VOID_P}" EQUAL 8 )
+    # linux-amd64
+    set( jreFileName "${jreFileNameBase}-linux-x64.tar.bz2" )
+  else()
+    # linux
+    set( jreFileName "${jreFileNameBase}-linux-i586.tar.bz2" )
+  endif()
+endif()
+
+
+# Download JRE if defined
+IF (DEFINED jreFileName)
+
+  ExternalData_Expand_arguments(
+    SCIFIO-JRE
+    outputFile
+    DATA{${CMAKE_CURRENT_SOURCE_DIR}/data/${jreFileName}}
     )
+
+  ExternalData_Add_Target( SCIFIO-JRE )
+
+  add_dependencies( SCIFIO SCIFIO-JRE)
+
   add_custom_command(TARGET SCIFIO
     POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/DownloadJRE.cmake
+    COMMAND ${CMAKE_COMMAND} -E tar xjf "${outputFile}"
     WORKING_DIRECTORY ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}
     COMMENT "Downloading JRE libraries..."
     )
