@@ -18,7 +18,6 @@
 
 #include "itkSCIFIOImageIO.h"
 #include "itkIOCommon.h"
-#include "itkExceptionObject.h"
 #include "itkMetaDataObject.h"
 
 #include <cstdio>
