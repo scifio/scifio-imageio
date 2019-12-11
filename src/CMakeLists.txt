@@ -77,23 +77,20 @@ install( DIRECTORY ${JAR_BUILD_TREE_LOCATION}
 
 
 
-set(jreFileNameBase "jdk1.6.0_24")
-if( WIN32 )
-  if( "${CMAKE_SIZEOF_VOID_P}" EQUAL 8 )
+set(jreFileNameBase "OpenJDK11")
+if(WIN32)
+  if("${CMAKE_SIZEOF_VOID_P}" EQUAL 8)
     # win64
-    set( jreFileName "${jreFileNameBase}-windows-x64.tar.bz2" )
+    set(jreFileName "${jreFileNameBase}-windows-x64.tar.bz2")
   else()
     # win32
-    set( jreFileName "${jreFileNameBase}-windows-i586.tar.bz2" )
+    set(jreFileName "${jreFileNameBase}-windows-x86.tar.bz2")
   endif()
-elseif( "${CMAKE_SYSTEM_NAME}" MATCHES "Linux" )
-  if( "${CMAKE_SIZEOF_VOID_P}" EQUAL 8 )
-    # linux-amd64
-    set( jreFileName "${jreFileNameBase}-linux-x64.tar.bz2" )
-  else()
-    # linux
-    set( jreFileName "${jreFileNameBase}-linux-i586.tar.bz2" )
-  endif()
+elseif(CMAKE_HOST_SYSTEM_NAME MATCHES "Darwin" AND CMAKE_HOST_SYSTEM_PROCESSOR STREQUAL "x86_64")
+  set(jreFileName "${jreFileNameBase}-macos-x64.tar.bz2")
+elseif("${CMAKE_SYSTEM_NAME}" MATCHES "Linux")
+  # linux-amd64
+  set(jreFileName "${jreFileNameBase}-linux-x64.tar.bz2")
 endif()
 
 # Disable download of old java version
