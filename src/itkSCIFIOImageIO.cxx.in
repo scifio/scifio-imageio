@@ -19,6 +19,7 @@
 #include "itkSCIFIOImageIO.h"
 #include "itkIOCommon.h"
 #include "itkMetaDataObject.h"
+#include "itksys/SystemTools.hxx"
 
 #include <cstdio>
 #include <cstdlib>
@@ -55,7 +56,7 @@ namespace
 
   std::string getEnv( const char* name )
   {
-    char* result = getenv(name);
+    const char* result = itksys::SystemTools::GetEnv(name);
     if ( result == NULL )
       {
       return "";
