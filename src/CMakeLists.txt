@@ -97,7 +97,7 @@ endif()
 unset(jreFileNameBase)
 
 # Download JRE if defined
-IF (DEFINED jreFileName)
+if (DEFINED jreFileName)
 
   ExternalData_Expand_arguments(
     SCIFIO-JRE
