@@ -23,18 +23,19 @@
 #include "itkMetaDataObject.h"
 #include "itkStreamingImageFilter.h"
 
-int itkRGBSCIFIOImageIOTest( int argc, char * argv [] )
+int
+itkRGBSCIFIOImageIOTest(int argc, char * argv[])
 {
-  if( argc < 3)
-    {
+  if (argc < 3)
+  {
     std::cerr << "Usage: " << argv[0] << " input output\n";
     return EXIT_FAILURE;
-    }
+  }
 
   using PixelType = itk::RGBPixel<unsigned char>;
   constexpr unsigned int Dimension = 3;
 
-  using ImageType = itk::Image< PixelType, Dimension >;
+  using ImageType = itk::Image<PixelType, Dimension>;
 
   using ReaderType = itk::ImageFileReader<ImageType>;
 
@@ -50,8 +51,8 @@ int itkRGBSCIFIOImageIOTest( int argc, char * argv [] )
 
   using StreamingFilter = itk::StreamingImageFilter<ImageType, ImageType>;
   StreamingFilter::Pointer streamer = StreamingFilter::New();
-  streamer->SetInput( reader->GetOutput() );
-  streamer->SetNumberOfStreamDivisions( 3 );
+  streamer->SetInput(reader->GetOutput());
+  streamer->SetNumberOfStreamDivisions(3);
 
   itk::ImageFileWriter<ImageType>::Pointer writer;
 
@@ -63,18 +64,18 @@ int itkRGBSCIFIOImageIOTest( int argc, char * argv [] )
   writer->SetFileName(argv[2]);
 
   try
-    {
+  {
     streamer->Update();
     writer->Update();
-    }
-  catch (itk::ExceptionObject &e)
-    {
+  }
+  catch (itk::ExceptionObject & e)
+  {
     std::cerr << e << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   std::string notes;
-  itk::ExposeMetaData<std::string>( reader->GetMetaDataDictionary(), "Recording #1 Notes", notes );
+  itk::ExposeMetaData<std::string>(reader->GetMetaDataDictionary(), "Recording #1 Notes", notes);
   std::cout << "Notes: " << notes << std::endl;
 
   return EXIT_SUCCESS;

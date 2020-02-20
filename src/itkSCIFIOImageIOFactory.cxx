@@ -24,23 +24,19 @@ namespace itk
 {
 SCIFIOImageIOFactory::SCIFIOImageIOFactory()
 {
-  this->RegisterOverride("itkImageIOBase",
-                         "itkSCIFIOImageIO",
-                         "SCIFIO Image IO",
-                         1,
-                         CreateObjectFunction<SCIFIOImageIO>::New());
+  this->RegisterOverride(
+    "itkImageIOBase", "itkSCIFIOImageIO", "SCIFIO Image IO", 1, CreateObjectFunction<SCIFIOImageIO>::New());
 }
 
-SCIFIOImageIOFactory::~SCIFIOImageIOFactory()
-{}
+SCIFIOImageIOFactory::~SCIFIOImageIOFactory() {}
 
-const char*
+const char *
 SCIFIOImageIOFactory::GetITKSourceVersion(void) const
 {
   return ITK_SOURCE_VERSION;
 }
 
-const char*
+const char *
 SCIFIOImageIOFactory::GetDescription() const
 {
   return "SCIFIO ImageIO Factory, allows the loading of "
@@ -53,13 +49,14 @@ SCIFIOImageIOFactory::GetDescription() const
 
 static bool SCIFIOImageIOFactoryHasBeenRegistered;
 
-void SCIFIO_EXPORT SCIFIOImageIOFactoryRegister__Private(void)
+void SCIFIO_EXPORT
+     SCIFIOImageIOFactoryRegister__Private(void)
 {
-  if( !SCIFIOImageIOFactoryHasBeenRegistered )
-    {
+  if (!SCIFIOImageIOFactoryHasBeenRegistered)
+  {
     SCIFIOImageIOFactoryHasBeenRegistered = true;
     SCIFIOImageIOFactory::RegisterOneFactory();
-    }
+  }
 }
 
 } // end namespace itk

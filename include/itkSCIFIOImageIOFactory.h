@@ -36,8 +36,10 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Class methods used to interface with the registered factories **/
-  const char* GetITKSourceVersion(void) const override;
-  const char* GetDescription(void) const override;
+  const char *
+  GetITKSourceVersion(void) const override;
+  const char *
+  GetDescription(void) const override;
 
   /** Method for class instantiation **/
   itkFactorylessNewMacro(Self);
@@ -46,11 +48,12 @@ public:
   itkTypeMacro(SCIFIOImageIOFactory, ObjectFactoryBase);
 
   /** Register one factory of this type **/
-  static void RegisterOneFactory(void)
-    {
+  static void
+  RegisterOneFactory(void)
+  {
     SCIFIOImageIOFactory::Pointer SCIFIOFactory = SCIFIOImageIOFactory::New();
     ObjectFactoryBase::RegisterFactoryInternal(SCIFIOFactory);
-    }
+  }
 
 protected:
   SCIFIOImageIOFactory();
