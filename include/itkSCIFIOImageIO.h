@@ -167,52 +167,52 @@ private:
     return argv;
   }
 
-  ImageIOBase::IOComponentType
+  IOComponentEnum
   scifioToITKComponentType(int pixelType)
   {
     switch (pixelType)
     {
       case 0:
-        return CHAR;
+        return IOComponentEnum::CHAR;
       case 1:
-        return UCHAR;
+        return IOComponentEnum::UCHAR;
       case 2:
-        return SHORT;
+        return IOComponentEnum::SHORT;
       case 3:
-        return USHORT;
+        return IOComponentEnum::USHORT;
       case 4:
-        return INT;
+        return IOComponentEnum::INT;
       case 5:
-        return UINT;
+        return IOComponentEnum::UINT;
       case 6:
-        return FLOAT;
+        return IOComponentEnum::FLOAT;
       default:
-        return DOUBLE;
+        return IOComponentEnum::DOUBLE;
     }
   }
 
   int
-  itkToSCIFIOPixelType(ImageIOBase::IOComponentType cmp)
+  itkToSCIFIOPixelType(ImageIOBase::IOComponentEnum cmp)
   {
     switch (cmp)
     {
-      case CHAR:
+      case IOComponentEnum::CHAR:
         return 0;
-      case UCHAR:
+      case IOComponentEnum::UCHAR:
         return 1;
-      case SHORT:
+      case IOComponentEnum::SHORT:
         return 2;
-      case USHORT:
+      case IOComponentEnum::USHORT:
         return 3;
-      case INT:
+      case IOComponentEnum::INT:
         return 4;
-      case UINT:
+      case IOComponentEnum::UINT:
         return 5;
-      case FLOAT:
+      case IOComponentEnum::FLOAT:
         return 6;
-      case LONG:
-      case ULONG:
-      case DOUBLE:
+      case IOComponentEnum::LONG:
+      case IOComponentEnum::ULONG:
+      case IOComponentEnum::DOUBLE:
       default:
         return 7;
     }
