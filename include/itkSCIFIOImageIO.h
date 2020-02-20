@@ -91,65 +91,87 @@ public:
   /** RTTI (and related methods) **/
   itkTypeMacro(SCIFIOImageIO, Superclass);
 
-  bool SupportsDimension( unsigned long dim ) override;
+  bool
+  SupportsDimension(unsigned long dim) override;
 
   /**--------------- Read the data----------------- **/
 
-  bool CanReadFile(const char* FileNameToRead) override;
+  bool
+  CanReadFile(const char * FileNameToRead) override;
 
   /* Sets the series to read in a multi-series dataset */
-  virtual bool SetSeries(int series);
+  virtual bool
+  SetSeries(int series);
 
   /* Sets the series to read in a multi-series dataset */
-  virtual int GetSeriesCount();
+  virtual int
+  GetSeriesCount();
 
   /* Set the spacing and dimension information for the set file name */
-  void ReadImageInformation() override;
+  void
+  ReadImageInformation() override;
 
   /* Read the data from the disk into provided memory buffer */
-  void Read(void* buffer) override;
+  void
+  Read(void * buffer) override;
 
   /**---------------Write the data------------------**/
 
-  bool CanWriteFile(const char* FileNameToWrite) override;
+  bool
+  CanWriteFile(const char * FileNameToWrite) override;
 
   /* Set the spacing and dimension information for the set file name */
-  void WriteImageInformation() override;
+  void
+  WriteImageInformation() override;
 
   /* Write the data to the disk from the provided memory buffer */
-  void Write(const void* buffer) override;
+  void
+  Write(const void * buffer) override;
 
 protected:
   SCIFIOImageIO();
   ~SCIFIOImageIO() override;
 
-  SizeType GetHeaderSize() const override { return 0; }
+  SizeType
+  GetHeaderSize() const override
+  {
+    return 0;
+  }
 
 private:
-  void CreateJavaProcess();
-  void DestroyJavaProcess();
-  std::string FindDimensionOrder(const ImageIORegion & region );
-  std::string WaitForNewLines(int pipedatalength);
-  void CheckError(std::string message);
-  bool CheckJavaPath(std::string javaHome, std::string &javaCmd);
-  std::string RemoveFinalSlash(std::string path) const;
+  void
+  CreateJavaProcess();
+  void
+  DestroyJavaProcess();
+  std::string
+  FindDimensionOrder(const ImageIORegion & region);
+  std::string
+  WaitForNewLines(int pipedatalength);
+  void
+  CheckError(std::string message);
+  bool
+  CheckJavaPath(std::string javaHome, std::string & javaCmd);
+  std::string
+  RemoveFinalSlash(std::string path) const;
 
-  char ** toCArray( std::vector< std::string > & args )
+  char **
+  toCArray(std::vector<std::string> & args)
+  {
+    auto ** argv = new char *[args.size() + 1];
+    for (int i = 0; i < static_cast<int>(args.size()); i++)
     {
-    auto **argv = new char *[args.size() + 1];
-    for( int i = 0; i < static_cast< int >( args.size() ); i++ )
-      {
-      itkDebugMacro( "SCIFIOImageIO::toCArray::args["<<i<<"] = " << args[i]);
-      argv[i] = (char*)args[i].c_str();
-      }
+      itkDebugMacro("SCIFIOImageIO::toCArray::args[" << i << "] = " << args[i]);
+      argv[i] = (char *)args[i].c_str();
+    }
     argv[args.size()] = nullptr;
     return argv;
-    }
+  }
 
-  ImageIOBase::IOComponentType scifioToITKComponentType( int pixelType )
+  ImageIOBase::IOComponentType
+  scifioToITKComponentType(int pixelType)
+  {
+    switch (pixelType)
     {
-    switch ( pixelType )
-      {
       case 0:
         return CHAR;
       case 1:
@@ -161,45 +183,46 @@ private:
       case 4:
         return INT;
       case 5:
-         return UINT;
+        return UINT;
       case 6:
         return FLOAT;
       default:
         return DOUBLE;
-      }
-    }
-
-  int itkToSCIFIOPixelType( ImageIOBase::IOComponentType cmp )
-  {
-    switch ( cmp )
-    {
-    case CHAR:
-      return 0;
-    case UCHAR:
-      return 1;
-    case SHORT:
-      return 2;
-    case USHORT:
-      return 3;
-    case INT:
-      return 4;
-    case UINT:
-      return 5;
-    case FLOAT:
-      return 6;
-    case LONG:
-    case ULONG:
-    case DOUBLE:
-    default:
-      return 7;
     }
   }
 
-  MetaDataDictionary           m_MetaDataDictionary;
-  std::vector< std::string >   m_Args;
-  char **                      m_Argv;
-  itksysProcess_Pipe_Handle    m_Pipe[2];
-  itksysProcess *              m_Process;
+  int
+  itkToSCIFIOPixelType(ImageIOBase::IOComponentType cmp)
+  {
+    switch (cmp)
+    {
+      case CHAR:
+        return 0;
+      case UCHAR:
+        return 1;
+      case SHORT:
+        return 2;
+      case USHORT:
+        return 3;
+      case INT:
+        return 4;
+      case UINT:
+        return 5;
+      case FLOAT:
+        return 6;
+      case LONG:
+      case ULONG:
+      case DOUBLE:
+      default:
+        return 7;
+    }
+  }
+
+  MetaDataDictionary        m_MetaDataDictionary;
+  std::vector<std::string>  m_Args;
+  char **                   m_Argv;
+  itksysProcess_Pipe_Handle m_Pipe[2];
+  itksysProcess *           m_Process;
 };
 } // end namespace itk
 
