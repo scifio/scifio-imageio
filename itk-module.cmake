@@ -1,16 +1,18 @@
-set(DOCUMENTATION "This module contains classes for reading and writing image
-files with the Open Microscopy Environment (OME) Scientific Imaging Formats
-Input and Output (SCIFIO) library.")
+# the top-level README is used for describing this module, just
+# re-used it for documentation here
+get_filename_component(MY_CURRENT_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+file(READ "${MY_CURRENT_DIR}/README.md" DOCUMENTATION)
 
+# define the dependencies of the include module and the tests
 itk_module(SCIFIO
-  ENABLE_SHARED
   DEPENDS
     ITKIOImageBase
   TEST_DEPENDS
     ITKTestKernel
-  EXCLUDE_FROM_DEFAULT
   FACTORY_NAMES
     ImageIO::SCIFIO
   DESCRIPTION
     "${DOCUMENTATION}"
+  EXCLUDE_FROM_DEFAULT
+  ENABLE_SHARED
 )
