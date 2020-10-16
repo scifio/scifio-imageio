@@ -27,7 +27,7 @@ namespace itk
 class SCIFIO_EXPORT SCIFIOImageIOFactory : public ObjectFactoryBase
 {
 public:
-  ITK_DISALLOW_COPY_AND_ASSIGN(SCIFIOImageIOFactory);
+  ITK_DISALLOW_COPY_AND_MOVE(SCIFIOImageIOFactory);
 
   /** Standard class type alias **/
   using Self = SCIFIOImageIOFactory;
