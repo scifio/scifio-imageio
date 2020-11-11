@@ -2,8 +2,6 @@
 
 ![](https://github.com/scifio/scifio-imageio/workflows/Build,%20test,%20package/badge.svg)
 
-[![Build Status](https://dev.azure.com/scifio-imageio/scifio-imageio/_apis/build/status/scifio.scifio-imageio?branchName=master)](https://dev.azure.com/scifio-imageio/scifio-imageio/_build/latest?definitionId=1&branchName=master)
-
 __NB: This `scifio-imageio` provides the _C++_ side of SCIFIO-ITK integration. For the _Java_ side, see [scifio-itk-bridge](https://github.com/scifio/scifio-itk-bridge).__
 
 This package provides an ImageIO plugin for the
