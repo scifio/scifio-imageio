@@ -6,7 +6,7 @@
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0.txt
+ *         https://www.apache.org/licenses/LICENSE-2.0.txt
  *
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
@@ -51,7 +51,7 @@ namespace
  * Splits a string into tokens using the given delimiter.
  *
  * Thanks to SO #236129 for this solution:
- * http://stackoverflow.com/a/236803
+ * https://stackoverflow.com/a/236803
  */
 std::vector<std::string> &
 split(const std::string & s, char delim, std::vector<std::string> & elems)

@@ -5,7 +5,7 @@
 __NB: This `scifio-imageio` provides the _C++_ side of SCIFIO-ITK integration. For the _Java_ side, see [scifio-itk-bridge](https://github.com/scifio/scifio-itk-bridge).__
 
 This package provides an ImageIO plugin for the
-[Insight Toolkit](http://itk.org/) (ITK) that uses
+[Insight Toolkit](https://itk.org/) (ITK) that uses
 [Bio-Formats](https://github.com/openmicroscopy/bioformats)
 to read and write supported file formats.
 
@@ -28,21 +28,21 @@ The SCIFIO ImageIO plugin was developed by Gaetan Lehmann, Mark Hiner,
 Curtis Rueden, Melissa Linkert and Matt McCormick. Development of this
 module was funded in part by the
 [FARSIGHT project](http://farsight-toolkit.org/), as well as the
-[Open Microscopy Environment](http://openmicroscopy.org/).
+[Open Microscopy Environment](https://openmicroscopy.org/).
 
 Special thanks to Alex Gouaillard, Sebastien Barre, Luis Ibanez and
 Jim Miller for fixes and suggestions.
 
 ## Prerequisites
 
-You should have [CMake](http://www.cmake.org/) installed, to allow the
+You should have [CMake](https://www.cmake.org/) installed, to allow the
 configuration of ITK builds. If you want the latest ITK development build, you
-will need [Git](http://git-scm.com/) as well.
+will need [Git](https://git-scm.com/) as well.
 
 ## Installation
 
 Simply download ITK from the [Kitware software
-page](http://www.itk.org/ITK/resources/software.html). Using CMake, set the
+page](https://www.itk.org/ITK/resources/software.html). Using CMake, set the
 following configuration flag:
 ```
 Module_SCIFIO = ON
@@ -81,10 +81,10 @@ The programs are as follows:
   Reads an input image, and writes it out as a specified type
 * __itkRGBSCIFIOImageTest__:
   Same as itkSCIFIOImageIOTest but for
-  [RGB](http://www.itk.org/Doxygen/html/classitk_1_1RGBPixel.html) types
+  [RGB](https://www.itk.org/Doxygen/html/classitk_1_1RGBPixel.html) types
 * __itkVectorImageSCIFIOImageIOTest__:
   Same as itkSCIFIOImageIOTest but for
-  [VectorImage](http://www.itk.org/Doxygen/html/classitk_1_1VectorImage.html)
+  [VectorImage](https://www.itk.org/Doxygen/html/classitk_1_1VectorImage.html)
   type
 
 For example, to convert a .czi image to a .tif, you would use:
@@ -95,10 +95,10 @@ SCIFIOTestDriver itkSCIFIOImageIOTest in.czi out.tif
 ## Troubleshooting
 
 For general troubleshooting issues using this plugin, please e-mail the
-[SCIFIO mailing list](http://scif.io/mailman/listinfo/scifio).
+[SCIFIO mailing list](https://scif.io/mailman/listinfo/scifio).
 
 Any questions about the capabilities of Bio-Formats can be
-[directed to the OME team](http://www.openmicroscopy.org/site/community).
+[directed to the OME team](https://www.openmicroscopy.org/site/community).
 
 For ITK questions, see the
-[ITK mailing lists](http://www.itk.org/ITK/help/mailing.html).
+[ITK mailing lists](https://www.itk.org/ITK/help/mailing.html).
