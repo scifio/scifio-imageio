@@ -6,7 +6,7 @@
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0.txt
+ *         https://www.apache.org/licenses/LICENSE-2.0.txt
  *
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
@@ -71,9 +71,9 @@ namespace itk
  *   size, but also nice for tweaking the VM in many other ways (e.g.,
  *   garbage collection settings).
  *
- * [scifio]:       http://openmicroscopy.org/site/support/bio-formats/developers/scifio.html
- * [bio-formats]:  http://openmicroscopy.org/site/products/bio-formats
- * [file formats]: http://openmicroscopy.org/site/support/bio-formats/formats
+ * [scifio]:       https://openmicroscopy.org/site/support/bio-formats/developers/scifio.html
+ * [bio-formats]:  https://openmicroscopy.org/site/products/bio-formats
+ * [file formats]: https://openmicroscopy.org/site/support/bio-formats/formats
  *
  * \ingroup SCIFIO
  */
