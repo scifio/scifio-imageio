@@ -30,19 +30,19 @@
 
 #define METADATA_NOT_FOUND "No value for this key."
 
-#define assertEquals(name, expected, actual)                                                                           \
-  {                                                                                                                    \
-    if (expected != actual)                                                                                            \
-    {                                                                                                                  \
-      std::cerr << "[ERROR] " << name                                                                                  \
-                << " does not match: "                                                                                 \
-                   "expected="                                                                                         \
-                << expected                                                                                            \
-                << "; "                                                                                                \
-                   "actual="                                                                                           \
-                << actual << std::endl;                                                                                \
-      return EXIT_FAILURE;                                                                                             \
-    }                                                                                                                  \
+#define assertEquals(name, expected, actual) \
+  {                                          \
+    if (expected != actual)                  \
+    {                                        \
+      std::cerr << "[ERROR] " << name        \
+                << " does not match: "       \
+                   "expected="               \
+                << expected                  \
+                << "; "                      \
+                   "actual="                 \
+                << actual << std::endl;      \
+      return EXIT_FAILURE;                   \
+    }                                        \
   }
 
 namespace

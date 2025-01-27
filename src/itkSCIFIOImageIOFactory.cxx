@@ -50,7 +50,7 @@ SCIFIOImageIOFactory::GetDescription() const
 static bool SCIFIOImageIOFactoryHasBeenRegistered;
 
 void SCIFIO_EXPORT
-     SCIFIOImageIOFactoryRegister__Private(void)
+SCIFIOImageIOFactoryRegister__Private(void)
 {
   if (!SCIFIOImageIOFactoryHasBeenRegistered)
   {
