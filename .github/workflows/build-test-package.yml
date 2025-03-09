@@ -27,10 +27,10 @@ jobs:
             cmake-build-type: "MinSizeRel"
 
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v4
 
       - name: Set up Python 3.7
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v5
         with:
           python-version: 3.7
 
@@ -140,7 +140,7 @@ jobs:
 #          - itk-python-git-tag: "v5.3rc04"
 #
 #    steps:
-#      - uses: actions/checkout@v2
+#      - uses: actions/checkout@v4
 #
 #      - name: 'Free up disk space'
 #        run: |
@@ -176,7 +176,7 @@ jobs:
 #          - itk-python-git-tag: "v5.3rc04"
 #
 #    steps:
-#      - uses: actions/checkout@v2
+#      - uses: actions/checkout@v4
 #
 #      - name: 'Fetch build script'
 #        run: |
@@ -205,7 +205,7 @@ jobs:
 #          - itk-python-git-tag: "v5.3rc04"
 #
 #    steps:
-#      - uses: actions/checkout@v2
+#      - uses: actions/checkout@v4
 #        with:
 #          path: "im"
 #
